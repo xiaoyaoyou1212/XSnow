@@ -1,6 +1,5 @@
 package com.vise.xsnow.download.core;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
@@ -243,11 +242,9 @@ public class DownHelper {
      * @param url
      * @param saveName
      * @param savePath
-     * @param context
      * @return
      */
-    public Observable<DownProgress> downloadDispatcher(final String url, final String saveName,
-                                                       final String savePath, final Context context) {
+    public Observable<DownProgress> downloadDispatcher(final String url, final String saveName, final String savePath) {
         if (isRecordExists(url)) {
             return Observable.error(new Throwable("This url download task already exists, so do nothing."));
         }

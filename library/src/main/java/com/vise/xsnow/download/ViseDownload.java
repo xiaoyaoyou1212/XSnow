@@ -15,6 +15,9 @@ import com.vise.xsnow.download.db.DownDbManager;
 import com.vise.xsnow.download.mode.DownEvent;
 import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.download.mode.DownRecord;
+import com.vise.xsnow.net.callback.ApiCallback;
+import com.vise.xsnow.net.exception.ApiException;
+import com.vise.xsnow.net.mode.ApiCode;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +26,11 @@ import java.util.List;
 import retrofit2.Retrofit;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * @Description: 下载管理入口
@@ -147,7 +152,26 @@ public class ViseDownload {
             public Observable<DownEvent> call(Object o) {
                 return mDownService.getSubject(ViseDownload.this, url).asObservable().onBackpressureLatest();
             }
-        }).observeOn(AndroidSchedulers.mainThread());
+        }).compose(this.<DownEvent>norTransformer());
+    }
+
+    public Subscription receiveDownProgress(final String url, final ApiCallback<DownEvent> callback) {
+        return this.receiveDownProgress(url).subscribe(new Subscriber<DownEvent>() {
+            @Override
+            public void onCompleted() {
+                callback.onCompleted();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callback.onError(new ApiException(e, ApiCode.Request.UNKNOWN));
+            }
+
+            @Override
+            public void onNext(DownEvent downEvent) {
+                callback.onNext(downEvent);
+            }
+        });
     }
 
     /**
@@ -160,7 +184,7 @@ public class ViseDownload {
                     "#ViseDownload.context(Context context)# first!"));
         }
         DownDbManager dataBaseHelper = DownDbManager.getSingleton(mContext);
-        return dataBaseHelper.readAllRecords();
+        return dataBaseHelper.readAllRecords().compose(this.<List<DownRecord>>norTransformer());
     }
 
     /**
@@ -174,7 +198,7 @@ public class ViseDownload {
                     "#ViseDownload.context(Context context)# first!"));
         }
         DownDbManager dataBaseHelper = DownDbManager.getSingleton(mContext);
-        return dataBaseHelper.readRecord(url);
+        return dataBaseHelper.readRecord(url).compose(this.<DownRecord>norTransformer());
     }
 
     /**
@@ -197,7 +221,7 @@ public class ViseDownload {
                     mDownService.pauseDownload(url);
                 }
             }
-        });
+        }).compose(this.norTransformer());
     }
 
     /**
@@ -221,7 +245,7 @@ public class ViseDownload {
                     mDownService.cancelDownload(url);
                 }
             }
-        });
+        }).compose(this.norTransformer());
     }
 
     /**
@@ -245,7 +269,7 @@ public class ViseDownload {
                     mDownService.deleteDownload(url);
                 }
             }
-        });
+        }).compose(this.norTransformer());
     }
 
     /**
@@ -257,7 +281,27 @@ public class ViseDownload {
      */
     public Observable<DownProgress> download(@NonNull final String url, @NonNull final String saveName,
                                              @Nullable final String savePath) {
-        return mDownloadHelper.downloadDispatcher(url, saveName, savePath, mContext);
+        return mDownloadHelper.downloadDispatcher(url, saveName, savePath).compose(this.<DownProgress>norTransformer());
+    }
+
+    public Subscription download(@NonNull final String url, @NonNull final String saveName,
+                                 @Nullable final String savePath, @NonNull final ApiCallback<DownProgress> callback) {
+        return this.download(url, saveName, savePath).subscribe(new Subscriber<DownProgress>() {
+            @Override
+            public void onCompleted() {
+                callback.onCompleted();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callback.onError(new ApiException(e, ApiCode.Request.UNKNOWN));
+            }
+
+            @Override
+            public void onNext(DownProgress downProgress) {
+                callback.onNext(downProgress);
+            }
+        });
     }
 
     /**
@@ -298,42 +342,11 @@ public class ViseDownload {
         });
     }
 
-    /**
-     * 使用普通方式下载
-     * @param url
-     * @param saveName
-     * @param savePath
-     * @param <T>
-     * @return
-     */
-    public <T> Observable.Transformer<T, DownProgress> transform(@NonNull final String url,
-                                                                 @NonNull final String saveName,
-                                                                 @Nullable final String savePath) {
-        return new Observable.Transformer<T, DownProgress>() {
+    private <T> Observable.Transformer<T, T> norTransformer() {
+        return new Observable.Transformer<T, T>() {
             @Override
-            public Observable<DownProgress> call(Observable<T> observable) {
-                return observable.flatMap(new Func1<T, Observable<DownProgress>>() {
-                    @Override
-                    public Observable<DownProgress> call(T t) {
-                        return download(url, saveName, savePath);
-                    }
-                });
-            }
-        };
-    }
-
-    public <T> Observable.Transformer<T, Object> transformService(@NonNull final String url,
-                                                                  @NonNull final String saveName,
-                                                                  @Nullable final String savePath) {
-        return new Observable.Transformer<T, Object>() {
-            @Override
-            public Observable<Object> call(Observable<T> observable) {
-                return observable.flatMap(new Func1<T, Observable<Object>>() {
-                    @Override
-                    public Observable<Object> call(T t) {
-                        return serviceDownload(url, saveName, savePath);
-                    }
-                });
+            public Observable<T> call(Observable<T> tObservable) {
+                return tObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
