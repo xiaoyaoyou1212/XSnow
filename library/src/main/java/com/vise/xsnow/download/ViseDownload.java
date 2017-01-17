@@ -28,7 +28,7 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 
 /**
- * @Description:
+ * @Description: 下载管理入口
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/16 21:03.
  */
@@ -36,14 +36,12 @@ public class ViseDownload {
     private static DownService mDownService;
     private static boolean bound = false;
 
-    private DownHelper mDownloadHelper;
-
     private Context mContext;
-
-    private boolean mAutoInstall;
+    private DownHelper mDownloadHelper;
     private int MAX_DOWNLOAD_NUMBER = 5;
 
     private ViseDownload() {
+        mDownloadHelper = new DownHelper();
     }
 
     public static ViseDownload getInstance() {
@@ -58,44 +56,62 @@ public class ViseDownload {
      */
     public ViseDownload context(Context context) {
         this.mContext = context;
-        mDownloadHelper = new DownHelper(mContext);
         return this;
     }
 
+    /**
+     * 设置默认保存路径
+     * @param savePath
+     * @return
+     */
     public ViseDownload defaultSavePath(String savePath) {
         mDownloadHelper.setDefaultSavePath(savePath);
         return this;
     }
 
+    /**
+     * 设置自定义Retrofit
+     * @param retrofit
+     * @return
+     */
     public ViseDownload retrofit(Retrofit retrofit) {
         mDownloadHelper.setRetrofit(retrofit);
         return this;
     }
 
+    /**
+     * 设置最大线程数
+     * @param max
+     * @return
+     */
     public ViseDownload maxThread(int max) {
         mDownloadHelper.setMaxThreads(max);
         return this;
     }
 
+    /**
+     * 设置最大重试次数
+     * @param max
+     * @return
+     */
     public ViseDownload maxRetryCount(int max) {
         mDownloadHelper.setMaxRetryCount(max);
         return this;
     }
 
+    /**
+     * 设置最大下载数
+     * @param max
+     * @return
+     */
     public ViseDownload maxDownloadNumber(int max) {
         this.MAX_DOWNLOAD_NUMBER = max;
         return this;
     }
 
-    public ViseDownload autoInstall(boolean flag) {
-        this.mAutoInstall = flag;
-        return this;
-    }
 
     /**
-     * get Files.
-     * File[] {DownloadFile, TempFile, LastModifyFile}
-     *
+     * 获取文件 注：File[] {DownloadFile, TempFile, LastModifyFile}
      * @param saveName saveName
      * @param savePath savePath
      * @return Files
@@ -106,12 +122,8 @@ public class ViseDownload {
     }
 
     /**
-     * Receive the download address for the url download event and download status.
      * 接收下载地址为url的下载事件和下载状态.
-     * <p>
-     * Note that only receive the download address for the URL.
      * 注意只接收下载地址为url的事件和状态.
-     *
      * @param url download url
      * @return Observable<DownProgress>
      */
@@ -139,9 +151,7 @@ public class ViseDownload {
     }
 
     /**
-     * Read all the download record from the database
      * 从数据库中读取所有的下载记录
-     *
      * @return Observable<List<DownloadRecord>>
      */
     public Observable<List<DownRecord>> getTotalDownloadRecords() {
@@ -154,9 +164,7 @@ public class ViseDownload {
     }
 
     /**
-     * Read single download record with url.
      * 从数据库中读取下载地址为url的下载记录
-     *
      * @param url download url
      * @return Observable<DownProgress>
      */
@@ -170,12 +178,8 @@ public class ViseDownload {
     }
 
     /**
-     * Suspended download address for the url download task in Service.
      * 暂停Service中下载地址为url的下载任务.
-     * <p>
-     * Book the download records in the tag database are paused.
      * 同时标记数据库中的下载记录为暂停状态.
-     *
      * @param url download url
      */
     public Observable<?> pauseServiceDownload(final String url) {
@@ -198,10 +202,8 @@ public class ViseDownload {
 
     /**
      * 取消Service中下载地址为url的下载任务.
-     * <p>
      * 同时标记数据库中的下载记录为取消状态.
      * 不会删除已经下载的文件.
-     *
      * @param url download url
      */
     public Observable<?> cancelServiceDownload(final String url) {
@@ -224,10 +226,8 @@ public class ViseDownload {
 
     /**
      * 删除Service中下载地址为url的下载任务.
-     * <p>
      * 同时从数据库中删除该下载记录.
      * 不会删除已经下载的文件.
-     *
      * @param url download url
      */
     public Observable<?> deleteServiceDownload(final String url) {
@@ -249,23 +249,23 @@ public class ViseDownload {
     }
 
     /**
-     * Using Service to download. Just download, can't receive download status.
-     * 使用Service下载. 仅仅开始下载, 不会接收下载进度.
-     * <p>
-     * Un subscribe will not pause download.
-     * 取消订阅不会停止下载.
-     * <p>
-     * If you want receive download status, see {@link #receiveDownProgress(String)}
-     * <p>
-     * If you want pause download, see {@link #pauseServiceDownload(String)}
-     * <p>
-     * Also save the download records in the database, if you want get record from database,
-     * see  {@link #getDownloadRecord(String)}
-     *
-     * @param url      download file Url
-     * @param saveName download file SaveName
-     * @param savePath download file SavePath. If NULL, using default save path {@code /storage/emulated/0/Download/}
-     * @return Observable<DownProgress>
+     * 使用普通方式进行下载
+     * @param url
+     * @param saveName
+     * @param savePath
+     * @return
+     */
+    public Observable<DownProgress> download(@NonNull final String url, @NonNull final String saveName,
+                                             @Nullable final String savePath) {
+        return mDownloadHelper.downloadDispatcher(url, saveName, savePath, mContext);
+    }
+
+    /**
+     * 使用Service下载，仅仅开始下载, 不会接收下载进度，取消订阅不会停止下载
+     * @param url
+     * @param saveName
+     * @param savePath
+     * @return
      */
     public Observable<Object> serviceDownload(@NonNull final String url, @NonNull final String saveName,
                                               @Nullable final String savePath) {
@@ -299,32 +299,12 @@ public class ViseDownload {
     }
 
     /**
-     * Normal download.
-     * <p>
-     * Un subscribe will  pause download.
-     * <p>
-     * Do not save the download records in the database.
-     *
-     * @param url      download file Url
-     * @param saveName download file SaveName
-     * @param savePath download file SavePath. If NULL, using default save path {@code /storage/emulated/0/Download/}
-     * @return Observable<DownProgress>
-     */
-    public Observable<DownProgress> download(@NonNull final String url, @NonNull final String saveName,
-                                             @Nullable final String savePath) {
-        return mDownloadHelper.downloadDispatcher(url, saveName, savePath, mContext, mAutoInstall);
-    }
-
-    /**
-     * Normal download version of the Transformer.
-     * <p>
-     * Provide RxJava Compose operator use.
-     *
-     * @param url      download file Url
-     * @param saveName download file SaveName
-     * @param savePath download file SavePath. If NULL, using default save path {@code /storage/emulated/0/Download/}
-     * @param <T>      T
-     * @return Transformer
+     * 使用普通方式下载
+     * @param url
+     * @param saveName
+     * @param savePath
+     * @param <T>
+     * @return
      */
     public <T> Observable.Transformer<T, DownProgress> transform(@NonNull final String url,
                                                                  @NonNull final String saveName,
@@ -342,17 +322,6 @@ public class ViseDownload {
         };
     }
 
-    /**
-     * Service download without status version of the Transformer.
-     * <p>
-     * Provide RxJava Compose operator use.
-     *
-     * @param url      download file Url
-     * @param saveName download file SaveName
-     * @param savePath download file SavePath. If NULL, using default save path {@code /storage/emulated/0/Download/}
-     * @param <T>      T
-     * @return Transformer
-     */
     public <T> Observable.Transformer<T, Object> transformService(@NonNull final String url,
                                                                   @NonNull final String saveName,
                                                                   @Nullable final String savePath) {
@@ -369,17 +338,27 @@ public class ViseDownload {
         };
     }
 
+    /**
+     * 添加下载任务
+     * @param url
+     * @param saveName
+     * @param savePath
+     * @throws IOException
+     */
     private void addDownloadTask(@NonNull String url, @NonNull String saveName,
                                  @Nullable String savePath) throws IOException {
-        mDownService.addDownOperate(
-                new DownTask.Builder()
-                        .setViseDownload(ViseDownload.this)
+        mDownService.addDownTask(
+                new DownTask.Builder(ViseDownload.this)
                         .setUrl(url)
                         .setSaveName(saveName)
                         .setSavePath(savePath)
                         .build());
     }
 
+    /**
+     * 绑定服务并开启
+     * @param callback
+     */
     private void startBindServiceAndDo(final ServiceConnectedCallback callback) {
         if (mContext == null) {
             throw new RuntimeException("Context is NULL! You should call " +
@@ -400,7 +379,6 @@ public class ViseDownload {
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                //注意!!这个方法只会在系统杀掉Service时才会调用!!
                 bound = false;
             }
         }, Context.BIND_AUTO_CREATE);

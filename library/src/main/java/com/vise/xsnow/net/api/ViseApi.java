@@ -2,7 +2,11 @@ package com.vise.xsnow.net.api;
 
 import android.content.Context;
 
+import com.vise.log.ViseLog;
+import com.vise.utils.assist.ClassUtil;
+import com.vise.utils.assist.SSLUtil;
 import com.vise.xsnow.cache.DiskCache;
+import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.convert.GsonConverterFactory;
 import com.vise.xsnow.net.core.ApiCache;
@@ -22,9 +26,6 @@ import com.vise.xsnow.net.mode.ApiResult;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.subscriber.ApiCallbackSubscriber;
-import com.vise.log.ViseLog;
-import com.vise.utils.assist.ClassUtil;
-import com.vise.utils.assist.SSLUtil;
 
 import java.io.File;
 import java.net.Proxy;
@@ -555,10 +556,6 @@ public class ViseApi {
      * ViseApi的所有配置都通过建造者方式创建
      */
     public static final class Builder {
-        private static final int DEFAULT_TIMEOUT = 60;//默认超时时间
-        private static final int DEFAULT_MAX_IDLE_CONNECTIONS = 5;//默认空闲连接数
-        private static final long DEFAULT_KEEP_ALIVE_DURATION = 8;//默认心跳间隔时长
-        private static final long CACHE_MAX_SIZE = 10 * 1024 * 1024;//默认最大缓存大小
         private okhttp3.Call.Factory callFactory;
         private Converter.Factory converterFactory;
         private CallAdapter.Factory callAdapterFactory;
@@ -687,7 +684,7 @@ public class ViseApi {
             if (timeout > -1) {
                 okHttpBuilder.connectTimeout(timeout, unit);
             } else {
-                okHttpBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+                okHttpBuilder.connectTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
             }
             return this;
         }
@@ -703,7 +700,7 @@ public class ViseApi {
             if (timeout > -1) {
                 okHttpBuilder.writeTimeout(timeout, unit);
             } else {
-                okHttpBuilder.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+                okHttpBuilder.writeTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
             }
             return this;
         }
@@ -719,7 +716,7 @@ public class ViseApi {
             if (timeout > -1) {
                 okHttpBuilder.readTimeout(timeout, unit);
             } else {
-                okHttpBuilder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+                okHttpBuilder.readTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
             }
             return this;
         }
@@ -973,7 +970,7 @@ public class ViseApi {
             okHttpBuilder.sslSocketFactory(sslSocketFactory);
 
             if (connectionPool == null) {
-                connectionPool = new ConnectionPool(DEFAULT_MAX_IDLE_CONNECTIONS, DEFAULT_KEEP_ALIVE_DURATION, TimeUnit.SECONDS);
+                connectionPool = new ConnectionPool(ViseConfig.DEFAULT_MAX_IDLE_CONNECTIONS, ViseConfig.DEFAULT_KEEP_ALIVE_DURATION, TimeUnit.SECONDS);
             }
             okHttpBuilder.connectionPool(connectionPool);
 
@@ -985,12 +982,12 @@ public class ViseApi {
             }
 
             if (httpCacheDirectory == null) {
-                httpCacheDirectory = new File(context.getCacheDir(), "http_cache");
+                httpCacheDirectory = new File(context.getCacheDir(), ViseConfig.CACHE_HTTP_DIR);
             }
             if (isCache) {
                 try {
                     if (cache == null) {
-                        cache = new Cache(httpCacheDirectory, CACHE_MAX_SIZE);
+                        cache = new Cache(httpCacheDirectory, ViseConfig.CACHE_MAX_SIZE);
                     }
                     cacheOnline(cache);
                     cacheOffline(cache);

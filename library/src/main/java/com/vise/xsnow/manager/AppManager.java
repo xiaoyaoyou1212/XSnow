@@ -3,8 +3,8 @@ package com.vise.xsnow.manager;
 import android.app.Activity;
 import android.content.Context;
 
-import com.vise.xsnow.ui.BaseActivity;
 import com.vise.log.ViseLog;
+import com.vise.xsnow.ui.BaseActivity;
 
 import java.util.Stack;
 

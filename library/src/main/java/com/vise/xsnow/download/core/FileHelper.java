@@ -1,11 +1,8 @@
 package com.vise.xsnow.download.core;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.vise.log.ViseLog;
 import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.download.mode.DownRange;
 
@@ -18,7 +15,6 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,8 +38,6 @@ import static java.nio.channels.FileChannel.MapMode.READ_WRITE;
  * @date: 17/1/16 21:57.
  */
 public class FileHelper {
-    public static final String TAG = "RxDownload";
-
     private static final String TMP_SUFFIX = ".tmp";  //temp file
     private static final String LMF_SUFFIX = ".lmf";  //last modify file
     private static final String CACHE = ".cache";    //cache directory
@@ -116,7 +110,7 @@ public class FileHelper {
             if (fileLength != -1) {
                 file.setLength(fileLength);//设置下载文件的长度
             } else {
-                Log.i(TAG, "Chunked download.");
+                ViseLog.i("Chunked download.");
                 //Chunked 下载, 无需设置文件大小.
             }
         } finally {
@@ -151,7 +145,7 @@ public class FileHelper {
                     sub.onNext(status);
                 }
                 outputStream.flush(); // This is important!!!
-                Log.i(TAG, "Normal download completed!");
+                ViseLog.i("Normal download completed!");
                 sub.onCompleted();
             } finally {
                 Utils.closeQuietly(inputStream);
@@ -159,7 +153,7 @@ public class FileHelper {
                 Utils.closeQuietly(resp.body());
             }
         } catch (IOException e) {
-            Log.i(TAG, "Normal download failed or cancel!");
+            ViseLog.i("Normal download failed or cancel!");
             sub.onError(e);
         }
     }
@@ -211,7 +205,7 @@ public class FileHelper {
         InputStream inStream = null;
         try {
             try {
-                Log.i(TAG, Thread.currentThread().getName() + " start download from " + start + " to " + end + "!");
+                ViseLog.i(Thread.currentThread().getName() + " start download from " + start + " to " + end + "!");
                 int readLen;
                 byte[] buffer = new byte[8192];
                 DownProgress status = new DownProgress();
@@ -234,7 +228,7 @@ public class FileHelper {
                     status.setDownloadSize(totalSize - getResidue(recordBuffer));
                     subscriber.onNext(status);
                 }
-                Log.i(TAG, Thread.currentThread().getName() + " complete download! Download size is " +
+                ViseLog.i(Thread.currentThread().getName() + " complete download! Download size is " +
                         response.contentLength() + " bytes");
                 subscriber.onCompleted();
             } finally {
@@ -246,7 +240,7 @@ public class FileHelper {
                 Utils.closeQuietly(response);
             }
         } catch (IOException e) {
-            Log.i(TAG, Thread.currentThread().getName() + " download failed or cancel!");
+            ViseLog.i(Thread.currentThread().getName() + " download failed or cancel!");
             subscriber.onError(e);
         }
     }
@@ -320,13 +314,13 @@ public class FileHelper {
         for (String each : directoryPaths) {
             File file = new File(each);
             if (file.exists() && file.isDirectory()) {
-                Log.d(TAG, "Directory exists. Do not need create. Path = " + each);
+                ViseLog.d("Directory exists. Do not need create. Path = " + each);
             } else {
                 boolean flag = file.mkdir();
                 if (flag) {
-                    Log.d(TAG, "Directory create succeed! Path = " + each);
+                    ViseLog.d("Directory create succeed! Path = " + each);
                 } else {
-                    Log.d(TAG, "Directory create failed! Path = " + each);
+                    ViseLog.d("Directory create failed! Path = " + each);
                     throw new IOException("Directory create failed!");
                 }
             }
@@ -403,10 +397,6 @@ public class FileHelper {
             }
         }
 
-        public static boolean isNullOrUnsubscribed(Subscription subscription) {
-            return subscription == null || subscription.isUnsubscribed();
-        }
-
         public static String lastModify(Response<?> response) {
             return response.headers().get("Last-Modified");
         }
@@ -433,40 +423,6 @@ public class FileHelper {
 
         public static boolean requestRangeNotSatisfiable(Response<Void> resp) {
             return resp.code() == 416;
-        }
-
-        public static void installApk(Context context, File file) {
-            Uri uri = Uri.fromFile(file);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-            context.startActivity(intent);
-        }
-
-        public static String formatSize(long size) {
-            String hrSize;
-
-            double b = size;
-            double k = size / 1024.0;
-            double m = ((size / 1024.0) / 1024.0);
-            double g = (((size / 1024.0) / 1024.0) / 1024.0);
-            double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
-
-            DecimalFormat dec = new DecimalFormat("0.00");
-
-            if (t > 1) {
-                hrSize = dec.format(t).concat(" TB");
-            } else if (g > 1) {
-                hrSize = dec.format(g).concat(" GB");
-            } else if (m > 1) {
-                hrSize = dec.format(m).concat(" MB");
-            } else if (k > 1) {
-                hrSize = dec.format(k).concat(" KB");
-            } else {
-                hrSize = dec.format(b).concat(" B");
-            }
-            return hrSize;
         }
 
         private static String transferEncoding(Response<?> response) {

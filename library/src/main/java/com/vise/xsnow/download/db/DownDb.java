@@ -11,7 +11,7 @@ import com.vise.xsnow.download.mode.DownStatus;
 import java.util.Date;
 
 /**
- * @Description:
+ * @Description: 数据库操作
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/16 22:19.
  */
@@ -42,11 +42,11 @@ public class DownDb {
                         COLUMN_DATE + " INTEGER NOT NULL " +
                         " )";
 
-        static ContentValues insertOperate(DownTask operate) {
+        static ContentValues insertTask(DownTask task) {
             ContentValues values = new ContentValues();
-            values.put(COLUMN_URL, operate.getUrl());
-            values.put(COLUMN_SAVE_NAME, operate.getSaveName());
-            values.put(COLUMN_SAVE_PATH, operate.getSavePath());
+            values.put(COLUMN_URL, task.getUrl());
+            values.put(COLUMN_SAVE_NAME, task.getSaveName());
+            values.put(COLUMN_SAVE_PATH, task.getSavePath());
             values.put(COLUMN_DOWNLOAD_STATUS, DownStatus.WAITING.getStatus());
             values.put(COLUMN_DATE, new Date().getTime());
             return values;

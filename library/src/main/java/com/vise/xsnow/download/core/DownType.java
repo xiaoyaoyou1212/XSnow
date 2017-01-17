@@ -18,7 +18,7 @@ import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
- * @Description:
+ * @Description: 下载类型，包含下载URL、下载文件大小及最后修改时间
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/16 21:54.
  */
@@ -32,6 +32,9 @@ public abstract class DownType {
 
     public abstract Observable<DownProgress> startDownload() throws IOException;
 
+    /**
+     * 普通下载方式
+     */
     static class NormalDownload extends DownType {
 
         @Override
@@ -67,6 +70,9 @@ public abstract class DownType {
         }
     }
 
+    /**
+     * 支持断点下载方式
+     */
     static class ContinueDownload extends DownType {
         /**
          * 分段下载的任务
@@ -143,6 +149,9 @@ public abstract class DownType {
         }
     }
 
+    /**
+     * 支持多线程下载方式
+     */
     static class MultiThreadDownload extends ContinueDownload {
 
         @Override
@@ -157,6 +166,9 @@ public abstract class DownType {
         }
     }
 
+    /**
+     * 文件已下载方式
+     */
     static class AlreadyDownloaded extends DownType {
 
         @Override
@@ -170,6 +182,9 @@ public abstract class DownType {
         }
     }
 
+    /**
+     * 不支持断点下载方式
+     */
     static class RequestRangeNotSatisfiable extends DownType {
 
         @Override

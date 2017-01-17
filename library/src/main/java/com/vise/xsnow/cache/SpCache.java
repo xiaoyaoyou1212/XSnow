@@ -3,11 +3,11 @@ package com.vise.xsnow.cache;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.vise.xsnow.common.ViseConfig;
 import com.vise.log.ViseLog;
 import com.vise.utils.cipher.BASE64;
 import com.vise.utils.convert.ByteUtil;
 import com.vise.utils.convert.HexUtil;
+import com.vise.xsnow.common.ViseConfig;
 
 /**
  * @Description: SharedPreferences存储，支持对象加密存储

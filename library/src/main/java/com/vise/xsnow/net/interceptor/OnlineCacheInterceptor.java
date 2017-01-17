@@ -3,6 +3,7 @@ package com.vise.xsnow.net.interceptor;
 import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
+import com.vise.xsnow.common.ViseConfig;
 
 import java.io.IOException;
 
@@ -15,11 +16,10 @@ import okhttp3.Response;
  * @date: 16/12/31 22:23.
  */
 public class OnlineCacheInterceptor implements Interceptor {
-    private static final int MAX_AGE_ONLINE = 60;
     private String cacheControlValue;
 
     public OnlineCacheInterceptor() {
-        this(MAX_AGE_ONLINE);
+        this(ViseConfig.MAX_AGE_ONLINE);
     }
 
     public OnlineCacheInterceptor(int cacheControlValue) {

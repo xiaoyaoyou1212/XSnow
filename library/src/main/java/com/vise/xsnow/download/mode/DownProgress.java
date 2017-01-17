@@ -8,7 +8,7 @@ import com.vise.utils.file.FileUtil;
 import java.text.NumberFormat;
 
 /**
- * @Description:
+ * @Description: 下载进度，包含总大小、下载大小以及是否分块信息
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/16 21:49.
  */

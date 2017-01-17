@@ -26,7 +26,7 @@ import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
 /**
- * @Description:
+ * @Description: 下载后台服务
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-16 18:26
  */
@@ -62,11 +62,19 @@ public class DownService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mDataBaseHelper.repairErrorFlag();
+        mDataBaseHelper.repairErrorStatus();
         if (intent != null) {
             MAX_DOWNLOAD_NUMBER = intent.getIntExtra(INTENT_KEY, 5);
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        mDownloadQueueThread = new Thread(new DownTaskDispatchRunnable());
+        mDownloadQueueThread.start();
+        return mBinder;
     }
 
     @Override
@@ -79,19 +87,17 @@ public class DownService extends Service {
         mDataBaseHelper.closeDataBase();
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        mDownloadQueueThread = new Thread(new DownOperateDispatchRunnable());
-        mDownloadQueueThread.start();
-        return mBinder;
-    }
-
-    public Subject<DownEvent, DownEvent> getSubject(ViseDownload rxDownload, String url) {
+    /**
+     * 获取下载事件主题
+     * @param viseDownload
+     * @param url
+     * @return
+     */
+    public Subject<DownEvent, DownEvent> getSubject(ViseDownload viseDownload, String url) {
         Subject<DownEvent, DownEvent> subject = createAndGet(url);
         if (!mDataBaseHelper.recordNotExists(url)) {
             DownRecord record = mDataBaseHelper.readSingleRecord(url);
-            File file = rxDownload.getRealFiles(record.getSaveName(), record.getSavePath())[0];
+            File file = viseDownload.getRealFiles(record.getSaveName(), record.getSavePath())[0];
             if (file.exists()) {
                 subject.onNext(mEventFactory.factory(url, record.getStatus(), record.getDownProgress()));
             }
@@ -99,6 +105,11 @@ public class DownService extends Service {
         return subject;
     }
 
+    /**
+     * 创建并获取下载事件主题
+     * @param url
+     * @return
+     */
     public Subject<DownEvent, DownEvent> createAndGet(String url) {
         if (mSubjectPool.get(url) == null) {
             Subject<DownEvent, DownEvent> subject = new SerializedSubject<>(BehaviorSubject.create
@@ -108,39 +119,61 @@ public class DownService extends Service {
         return mSubjectPool.get(url);
     }
 
-    public void addDownOperate(DownTask mission) throws IOException {
-        String url = mission.getUrl();
+    /**
+     * 添加下载任务
+     * @param task
+     * @throws IOException
+     */
+    public void addDownTask(DownTask task) throws IOException {
+        String url = task.getUrl();
         if (mWaitingForDownloadLookUpMap.get(url) != null || mNowDownloading.get(url) != null) {
-            throw new IOException("This download mission is exists.");
+            throw new IOException("This download task is exists.");
         } else {
             if (mDataBaseHelper.recordNotExists(url)) {
-                mDataBaseHelper.insertRecord(mission);
+                mDataBaseHelper.insertRecord(task);
                 createAndGet(url).onNext(mEventFactory.factory(url, DownStatus.WAITING.getStatus(), null));
             } else {
                 mDataBaseHelper.updateRecord(url, DownStatus.WAITING.getStatus());
                 createAndGet(url).onNext(mEventFactory.factory(url, DownStatus.WAITING.getStatus(),
                         mDataBaseHelper.readProgress(url)));
             }
-            mWaitingForDownload.offer(mission);
-            mWaitingForDownloadLookUpMap.put(url, mission);
+            mWaitingForDownload.offer(task);
+            mWaitingForDownloadLookUpMap.put(url, task);
         }
     }
 
+    /**
+     * 暂停下载任务
+     * @param url
+     */
     public void pauseDownload(String url) {
         suspendDownloadAndSendEvent(url, DownStatus.PAUSED.getStatus());
         mDataBaseHelper.updateRecord(url, DownStatus.PAUSED.getStatus());
     }
 
+    /**
+     * 取消下载任务
+     * @param url
+     */
     public void cancelDownload(String url) {
         suspendDownloadAndSendEvent(url, DownStatus.CANCELED.getStatus());
         mDataBaseHelper.updateRecord(url, DownStatus.CANCELED.getStatus());
     }
 
+    /**
+     * 删除下载任务
+     * @param url
+     */
     public void deleteDownload(String url) {
         suspendDownloadAndSendEvent(url, DownStatus.DELETED.getStatus());
         mDataBaseHelper.deleteRecord(url);
     }
 
+    /**
+     * 挂起下载任务并发送事件
+     * @param url
+     * @param flag
+     */
     private void suspendDownloadAndSendEvent(String url, int flag) {
         if (mWaitingForDownloadLookUpMap.get(url) != null) {
             mWaitingForDownloadLookUpMap.get(url).setCanceled(true);
@@ -155,26 +188,29 @@ public class DownService extends Service {
         }
     }
 
-    private class DownOperateDispatchRunnable implements Runnable {
+    /**
+     * 下载任务分发
+     */
+    private class DownTaskDispatchRunnable implements Runnable {
 
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
-                DownTask mission = mWaitingForDownload.peek();
-                if (null != mission) {
-                    String url = mission.getUrl();
-                    if (mission.isCanceled()) {
+                DownTask task = mWaitingForDownload.peek();
+                if (null != task) {
+                    String url = task.getUrl();
+                    if (task.isCanceled()) {//任务已取消
                         mWaitingForDownload.remove();
                         mWaitingForDownloadLookUpMap.remove(url);
                         continue;
                     }
-                    if (mNowDownloading.get(url) != null) {
+                    if (mNowDownloading.get(url) != null) {//任务正在下载
                         mWaitingForDownload.remove();
                         mWaitingForDownloadLookUpMap.remove(url);
                         continue;
                     }
-                    if (mCount.get() < MAX_DOWNLOAD_NUMBER) {
-//                        mission.start(mNowDownloading, mCount, mDataBaseHelper, mSubjectPool);
+                    if (mCount.get() < MAX_DOWNLOAD_NUMBER) {//小于最大下载数
+                        task.start(mNowDownloading, mCount, mDataBaseHelper, mSubjectPool);
                         mWaitingForDownload.remove();
                         mWaitingForDownloadLookUpMap.remove(url);
                     }
@@ -183,6 +219,9 @@ public class DownService extends Service {
         }
     }
 
+    /**
+     * 绑定服务
+     */
     public class DownloadBinder extends Binder {
         public DownService getService() {
             return DownService.this;

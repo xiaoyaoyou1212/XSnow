@@ -2,9 +2,9 @@ package com.vise.xsnow.common;
 
 import android.content.Context;
 
-import com.vise.xsnow.BuildConfig;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.DefaultTree;
+import com.vise.xsnow.BuildConfig;
 
 /**
  * @Description: 全局初始化配置

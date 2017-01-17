@@ -18,7 +18,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * @Description:
+ * @Description: 下载数据库操作管理
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/16 22:09.
  */
@@ -57,8 +57,8 @@ public class DownDbManager {
         }
     }
 
-    public long insertRecord(DownTask operate) {
-        return getWritableDatabase().insert(DownDb.RecordTable.TABLE_NAME, null, DownDb.RecordTable.insertOperate(operate));
+    public long insertRecord(DownTask task) {
+        return getWritableDatabase().insert(DownDb.RecordTable.TABLE_NAME, null, DownDb.RecordTable.insertTask(task));
     }
 
     public long updateRecord(String url, DownProgress progress) {
@@ -135,7 +135,7 @@ public class DownDbManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public long repairErrorFlag() {
+    public long repairErrorStatus() {
         return getWritableDatabase().update(DownDb.RecordTable.TABLE_NAME, DownDb.RecordTable.updateStatus(DownStatus.PAUSED.getStatus()),
                 DownDb.RecordTable.COLUMN_DOWNLOAD_STATUS + "=? or " + DownDb.RecordTable.COLUMN_DOWNLOAD_STATUS + "=?",
                 new String[]{DownStatus.WAITING.getStatus() + "", DownStatus.STARTED.getStatus() + ""});

@@ -1,5 +1,7 @@
 package com.vise.xsnow.net.mode;
 
+import com.vise.xsnow.common.ViseConfig;
+
 /**
  * @Description: 主机信息
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
@@ -7,7 +9,7 @@ package com.vise.xsnow.net.mode;
  */
 public class ApiHost {
 
-    private static String host = "https://api.github.com/";
+    private static String host = ViseConfig.API_HOST;
 
     public static String getHost() {
         return host;

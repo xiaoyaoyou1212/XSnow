@@ -2,11 +2,11 @@ package com.vise.xsnow.net.core;
 
 import android.content.Context;
 
+import com.vise.log.ViseLog;
 import com.vise.xsnow.cache.DiskCache;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.strategy.ICacheStrategy;
-import com.vise.log.ViseLog;
 
 import java.io.File;
 

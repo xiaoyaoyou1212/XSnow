@@ -5,11 +5,11 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
-import com.vise.xsnow.common.GSONUtil;
-import com.vise.xsnow.common.ViseConfig;
 import com.vise.log.ViseLog;
 import com.vise.utils.cipher.MD5;
 import com.vise.utils.system.AppUtil;
+import com.vise.xsnow.common.GSONUtil;
+import com.vise.xsnow.common.ViseConfig;
 
 import java.io.File;
 import java.io.IOException;

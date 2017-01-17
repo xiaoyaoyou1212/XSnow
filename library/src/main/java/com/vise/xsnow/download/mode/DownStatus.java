@@ -1,7 +1,7 @@
 package com.vise.xsnow.download.mode;
 
 /**
- * @Description:
+ * @Description: 下载状态
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-16 18:26
  */

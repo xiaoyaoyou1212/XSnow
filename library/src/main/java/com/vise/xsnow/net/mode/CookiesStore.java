@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
 import com.vise.utils.convert.HexUtil;
+import com.vise.xsnow.common.ViseConfig;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,13 +28,11 @@ import okhttp3.HttpUrl;
  * @date: 16/12/31 17:57.
  */
 public class CookiesStore {
-    private static final String COOKIE_PREFS = "Cookies_Prefs";
-
     private final Map<String, ConcurrentHashMap<String, Cookie>> cookies;
     private final SharedPreferences cookiePrefs;
 
     public CookiesStore(Context context) {
-        cookiePrefs = context.getSharedPreferences(COOKIE_PREFS, 0);
+        cookiePrefs = context.getSharedPreferences(ViseConfig.COOKIE_PREFS, 0);
         cookies = new HashMap<>();
         Map<String, ?> prefsMap = cookiePrefs.getAll();
         for (Map.Entry<String, ?> entry : prefsMap.entrySet()) {

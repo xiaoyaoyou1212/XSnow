@@ -2,6 +2,7 @@ package com.vise.xsnow.download.core;
 
 import com.vise.log.ViseLog;
 import com.vise.xsnow.download.ViseDownload;
+import com.vise.xsnow.download.db.DownDbManager;
 import com.vise.xsnow.download.mode.DownEvent;
 import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.download.mode.DownStatus;
@@ -15,21 +16,33 @@ import rx.schedulers.Schedulers;
 import rx.subjects.Subject;
 
 /**
- * @Description:
+ * @Description: 下载任务
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-16 18:27
  */
 public class DownTask {
-    private boolean canceled = false;
-    private ViseDownload viseDownload;
     private String url;
     private String saveName;
     private String savePath;
+    private boolean canceled = false;
     private DownProgress downProgress;
+    private ViseDownload viseDownload;
     private Subscription subscription;
 
-    public boolean isCanceled() {
-        return canceled;
+    public DownTask(ViseDownload viseDownload) {
+        this.viseDownload = viseDownload;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getSaveName() {
+        return saveName;
+    }
+
+    public String getSavePath() {
+        return savePath;
     }
 
     public DownTask setCanceled(boolean canceled) {
@@ -37,61 +50,23 @@ public class DownTask {
         return this;
     }
 
-    public ViseDownload getViseDownload() {
-        return viseDownload;
-    }
-
-    public DownTask setViseDownload(ViseDownload viseDownload) {
-        this.viseDownload = viseDownload;
-        return this;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public DownTask setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
-    public String getSaveName() {
-        return saveName;
-    }
-
-    public DownTask setSaveName(String saveName) {
-        this.saveName = saveName;
-        return this;
-    }
-
-    public String getSavePath() {
-        return savePath;
-    }
-
-    public DownTask setSavePath(String savePath) {
-        this.savePath = savePath;
-        return this;
+    public boolean isCanceled() {
+        return canceled;
     }
 
     public DownProgress getDownProgress() {
         return downProgress;
     }
 
-    public DownTask setDownProgress(DownProgress downProgress) {
-        this.downProgress = downProgress;
-        return this;
+    public ViseDownload getViseDownload() {
+        return viseDownload;
     }
 
     public Subscription getSubscription() {
         return subscription;
     }
 
-    public DownTask setSubscription(Subscription subscription) {
-        this.subscription = subscription;
-        return this;
-    }
-
-    /*public void start(final Map<String, DownTask> nowDownloadMap,
+    public void start(final Map<String, DownTask> nowDownloadMap,
                       final AtomicInteger count, final DownDbManager helper,
                       final Map<String, Subject<DownEvent, DownEvent>> subjectPool) {
         nowDownloadMap.put(url, this);
@@ -133,17 +108,16 @@ public class DownTask {
                         downProgress = progress;
                     }
                 });
-    }*/
+    }
 
     public static class Builder {
-        ViseDownload viseDownload;
-        String url;
-        String saveName;
-        String savePath;
+        private final ViseDownload viseDownload;
+        private String url;
+        private String saveName;
+        private String savePath;
 
-        public Builder setViseDownload(ViseDownload viseDownload) {
+        public Builder(ViseDownload viseDownload) {
             this.viseDownload = viseDownload;
-            return this;
         }
 
         public Builder setUrl(String url) {
@@ -162,8 +136,7 @@ public class DownTask {
         }
 
         public DownTask build() {
-            DownTask task = new DownTask();
-            task.viseDownload = viseDownload;
+            DownTask task = new DownTask(viseDownload);
             task.url = url;
             task.saveName = saveName;
             task.savePath = savePath;

@@ -1,9 +1,9 @@
 package com.vise.xsnow.net.strategy;
 
+import com.vise.log.ViseLog;
 import com.vise.xsnow.common.GSONUtil;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.mode.CacheResult;
-import com.vise.log.ViseLog;
 
 import rx.Observable;
 import rx.functions.Action1;

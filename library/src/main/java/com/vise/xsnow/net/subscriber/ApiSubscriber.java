@@ -3,10 +3,9 @@ package com.vise.xsnow.net.subscriber;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 
+import com.vise.utils.assist.Network;
 import com.vise.xsnow.net.exception.ApiException;
 import com.vise.xsnow.net.mode.ApiCode;
-import com.vise.log.ViseLog;
-import com.vise.utils.assist.Network;
 
 import java.lang.ref.WeakReference;
 
