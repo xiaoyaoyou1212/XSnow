@@ -6,21 +6,17 @@ import java.util.Map;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.HEAD;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.QueryMap;
-import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -73,24 +69,4 @@ public interface ApiService {
     @POST()
     Observable<ResponseBody> uploadFiles(@Url() String path, @Part() List<MultipartBody.Part> parts);
 
-    @Streaming
-    @GET
-    Observable<ResponseBody> downloadFile(@Url String fileUrl);
-
-    @GET
-    @Streaming
-    Observable<Response<ResponseBody>> downloadFile(@Header("Range") String range, @Url String url);
-
-    @HEAD
-    Observable<Response<Void>> getHttpHeader(@Header("Range") String range, @Url String url);
-
-    @HEAD
-    Observable<Response<Void>> getHttpHeaderWithIfRange(@Header("Range") final String range,
-                                                        @Header("If-Range") final String lastModify,
-                                                        @Url String url);
-
-    @GET
-    Observable<Response<Void>> requestWithIfRange(@Header("Range") final String range,
-                                                  @Header("If-Range") final String lastModify,
-                                                  @Url String url);
 }

@@ -1,5 +1,7 @@
 package com.vise.xsnow.event.inner;
 
+import com.vise.xsnow.event.EventSubscribe;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;

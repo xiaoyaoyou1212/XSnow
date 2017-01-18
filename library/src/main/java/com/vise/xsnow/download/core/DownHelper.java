@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.vise.log.ViseLog;
 import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.download.mode.DownRange;
-import com.vise.xsnow.net.api.ApiService;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class DownHelper {
 
     private int MAX_RETRY_COUNT = 3;
 
-    private ApiService mDownloadApi;
+    private DownApiService mDownloadApi;
     private FileHelper mFileHelper;
     private DownTypeFactory mFactory;
 
@@ -49,7 +48,7 @@ public class DownHelper {
     public DownHelper() {
         mDownloadRecord = new HashMap<>();
         mFileHelper = new FileHelper();
-        mDownloadApi = DownRetrofit.getInstance().create(ApiService.class);
+        mDownloadApi = DownRetrofit.getInstance().create(DownApiService.class);
         mFactory = new DownTypeFactory(this);
     }
 
@@ -58,7 +57,7 @@ public class DownHelper {
      * @param retrofit
      */
     public void setRetrofit(Retrofit retrofit) {
-        mDownloadApi = retrofit.create(ApiService.class);
+        mDownloadApi = retrofit.create(DownApiService.class);
     }
 
     /**
@@ -100,7 +99,7 @@ public class DownHelper {
      * 获取服务操作接口
      * @return
      */
-    public ApiService getDownloadApi() {
+    public DownApiService getDownloadApi() {
         return mDownloadApi;
     }
 

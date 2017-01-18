@@ -1,4 +1,6 @@
-package com.vise.xsnow.event.inner;
+package com.vise.xsnow.event;
+
+import com.vise.xsnow.event.inner.EventThread;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
