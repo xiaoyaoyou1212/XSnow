@@ -13,6 +13,6 @@ public class ViseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ViseContext.getInstance(this).init();
+        ViseContext.getInstance().init(this);
     }
 }

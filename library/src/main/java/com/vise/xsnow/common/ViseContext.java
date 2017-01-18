@@ -15,22 +15,22 @@ public class ViseContext {
     private static ViseContext instance;
     private Context context;
 
-    private ViseContext(Context context) {
-        this.context = context;
+    private ViseContext() {
     }
 
-    public static ViseContext getInstance(Context context) {
+    public static ViseContext getInstance() {
         if (instance == null) {
             synchronized (ViseContext.class) {
                 if (instance == null) {
-                    instance = new ViseContext(context);
+                    instance = new ViseContext();
                 }
             }
         }
         return instance;
     }
 
-    public void init() {
+    public void init(Context context) {
+        this.context = context;
         initLog();
     }
 
