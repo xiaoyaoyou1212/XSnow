@@ -1,8 +1,20 @@
 <resources>
     <string name="app_name">XSnow</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="menu_net">网络</string>
+    <string name="menu_down">下载</string>
+    <string name="menu_image_loader">图片加载</string>
+    <string name="menu_other">其他</string>
+    <string name="menu_about">关于</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="about_author">逍遥游</string>
+    <string name="content_prompt">详细使用请右滑查看菜单栏进行操作\n项目介绍请点击右下角图标查看</string>
+
+    <string name="about_dialog_text">\n
+        项目简介：基于RxJava+Retrofit精心打造的Android基础框架，包含网络、下载、缓存、事件总线、数据库、图片加载、UI模块，基本都是项目中必用功能，每个模块充分解耦，可随意替换。\n
+        项目地址：https://github.com/xiaoyaoyou1212/XSnow\n
+        作者：胡伟\n
+        网站：http://www.xiaoyaoyou1212.com\n
+        博客：http://blog.csdn.net/xiaoyaoyou1212
+    </string>
 </resources>

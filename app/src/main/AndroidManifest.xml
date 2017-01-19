@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activity.NetTestActivity"/>
+        <activity android:name=".activity.DownTestActivity"/>
         <activity android:name=".activity.ImageLoaderActivity"/>
+        <activity android:name=".activity.OtherTestActivity"/>
     </application>
 
 </manifest>
