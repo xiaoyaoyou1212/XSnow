@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.vise.log.ViseLog;
 import com.vise.log.inner.DefaultTree;
-import com.vise.xsnow.BuildConfig;
 
 /**
  * @Description: 全局初始化配置
@@ -34,10 +33,12 @@ public class ViseContext {
         initLog();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     private void initLog() {
-        if (BuildConfig.DEBUG) {
-            ViseLog.getLogConfig().configAllowLog(true).configShowBorders(true);
-            ViseLog.plant(new DefaultTree());
-        }
+        ViseLog.getLogConfig().configAllowLog(true).configShowBorders(true);
+        ViseLog.plant(new DefaultTree());
     }
 }

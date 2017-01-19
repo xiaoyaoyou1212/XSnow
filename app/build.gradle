@@ -33,5 +33,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     testCompile 'junit:junit:4.12'
-    compile project(path: ':library')
+    compile project(path: ':xsnow')
 }
