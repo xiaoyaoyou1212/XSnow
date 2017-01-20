@@ -8,7 +8,9 @@ import com.vise.xsnow.database.DBManager;
 import org.greenrobot.greendao.AbstractDao;
 
 /**
- * @Description:
+ * @Description: 数据库操作类，由于greenDao的特殊性，不能在框架中搭建，
+ * 所有数据库操作都可以参考该类实现自己的数据库操作管理类，不同的Dao实现
+ * 对应的getAbstractDao方法就行。
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:18.
  */

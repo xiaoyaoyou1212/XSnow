@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.OkHeaders;
 import retrofit2.Response;
 import rx.Subscriber;
 import rx.Subscription;
@@ -402,7 +403,7 @@ public class FileHelper {
         }
 
         public static long contentLength(Response<?> response) {
-            return 0;
+            return OkHeaders.contentLength(response.headers());
         }
 
         public static boolean isChunked(Response<?> response) {

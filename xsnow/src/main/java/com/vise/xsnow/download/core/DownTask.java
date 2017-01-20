@@ -8,8 +8,10 @@ import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.download.mode.DownStatus;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -75,6 +77,7 @@ public class DownTask {
         subscription = viseDownload.download(url, saveName, savePath)
                 .subscribeOn(Schedulers.io())
                 .onBackpressureLatest()
+                .sample(1, TimeUnit.SECONDS)
                 .subscribe(new Subscriber<DownProgress>() {
                     @Override
                     public void onStart() {

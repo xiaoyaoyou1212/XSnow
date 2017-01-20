@@ -20,7 +20,7 @@ import com.vise.xsnow.ui.BaseActivity;
 import java.util.HashMap;
 
 /**
- * @Description:
+ * @Description: 网络获取相关展示
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:04.
  */

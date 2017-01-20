@@ -4,13 +4,15 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
+
 /**
- * @Description:
+ * @Description: GitHub信息
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:15.
  */
 @Entity
-public class GithubModel {
+public class GithubModel implements Serializable {
     @Id(autoincrement = true)
     private Long id;
     private String current_user_url;

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description:
+ * @Description: 图片加载展示
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 22:45.
  */
