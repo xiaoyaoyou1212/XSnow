@@ -67,5 +67,5 @@ ViseApi mViseApi = new ViseApi.Builder(mContext).cacheKey(ApiHost.getHost()).cac
 
 ### 关于作者
 #### 作者：胡伟
-#### 网站：[http://www.xiaoyaoyou1212.com](http://www.xiaoyaoyou1212.com)
+#### 网站：[http://www.huwei.tech](http://www.huwei.tech)
 #### 博客：[http://blog.csdn.net/xiaoyaoyou1212](http://blog.csdn.net/xiaoyaoyou1212)
