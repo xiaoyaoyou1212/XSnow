@@ -4,7 +4,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile project('com.vise.xiaoyaoyou:xsnow:1.0.0')`
+- 项目依赖：`compile project('com.vise.xiaoyaoyou:xsnow:1.0.1')`
 
 ## 网络
 网络算是项目的灵魂，基本每个项目都离不开网络，而一个简单好用，又支持各种配置的网络访问库就显得尤为重要了。该模块也是XSnow的核心功能，使用简单，支持定制常用配置，如各种拦截器、缓存策略、请求头等。上层项目基于RxJava+Retrofit请求网络时需要每个接口都写一个服务接口，这样非常不便利，如何将响应结果通用处理就成为该模块的重点，后面采用泛型转换方式，将响应结果ResponseBody通过map操作符转换成需要的T，具体实现参考项目中net包下的func包，如果需要Http响应码，也可以将响应结果包装成Response<ResponseBody>这样进行转换成T，考虑到项目中很少需要Http响应码来进行判定，一般使用服务器自定义的响应码就可以了，故该模块采用ResponseBody统一接收这种处理方式。
