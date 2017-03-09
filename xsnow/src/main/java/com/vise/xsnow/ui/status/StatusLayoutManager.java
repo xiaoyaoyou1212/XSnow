@@ -7,6 +7,28 @@ import android.view.ViewStub;
 
 /**
  * @Description: 各种状态视图显示管理，可配置网络异常显示视图、无数据显示视图等
+ * 使用示例：
+ * mStatusLayoutManager = StatusLayoutManager.newBuilder(mContext)
+ *      .contentView(R.layout.status_switch_content_layout)//配置内容视图
+ *      .loadingView(R.layout.loading_layout)//配置加载视图
+ *      .emptyView(R.layout.empty_layout)//配置空视图
+ *      .networkErrorView(R.layout.network_error_layout)//配置网络异常视图
+ *      .otherErrorView(R.layout.other_error_layout)//配置其他异常视图
+ *      .retryViewId(R.id.reload_view)//配置重试ViewID
+ *      .onStatusViewListener(new OnStatusViewListener() {//配置状态监听
+ *          @Override
+ *          public void onShowView(View view, int id) {//显示
+ *          }
+ *
+ *          @Override
+ *          public void onHideView(View view, int id) {//隐藏
+ *          }
+ *          })
+ *      .onRetryListener(new OnRetryListener() {//配置重试监听
+ *          @Override
+ *          public void onRetry() {
+ *          }
+ *      }).build();
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-03-08 15:54
  */

@@ -2,7 +2,6 @@ package com.vise.snowdemo.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
 
 import com.vise.snowdemo.R;

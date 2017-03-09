@@ -19,6 +19,7 @@ import com.vise.snowdemo.activity.DownTestActivity;
 import com.vise.snowdemo.activity.ImageLoaderActivity;
 import com.vise.snowdemo.activity.NetTestActivity;
 import com.vise.snowdemo.activity.OtherTestActivity;
+import com.vise.snowdemo.activity.StatusSwitchActivity;
 import com.vise.snowdemo.mode.GithubEvent;
 import com.vise.utils.view.ActivityUtil;
 import com.vise.xsnow.event.BusFactory;
@@ -82,6 +83,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             ActivityUtil.startForwardActivity(this, DownTestActivity.class);
         } else if (id == R.id.menu_image_loader) {
             ActivityUtil.startForwardActivity(this, ImageLoaderActivity.class);
+        } else if (id == R.id.menu_status_view) {
+            ActivityUtil.startForwardActivity(this, StatusSwitchActivity.class);
         } else if (id == R.id.menu_other) {
             ActivityUtil.startForwardActivity(this, OtherTestActivity.class);
         }

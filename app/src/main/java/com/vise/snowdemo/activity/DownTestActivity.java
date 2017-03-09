@@ -16,8 +16,6 @@ import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.exception.ApiException;
 import com.vise.xsnow.ui.BaseActivity;
 
-import rx.functions.Action1;
-
 /**
  * @Description: 下载展示
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>

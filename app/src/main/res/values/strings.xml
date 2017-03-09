@@ -4,6 +4,7 @@
     <string name="menu_net">网络</string>
     <string name="menu_down">下载</string>
     <string name="menu_image_loader">图片加载</string>
+    <string name="menu_status_view">状态视图</string>
     <string name="menu_other">其他</string>
     <string name="menu_about">关于</string>
 
