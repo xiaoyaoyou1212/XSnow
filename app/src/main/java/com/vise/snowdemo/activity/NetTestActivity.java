@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.mode.GithubModel;
+import com.vise.utils.assist.SSLUtil;
 import com.vise.xsnow.net.api.ViseApi;
 import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.exception.ApiException;
@@ -17,6 +18,8 @@ import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.ui.BaseActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 /**
@@ -265,7 +268,11 @@ public class NetTestActivity extends BaseActivity implements View.OnClickListene
 
     private void cacheAndRemoteRequest() {
         mShow_response_data.setText("");
-        mViseApi = new ViseApi.Builder(mContext).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.CACHE_AND_REMOTE).build();
+        try {
+            mViseApi = new ViseApi.Builder(mContext).SSLSocketFactory(SSLUtil.getSslSocketFactory(new InputStream[]{this.getAssets().open("srca.cer")}, null, null)).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.CACHE_AND_REMOTE).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mViseApi.cacheGet("", new HashMap<String, String>(), new ApiCallback<CacheResult<GithubModel>>() {
             @Override
             public void onStart() {
