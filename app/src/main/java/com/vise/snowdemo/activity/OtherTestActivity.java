@@ -21,7 +21,7 @@ import com.vise.xsnow.ui.BaseActivity;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:10.
  */
-public class OtherTestActivity extends BaseActivity implements View.OnClickListener {
+public class OtherTestActivity extends BaseActivity {
 
     private Button mDb_insert;
     private Button mDb_delete;
@@ -38,35 +38,35 @@ public class OtherTestActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRegisterEvent(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_test);
-        setOnResumeRegisterBus(true);
     }
 
     @Override
     protected void initView() {
-        mDb_insert = (Button) findViewById(R.id.db_insert);
-        mDb_delete = (Button) findViewById(R.id.db_delete);
-        mDb_update = (Button) findViewById(R.id.db_update);
-        mDb_query = (Button) findViewById(R.id.db_query);
-        mMemory_cache_put = (Button) findViewById(R.id.memory_cache_put);
-        mMemory_cache_get = (Button) findViewById(R.id.memory_cache_get);
-        mSp_cache_put = (Button) findViewById(R.id.sp_cache_put);
-        mSp_cache_get = (Button) findViewById(R.id.sp_cache_get);
-        mSend_event = (Button) findViewById(R.id.send_event);
+        mDb_insert = F(R.id.db_insert);
+        mDb_delete = F(R.id.db_delete);
+        mDb_update = F(R.id.db_update);
+        mDb_query = F(R.id.db_query);
+        mMemory_cache_put = F(R.id.memory_cache_put);
+        mMemory_cache_get = F(R.id.memory_cache_get);
+        mSp_cache_put = F(R.id.sp_cache_put);
+        mSp_cache_get = F(R.id.sp_cache_get);
+        mSend_event = F(R.id.send_event);
     }
 
     @Override
     protected void bindEvent() {
-        mDb_insert.setOnClickListener(this);
-        mDb_delete.setOnClickListener(this);
-        mDb_update.setOnClickListener(this);
-        mDb_query.setOnClickListener(this);
-        mMemory_cache_put.setOnClickListener(this);
-        mMemory_cache_get.setOnClickListener(this);
-        mSp_cache_put.setOnClickListener(this);
-        mSp_cache_get.setOnClickListener(this);
-        mSend_event.setOnClickListener(this);
+        C(mDb_insert);
+        C(mDb_delete);
+        C(mDb_update);
+        C(mDb_query);
+        C(mMemory_cache_put);
+        C(mMemory_cache_get);
+        C(mSp_cache_put);
+        C(mSp_cache_get);
+        C(mSend_event);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class OtherTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
+    protected void processClick(View view) {
         switch (view.getId()) {
             case R.id.db_insert:
                 if (!mIsInsert) {

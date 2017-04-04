@@ -17,7 +17,7 @@ import com.vise.xsnow.ui.status.StatusLayoutManager;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-03-09 10:25
  */
-public class StatusSwitchActivity extends BaseActivity implements View.OnClickListener {
+public class StatusSwitchActivity extends BaseActivity {
 
     private LinearLayout mLayoutMain;
     private Button mShow_content_view;
@@ -36,12 +36,12 @@ public class StatusSwitchActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void initView() {
-        mLayoutMain = (LinearLayout) findViewById(R.id.layout_main);
-        mShow_content_view = (Button) findViewById(R.id.show_content_view);
-        mShow_loading_view = (Button) findViewById(R.id.show_loading_view);
-        mShow_empty_view = (Button) findViewById(R.id.show_empty_view);
-        mShow_network_error_view = (Button) findViewById(R.id.show_network_error_view);
-        mShow_other_error_view = (Button) findViewById(R.id.show_other_error_view);
+        mLayoutMain = F(R.id.layout_main);
+        mShow_content_view = F(R.id.show_content_view);
+        mShow_loading_view = F(R.id.show_loading_view);
+        mShow_empty_view = F(R.id.show_empty_view);
+        mShow_network_error_view = F(R.id.show_network_error_view);
+        mShow_other_error_view = F(R.id.show_other_error_view);
 
         mStatusLayoutManager = StatusLayoutManager.newBuilder(mContext)
                 .contentView(R.layout.status_switch_content_layout)
@@ -91,11 +91,11 @@ public class StatusSwitchActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void bindEvent() {
-        mShow_content_view.setOnClickListener(this);
-        mShow_loading_view.setOnClickListener(this);
-        mShow_empty_view.setOnClickListener(this);
-        mShow_network_error_view.setOnClickListener(this);
-        mShow_other_error_view.setOnClickListener(this);
+        C(mShow_content_view);
+        C(mShow_loading_view);
+        C(mShow_empty_view);
+        C(mShow_network_error_view);
+        C(mShow_other_error_view);
     }
 
     @Override
@@ -104,8 +104,8 @@ public class StatusSwitchActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    protected void processClick(View view) {
+        switch (view.getId()) {
             case R.id.show_content_view:
                 mStatusLayoutManager.showContentView();
                 break;
@@ -123,4 +123,5 @@ public class StatusSwitchActivity extends BaseActivity implements View.OnClickLi
                 break;
         }
     }
+
 }

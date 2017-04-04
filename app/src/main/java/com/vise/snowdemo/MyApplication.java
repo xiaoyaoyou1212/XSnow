@@ -1,25 +1,30 @@
 package com.vise.snowdemo;
 
+import com.vise.log.ViseLog;
+import com.vise.log.inner.DefaultTree;
 import com.vise.snowdemo.db.DbHelper;
-import com.vise.xsnow.ViseApplication;
+import com.vise.xsnow.BaseApplication;
 import com.vise.xsnow.loader.LoaderFactory;
 
 /**
- * @Description: 自定义Application，主要负责一些初始化操作，
- * 如果需要日志打印需要继承自ViseApplication，也可以自己根据
- * 需要进行日志初始化，不需要继承ViseApplication。
+ * @Description: 自定义Application，主要负责一些初始化操作
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:19.
  */
-public class MyApplication extends ViseApplication {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        init();
-    }
+public class MyApplication extends BaseApplication {
 
-    private void init() {
+    @Override
+    protected void initConfigs() {
+        initLog();
         DbHelper.getInstance().init(this);
         LoaderFactory.getLoader().init(this);
     }
+
+    private void initLog() {
+        ViseLog.getLogConfig()
+                .configAllowLog(true)//是否输出日志
+                .configShowBorders(true);//是否排版显示
+        ViseLog.plant(new DefaultTree());//添加打印日志信息到Logcat的树
+    }
+
 }

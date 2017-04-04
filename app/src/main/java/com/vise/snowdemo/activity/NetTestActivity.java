@@ -27,7 +27,7 @@ import java.util.HashMap;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:04.
  */
-public class NetTestActivity extends BaseActivity implements View.OnClickListener {
+public class NetTestActivity extends BaseActivity {
 
     private Button mNormal_request;
     private Button mFirst_cache_request;
@@ -47,25 +47,25 @@ public class NetTestActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initView() {
-        mNormal_request = (Button) findViewById(R.id.normal_request);
-        mFirst_cache_request = (Button) findViewById(R.id.first_cache_request);
-        mFirst_remote_request = (Button) findViewById(R.id.first_remote_request);
-        mOnly_cache_request = (Button) findViewById(R.id.only_cache_request);
-        mOnly_remote_request = (Button) findViewById(R.id.only_remote_request);
-        mCache_and_remote_request = (Button) findViewById(R.id.cache_and_remote_request);
-        mClear_cache = (Button) findViewById(R.id.clear_cache);
+        mNormal_request = F(R.id.normal_request);
+        mFirst_cache_request = F(R.id.first_cache_request);
+        mFirst_remote_request = F(R.id.first_remote_request);
+        mOnly_cache_request = F(R.id.only_cache_request);
+        mOnly_remote_request = F(R.id.only_remote_request);
+        mCache_and_remote_request = F(R.id.cache_and_remote_request);
+        mClear_cache = F(R.id.clear_cache);
         mShow_response_data = (TextView) findViewById(R.id.show_response_data);
     }
 
     @Override
     protected void bindEvent() {
-        mNormal_request.setOnClickListener(this);
-        mFirst_cache_request.setOnClickListener(this);
-        mFirst_remote_request.setOnClickListener(this);
-        mOnly_cache_request.setOnClickListener(this);
-        mOnly_remote_request.setOnClickListener(this);
-        mCache_and_remote_request.setOnClickListener(this);
-        mClear_cache.setOnClickListener(this);
+        C(mNormal_request);
+        C(mFirst_cache_request);
+        C(mFirst_remote_request);
+        C(mOnly_cache_request);
+        C(mOnly_remote_request);
+        C(mCache_and_remote_request);
+        C(mClear_cache);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class NetTestActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    public void onClick(View view) {
+    protected void processClick(View view) {
         switch (view.getId()) {
             case R.id.normal_request:
                 normalRequest();

@@ -2,6 +2,7 @@ package com.vise.snowdemo.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.GridView;
 
 import com.vise.snowdemo.R;
@@ -30,7 +31,7 @@ public class ImageLoaderActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mImageGrid = (GridView) findViewById(R.id.image_loader_grid);
+        mImageGrid = F(R.id.image_loader_grid);
     }
 
     @Override
@@ -61,5 +62,10 @@ public class ImageLoaderActivity extends BaseActivity {
         mImageList.add("http://img.juemei.com/album/2016-09-04/57cb5faf282a5.jpg");
         mImageAdapter = new ImageAdapter(mContext, mImageList);
         mImageGrid.setAdapter(mImageAdapter);
+    }
+
+    @Override
+    protected void processClick(View view) {
+
     }
 }

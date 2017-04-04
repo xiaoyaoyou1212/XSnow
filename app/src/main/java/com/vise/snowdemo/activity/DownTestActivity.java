@@ -42,79 +42,18 @@ public class DownTestActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mNormal_download = (Button) findViewById(R.id.normal_download);
-        mNormal_download_progress = (ProgressBar) findViewById(R.id.normal_download_progress);
-        mNormal_download_desc = (TextView) findViewById(R.id.normal_download_desc);
-        mService_download = (Button) findViewById(R.id.service_download);
-        mService_download_progress = (ProgressBar) findViewById(R.id.service_download_progress);
-        mService_download_desc = (TextView) findViewById(R.id.service_download_desc);
+        mNormal_download = F(R.id.normal_download);
+        mNormal_download_progress = F(R.id.normal_download_progress);
+        mNormal_download_desc = F(R.id.normal_download_desc);
+        mService_download = F(R.id.service_download);
+        mService_download_progress = F(R.id.service_download_progress);
+        mService_download_desc = F(R.id.service_download_desc);
     }
 
     @Override
     protected void bindEvent() {
-        mNormal_download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viseDownload.download(url, saveName, null, new ApiCallback<DownProgress>() {
-                    @Override
-                    public void onStart() {
-                        ViseLog.i("down start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.i("down error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("down completed");
-                    }
-
-                    @Override
-                    public void onNext(DownProgress downProgress) {
-                        if (downProgress == null) {
-                            return;
-                        }
-                        mNormal_download_progress.setProgress((int) (downProgress.getDownloadSize() * 100 / downProgress.getTotalSize()));
-                        mNormal_download_desc.setText(downProgress.getPercent());
-                    }
-                });
-            }
-        });
-        mService_download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viseDownload.receiveDownProgress(url, new ApiCallback<DownEvent>() {
-                    @Override
-                    public void onStart() {
-                        ViseLog.i("down start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.i("down error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("down completed");
-                    }
-
-                    @Override
-                    public void onNext(DownEvent downEvent) {
-                        if (downEvent == null || downEvent.getDownProgress() == null
-                                || downEvent.getDownProgress().getDownloadSize() > downEvent.getDownProgress().getTotalSize()) {
-                            return;
-                        }
-                        mService_download_progress.setProgress((int) (downEvent.getDownProgress().getDownloadSize()
-                                * 100 / downEvent.getDownProgress().getTotalSize()));
-                        mService_download_desc.setText(downEvent.getDownProgress().getPercent());
-                    }
-                });
-                viseDownload.serviceDownload(url, saveName, null).subscribe();
-            }
-        });
+        C(mNormal_download);
+        C(mService_download);
     }
 
     @Override
@@ -122,5 +61,76 @@ public class DownTestActivity extends BaseActivity {
         viseDownload = ViseDownload.getInstance()
                 .maxThread(3)
                 .context(mContext);
+    }
+
+    @Override
+    protected void processClick(View view) {
+        switch (view.getId()) {
+            case R.id.normal_download:
+                normalDownload();
+                break;
+            case R.id.service_download:
+                serverDownload();
+                break;
+        }
+    }
+
+    private void serverDownload() {
+        viseDownload.receiveDownProgress(url, new ApiCallback<DownEvent>() {
+            @Override
+            public void onStart() {
+                ViseLog.i("down start");
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                ViseLog.i("down error" + e);
+            }
+
+            @Override
+            public void onCompleted() {
+                ViseLog.i("down completed");
+            }
+
+            @Override
+            public void onNext(DownEvent downEvent) {
+                if (downEvent == null || downEvent.getDownProgress() == null
+                        || downEvent.getDownProgress().getDownloadSize() > downEvent.getDownProgress().getTotalSize()) {
+                    return;
+                }
+                mService_download_progress.setProgress((int) (downEvent.getDownProgress().getDownloadSize()
+                        * 100 / downEvent.getDownProgress().getTotalSize()));
+                mService_download_desc.setText(downEvent.getDownProgress().getPercent());
+            }
+        });
+        viseDownload.serviceDownload(url, saveName, null).subscribe();
+    }
+
+    private void normalDownload() {
+        viseDownload.download(url, saveName, null, new ApiCallback<DownProgress>() {
+            @Override
+            public void onStart() {
+                ViseLog.i("down start");
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                ViseLog.i("down error" + e);
+            }
+
+            @Override
+            public void onCompleted() {
+                ViseLog.i("down completed");
+            }
+
+            @Override
+            public void onNext(DownProgress downProgress) {
+                if (downProgress == null) {
+                    return;
+                }
+                mNormal_download_progress.setProgress((int) (downProgress.getDownloadSize() * 100 / downProgress.getTotalSize()));
+                mNormal_download_desc.setText(downProgress.getPercent());
+            }
+        });
     }
 }

@@ -22,7 +22,6 @@ import com.vise.snowdemo.activity.OtherTestActivity;
 import com.vise.snowdemo.activity.StatusSwitchActivity;
 import com.vise.snowdemo.mode.GithubEvent;
 import com.vise.utils.view.ActivityUtil;
-import com.vise.xsnow.event.BusFactory;
 import com.vise.xsnow.event.EventSubscribe;
 import com.vise.xsnow.event.IEvent;
 import com.vise.xsnow.ui.BaseActivity;
@@ -31,9 +30,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRegisterEvent(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BusFactory.getBus().register(this);
     }
 
     @Override
@@ -60,6 +59,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void initData() {
+
+    }
+
+    @Override
+    protected void processClick(View view) {
 
     }
 
@@ -123,9 +127,4 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .show();
     }
 
-    @Override
-    protected void onDestroy() {
-        BusFactory.getBus().unregister(this);
-        super.onDestroy();
-    }
 }
