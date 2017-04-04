@@ -4,12 +4,15 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile project('com.vise.xiaoyaoyou:xsnow:1.1.0')`
+- 项目依赖：`compile project('com.vise.xiaoyaoyou:xsnow:1.1.1')`
 
 ### QQ交流群
 ![QQ群](http://img.blog.csdn.net/20170327191310083)
 
 ### 版本说明
+
+- V1.1.1
+优化BaseActivity、BaseFragment以及BaseApplication，简化findViewById操作以及点击事件处理。
 
 - V1.1.0
 增加状态视图切换功能，如网络异常、无数据等情况下的显示，让视图显示更方便管理。
