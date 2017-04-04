@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseArray;
 import android.view.View;
 
 import com.vise.xsnow.event.BusFactory;
@@ -15,16 +16,20 @@ import com.vise.xsnow.manager.AppManager;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 14:51
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected Context mContext;
-    private boolean isOnResumeRegisterBus = false;
-    private boolean isOnStartRegisterBus = false;
+    private SparseArray<View> mViews;
+    private boolean mIsRegisterEvent = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        mViews = new SparseArray<>();
+        if (mIsRegisterEvent) {
+            BusFactory.getBus().register(this);
+        }
         AppManager.getInstance().addActivity(this);
     }
 
@@ -45,58 +50,38 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (isOnResumeRegisterBus) {
-            BusFactory.getBus().register(this);
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (isOnStartRegisterBus) {
-            BusFactory.getBus().register(this);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (isOnResumeRegisterBus) {
-            BusFactory.getBus().unregister(this);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (isOnStartRegisterBus) {
-            BusFactory.getBus().unregister(this);
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mIsRegisterEvent) {
+            BusFactory.getBus().unregister(this);
+        }
         AppManager.getInstance().removeActivity(this);
     }
 
-    protected boolean isOnResumeRegisterBus() {
-        return isOnResumeRegisterBus;
+    @Override
+    public void onClick(View view) {
+        processClick(view);
     }
 
-    protected BaseActivity setOnResumeRegisterBus(boolean onResumeRegisterBus) {
-        isOnResumeRegisterBus = onResumeRegisterBus;
-        return this;
+    protected <E extends View> E F(int viewId) {
+        E view = (E) mViews.get(viewId);
+        if (view == null) {
+            view = (E) findViewById(viewId);
+            mViews.put(viewId, view);
+        }
+        return view;
     }
 
-    protected boolean isOnStartRegisterBus() {
-        return isOnStartRegisterBus;
+    protected <E extends View> void C(E view) {
+        view.setOnClickListener(this);
     }
 
-    protected BaseActivity setOnStartRegisterBus(boolean onStartRegisterBus) {
-        isOnStartRegisterBus = onStartRegisterBus;
+    public boolean isRegisterEvent() {
+        return mIsRegisterEvent;
+    }
+
+    public BaseActivity setRegisterEvent(boolean mIsRegisterEvent) {
+        this.mIsRegisterEvent = mIsRegisterEvent;
         return this;
     }
 
@@ -114,4 +99,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化数据
      */
     protected abstract void initData();
+
+    /**
+     * 点击事件处理
+     * @param view
+     */
+    protected abstract void processClick(View view);
 }

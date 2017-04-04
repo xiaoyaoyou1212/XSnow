@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +18,24 @@ import com.vise.xsnow.event.BusFactory;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 14:52
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     protected Context mContext;
     protected Resources mResources;
     protected LayoutInflater mInflater;
-    private boolean isOnResumeRegisterBus = false;
-    private boolean isOnStartRegisterBus = false;
+    protected View mConvertView;
+    private SparseArray<View> mViews;
+    private boolean mIsRegisterEvent = false;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mContext = activity;
         this.mResources = mContext.getResources();
+        this.mViews = new SparseArray<>();
         this.mInflater = LayoutInflater.from(mContext);
+        if (mIsRegisterEvent) {
+            BusFactory.getBus().register(this);
+        }
     }
 
     @Override
@@ -39,7 +45,8 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutID(), container, false);
+        mConvertView = inflater.inflate(getLayoutID(), container, false);
+        return mConvertView;
     }
 
     @Override
@@ -51,57 +58,40 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (isOnResumeRegisterBus) {
-            BusFactory.getBus().register(this);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (isOnStartRegisterBus) {
-            BusFactory.getBus().register(this);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (isOnResumeRegisterBus) {
-            BusFactory.getBus().unregister(this);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (isOnStartRegisterBus) {
-            BusFactory.getBus().unregister(this);
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mIsRegisterEvent) {
+            BusFactory.getBus().unregister(this);
+        }
     }
 
-    protected boolean isOnResumeRegisterBus() {
-        return isOnResumeRegisterBus;
+    @Override
+    public void onClick(View view) {
+        processClick(view);
     }
 
-    protected BaseFragment setOnResumeRegisterBus(boolean onResumeRegisterBus) {
-        isOnResumeRegisterBus = onResumeRegisterBus;
-        return this;
+    protected <E extends View> E F(int viewId) {
+        if (mConvertView != null) {
+            E view = (E) mViews.get(viewId);
+            if (view == null) {
+                view = (E) mConvertView.findViewById(viewId);
+                mViews.put(viewId, view);
+            }
+            return view;
+        }
+        return null;
     }
 
-    protected boolean isOnStartRegisterBus() {
-        return isOnStartRegisterBus;
+    protected <E extends View> void C(E view) {
+        view.setOnClickListener(this);
     }
 
-    protected BaseFragment setOnStartRegisterBus(boolean onStartRegisterBus) {
-        isOnStartRegisterBus = onStartRegisterBus;
+    public boolean isRegisterEvent() {
+        return mIsRegisterEvent;
+    }
+
+    public BaseFragment setRegisterEvent(boolean mIsRegisterEvent) {
+        this.mIsRegisterEvent = mIsRegisterEvent;
         return this;
     }
 
@@ -126,4 +116,10 @@ public abstract class BaseFragment extends Fragment {
      * 初始化数据
      */
     protected abstract void initData();
+
+    /**
+     * 点击事件处理
+     * @param view
+     */
+    protected abstract void processClick(View view);
 }
