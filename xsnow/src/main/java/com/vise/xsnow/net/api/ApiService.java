@@ -51,19 +51,16 @@ public interface ApiService {
 
     @Multipart
     @POST()
-    Observable<ResponseBody> uploadImage(@Url() String url,
-                                         @Part("image\"; filename=\"image" + ".jpg") RequestBody
-                                                 requestBody);
+    Observable<ResponseBody> uploadImage(@Url() String url, @Part("image\"; filename=\"image" + ".jpg") RequestBody requestBody);
 
     @Multipart
     @POST()
-    Observable<ResponseBody> uploadFile(@Url String fileUrl,
-                                        @Part("description") RequestBody description, @Part("files") MultipartBody.Part file);
+    Observable<ResponseBody> uploadFile(@Url String fileUrl, @Part("description") RequestBody description,
+                                        @Part("files") MultipartBody.Part file);
 
     @Multipart
     @POST()
-    Observable<ResponseBody> uploadFiles(@Url() String url, @PartMap() Map<String, RequestBody>
-            maps);
+    Observable<ResponseBody> uploadFiles(@Url() String url, @PartMap() Map<String, RequestBody> maps);
 
     @Multipart
     @POST()
