@@ -62,7 +62,7 @@ public class ApiException extends Exception {
             case ApiCode.Response.TIMESTAMP_ERROR://时间戳过期
             case ApiCode.Response.ACCESS_TOKEN_EXPIRED://AccessToken错误或已过期
             case ApiCode.Response.REFRESH_TOKEN_EXPIRED://RefreshToken错误或已过期
-            case ApiCode.Response.OTHER_PHONE_LOGINED: //帐号在其它手机已登录
+            case ApiCode.Response.OTHER_PHONE_LOGIN: //帐号在其它手机已登录
             case ApiCode.Response.SIGN_ERROR://签名错误
                 return true;
             default:

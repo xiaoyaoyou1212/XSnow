@@ -50,7 +50,7 @@ public class ApiCode {
         //RefreshToken错误或已过期
         public static final int REFRESH_TOKEN_EXPIRED = 10002;
         //帐号在其它手机已登录
-        public static final int OTHER_PHONE_LOGINED = 10003;
+        public static final int OTHER_PHONE_LOGIN = 10003;
         //时间戳过期
         public static final int TIMESTAMP_ERROR = 10004;
         //缺少授权信息,没有AccessToken
