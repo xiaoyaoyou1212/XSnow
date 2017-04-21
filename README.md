@@ -4,7 +4,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile project('com.vise.xiaoyaoyou:xsnow:1.1.1')`
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:1.1.1'`
 
 ### QQ交流群
 ![QQ群](http://img.blog.csdn.net/20170327191310083)
