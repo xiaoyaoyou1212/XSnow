@@ -1,5 +1,7 @@
 package com.vise.snowdemo.activity;
 
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,12 +11,19 @@ import android.widget.TextView;
 
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
+import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.download.ViseDownload;
 import com.vise.xsnow.download.mode.DownEvent;
 import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.exception.ApiException;
+import com.vise.xsnow.permission.OnPermissionCallback;
+import com.vise.xsnow.permission.Permission;
+import com.vise.xsnow.permission.PermissionManager;
+import com.vise.xsnow.permission.RxPermissions;
 import com.vise.xsnow.ui.BaseActivity;
+
+import rx.functions.Action1;
 
 /**
  * @Description: 下载展示
@@ -58,6 +67,22 @@ public class DownTestActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        PermissionManager.instance().with(this).request(new OnPermissionCallback() {
+            @Override
+            public void onRequestAllow(String permissionName) {
+                DialogUtil.showTips(mContext, "权限控制", "已经授权！\n" + permissionName);
+            }
+
+            @Override
+            public void onRequestRefuse(String permissionName) {
+                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，提示请求许可理由！\n" + permissionName);
+            }
+
+            @Override
+            public void onRequestNoAsk(String permissionName) {
+                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，不在提醒！\n" + permissionName);
+            }
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
         viseDownload = ViseDownload.getInstance()
                 .maxThread(3)
                 .context(mContext);

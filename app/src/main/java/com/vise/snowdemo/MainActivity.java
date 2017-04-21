@@ -2,7 +2,6 @@ package com.vise.snowdemo;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -27,11 +26,9 @@ import com.vise.utils.view.ActivityUtil;
 import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.event.EventSubscribe;
 import com.vise.xsnow.event.IEvent;
-import com.vise.xsnow.permission.Permission;
-import com.vise.xsnow.permission.RxPermissions;
+import com.vise.xsnow.permission.OnPermissionCallback;
+import com.vise.xsnow.permission.PermissionManager;
 import com.vise.xsnow.ui.BaseActivity;
-
-import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -66,21 +63,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            RxPermissions rxPermissions = new RxPermissions(this);
-            rxPermissions.requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Permission>() {
-                        @Override
-                        public void call(Permission permission) {
-                            if (permission.granted) {
-                                DialogUtil.showTips(mContext, "权限控制", "已经授权");
-                            } else if (permission.shouldShowRequestPermissionRationale) {
-                                DialogUtil.showTips(mContext, "权限控制", "显示请求许可理由");
-                            } else {
-                                DialogUtil.showTips(mContext, "权限控制", "拒绝授权");
-                            }
-                        }
-                    });
-        }
+        PermissionManager.instance().with(this).request(new OnPermissionCallback() {
+            @Override
+            public void onRequestAllow(String permissionName) {
+                DialogUtil.showTips(mContext, "权限控制", "已经授权！\n" + permissionName);
+            }
+
+            @Override
+            public void onRequestRefuse(String permissionName) {
+                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，提示请求许可理由！\n" + permissionName);
+            }
+
+            @Override
+            public void onRequestNoAsk(String permissionName) {
+                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，不在提醒！\n" + permissionName);
+            }
+        }, Manifest.permission.CALL_PHONE);
     }
 
     @Override
