@@ -1,0 +1,416 @@
+package com.vise.xsnow.net.config;
+
+import com.vise.xsnow.cache.DiskCache;
+import com.vise.xsnow.common.ViseConfig;
+import com.vise.xsnow.net.ViseNet;
+import com.vise.xsnow.net.core.ApiCookie;
+import com.vise.xsnow.net.interceptor.GzipRequestInterceptor;
+import com.vise.xsnow.net.interceptor.HeadersInterceptor;
+import com.vise.xsnow.net.interceptor.OfflineCacheInterceptor;
+import com.vise.xsnow.net.interceptor.OnlineCacheInterceptor;
+import com.vise.xsnow.net.mode.CacheMode;
+
+import java.net.Proxy;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+
+import okhttp3.Cache;
+import okhttp3.ConnectionPool;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import retrofit2.CallAdapter;
+import retrofit2.Converter;
+
+/**
+ * @Description:
+ * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
+ * @date: 2017-04-28 17:17
+ */
+public class NetConfig implements INetConfig {
+    private CallAdapter.Factory callAdapterFactory;
+    private Converter.Factory converterFactory;
+    private okhttp3.Call.Factory callFactory;
+    private SSLSocketFactory sslSocketFactory;
+    private HostnameVerifier hostnameVerifier;
+    private ConnectionPool connectionPool;
+    private ApiCookie apiCookie;
+    private CacheMode cacheMode;
+    private Boolean isCookie;
+    private Boolean isCache;
+    private String baseUrl;
+    private Cache cache;
+
+    private static NetConfig sNetConfig;
+    private NetConfig() {
+    }
+
+    public static NetConfig getInstance() {
+        if (sNetConfig == null) {
+            synchronized (NetConfig.class) {
+                if (sNetConfig == null) {
+                    sNetConfig = new NetConfig();
+                }
+            }
+        }
+        return sNetConfig;
+    }
+
+    /**
+     * 设置自定义OkHttpClient
+     *
+     * @param client
+     * @return
+     */
+    public NetConfig client(OkHttpClient client) {
+        ViseNet.getRetrofitBuilder().client(checkNotNull(client, "client == null"));
+        return this;
+    }
+
+    /**
+     * 设置Call的工厂
+     *
+     * @param factory
+     * @return
+     */
+    public NetConfig callFactory(okhttp3.Call.Factory factory) {
+        this.callFactory = checkNotNull(factory, "factory == null");
+        return this;
+    }
+
+    /**
+     * 设置连接超时时间（秒）
+     *
+     * @param timeout
+     * @return
+     */
+    public NetConfig connectTimeout(int timeout) {
+        return connectTimeout(timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 设置读取超时时间（秒）
+     *
+     * @param timeout
+     * @return
+     */
+    public NetConfig readTimeout(int timeout) {
+        return readTimeout(timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 设置写入超时时间（秒）
+     *
+     * @param timeout
+     * @return
+     */
+    public NetConfig writeTimeout(int timeout) {
+        return writeTimeout(timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 设置是否添加Cookie
+     *
+     * @param isCookie
+     * @return
+     */
+    public NetConfig cookie(boolean isCookie) {
+        this.isCookie = isCookie;
+        return this;
+    }
+
+    /**
+     * 设置是否添加缓存
+     *
+     * @param isCache
+     * @return
+     */
+    public NetConfig cache(boolean isCache) {
+        this.isCache = isCache;
+        return this;
+    }
+
+    /**
+     * 设置代理
+     *
+     * @param proxy
+     * @return
+     */
+    public NetConfig proxy(Proxy proxy) {
+        ViseNet.getOkHttpBuilder().proxy(checkNotNull(proxy, "proxy == null"));
+        return this;
+    }
+
+    /**
+     * 设置连接池
+     *
+     * @param connectionPool
+     * @return
+     */
+    public NetConfig connectionPool(ConnectionPool connectionPool) {
+        this.connectionPool = checkNotNull(connectionPool, "connectionPool == null");
+        return this;
+    }
+
+    /**
+     * 设置连接超时时间
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     */
+    public NetConfig connectTimeout(int timeout, TimeUnit unit) {
+        if (timeout > -1) {
+            ViseNet.getOkHttpBuilder().connectTimeout(timeout, unit);
+        } else {
+            ViseNet.getOkHttpBuilder().connectTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        }
+        return this;
+    }
+
+    /**
+     * 设置写入超时时间
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     */
+    public NetConfig writeTimeout(int timeout, TimeUnit unit) {
+        if (timeout > -1) {
+            ViseNet.getOkHttpBuilder().writeTimeout(timeout, unit);
+        } else {
+            ViseNet.getOkHttpBuilder().writeTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        }
+        return this;
+    }
+
+    /**
+     * 设置读取超时时间
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     */
+    public NetConfig readTimeout(int timeout, TimeUnit unit) {
+        if (timeout > -1) {
+            ViseNet.getOkHttpBuilder().readTimeout(timeout, unit);
+        } else {
+            ViseNet.getOkHttpBuilder().readTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        }
+        return this;
+    }
+
+    /**
+     * 设置请求BaseURL
+     *
+     * @param baseUrl
+     * @return
+     */
+    public NetConfig baseUrl(String baseUrl) {
+        this.baseUrl = checkNotNull(baseUrl, "baseUrl == null");
+        return this;
+    }
+
+    /**
+     * 设置转换工厂
+     *
+     * @param factory
+     * @return
+     */
+    public NetConfig converterFactory(Converter.Factory factory) {
+        this.converterFactory = factory;
+        return this;
+    }
+
+    /**
+     * 设置CallAdapter工厂
+     *
+     * @param factory
+     * @return
+     */
+    public NetConfig callAdapterFactory(CallAdapter.Factory factory) {
+        this.callAdapterFactory = factory;
+        return this;
+    }
+
+    /**
+     * 设置请求头部
+     *
+     * @param headers
+     * @return
+     */
+    public NetConfig headers(Map<String, String> headers) {
+        ViseNet.getOkHttpBuilder().addInterceptor(new HeadersInterceptor(headers));
+        return this;
+    }
+
+    /**
+     * 设置请求参数
+     *
+     * @param parameters
+     * @return
+     */
+    public NetConfig parameters(Map<String, String> parameters) {
+        ViseNet.getOkHttpBuilder().addInterceptor(new HeadersInterceptor(parameters));
+        return this;
+    }
+
+    /**
+     * 设置拦截器
+     *
+     * @param interceptor
+     * @return
+     */
+    public NetConfig interceptor(Interceptor interceptor) {
+        ViseNet.getOkHttpBuilder().addInterceptor(checkNotNull(interceptor, "interceptor == null"));
+        return this;
+    }
+
+    /**
+     * 设置网络拦截器
+     *
+     * @param interceptor
+     * @return
+     */
+    public NetConfig networkInterceptor(Interceptor interceptor) {
+        ViseNet.getOkHttpBuilder().addNetworkInterceptor(checkNotNull(interceptor, "interceptor == null"));
+        return this;
+    }
+
+    /**
+     * 设置Cookie管理
+     *
+     * @param cookie
+     * @return
+     */
+    public NetConfig cookieManager(ApiCookie cookie) {
+        this.apiCookie = checkNotNull(cookie, "cookieManager == null");
+        return this;
+    }
+
+    /**
+     * 设置SSL工厂
+     *
+     * @param sslSocketFactory
+     * @return
+     */
+    public NetConfig SSLSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.sslSocketFactory = sslSocketFactory;
+        return this;
+    }
+
+    /**
+     * 设置主机验证机制
+     *
+     * @param hostnameVerifier
+     * @return
+     */
+    public NetConfig hostnameVerifier(HostnameVerifier hostnameVerifier) {
+        this.hostnameVerifier = hostnameVerifier;
+        return this;
+    }
+
+    /**
+     * 使用POST方式是否需要进行GZIP压缩，服务器不支持则不设置
+     *
+     * @return
+     */
+    public NetConfig postGzipInterceptor() {
+        interceptor(new GzipRequestInterceptor());
+        return this;
+    }
+
+    /**
+     * 设置缓存Key，主要针对网路请求结果进行缓存
+     *
+     * @param cacheKey
+     * @return
+     */
+    public NetConfig cacheKey(String cacheKey) {
+        ViseNet.getApiCacheBuilder().cacheKey(checkNotNull(cacheKey, "cacheKey == null"));
+        return this;
+    }
+
+    /**
+     * 设置缓存时间，默认永久，主要针对网路请求结果进行缓存
+     *
+     * @param cacheTime
+     * @return
+     */
+    public NetConfig cacheTime(long cacheTime) {
+        ViseNet.getApiCacheBuilder().cacheTime(Math.max(DiskCache.CACHE_NEVER_EXPIRE, cacheTime));
+        return this;
+    }
+
+    /**
+     * 设置缓存类型，可根据类型自动配置缓存策略，主要针对网络请求结果进行缓存
+     *
+     * @param cacheMode
+     * @return
+     */
+    public NetConfig cacheMode(CacheMode cacheMode) {
+        this.cacheMode = cacheMode;
+        return this;
+    }
+
+    /**
+     * 设置在线缓存，主要针对网路请求过程进行缓存
+     *
+     * @param cache
+     * @return
+     */
+    public NetConfig cacheOnline(Cache cache) {
+        networkInterceptor(new OnlineCacheInterceptor());
+        this.cache = cache;
+        return this;
+    }
+
+    /**
+     * 设置在线缓存，主要针对网路请求过程进行缓存
+     *
+     * @param cache
+     * @param cacheControlValue
+     * @return
+     */
+    public NetConfig cacheOnline(Cache cache, final int cacheControlValue) {
+        networkInterceptor(new OnlineCacheInterceptor(cacheControlValue));
+        this.cache = cache;
+        return this;
+    }
+
+    /**
+     * 设置离线缓存，主要针对网路请求过程进行缓存
+     *
+     * @param cache
+     * @return
+     */
+    public NetConfig cacheOffline(Cache cache) {
+        networkInterceptor(new OfflineCacheInterceptor(ViseNet.getContext()));
+        interceptor(new OfflineCacheInterceptor(ViseNet.getContext()));
+        this.cache = cache;
+        return this;
+    }
+
+    /**
+     * 设置离线缓存，主要针对网路请求过程进行缓存
+     *
+     * @param cache
+     * @param cacheControlValue
+     * @return
+     */
+    public NetConfig cacheOffline(Cache cache, final int cacheControlValue) {
+        networkInterceptor(new OfflineCacheInterceptor(ViseNet.getContext(), cacheControlValue));
+        interceptor(new OfflineCacheInterceptor(ViseNet.getContext(), cacheControlValue));
+        this.cache = cache;
+        return this;
+    }
+
+    private static <T> T checkNotNull(T t, String message) {
+        if (t == null) {
+            throw new NullPointerException(message);
+        }
+        return t;
+    }
+}
