@@ -2,10 +2,13 @@ package com.vise.xsnow.net;
 
 import android.content.Context;
 
+import com.vise.xsnow.net.config.NetConfig;
 import com.vise.xsnow.net.core.ApiCache;
+import com.vise.xsnow.net.request.GetRequest;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import rx.Observable;
 
 /**
  * @Description: 网络请求入口
@@ -18,6 +21,8 @@ public class ViseNet {
     private static OkHttpClient.Builder sOkHttpBuilder;
     private static Retrofit.Builder sRetrofitBuilder;
     private static ApiCache.Builder sApiCacheBuilder;
+
+    private final NetConfig NET_CONFIG = NetConfig.getInstance();
 
     private ViseNet() {
     }
@@ -59,5 +64,13 @@ public class ViseNet {
 
     public static ApiCache.Builder getApiCacheBuilder() {
         return sApiCacheBuilder;
+    }
+
+    public NetConfig Config() {
+        return NET_CONFIG;
+    }
+
+    public static GetRequest get() {
+        return new GetRequest();
     }
 }

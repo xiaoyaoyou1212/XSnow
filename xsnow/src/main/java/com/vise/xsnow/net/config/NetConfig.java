@@ -10,6 +10,7 @@ import com.vise.xsnow.net.interceptor.OfflineCacheInterceptor;
 import com.vise.xsnow.net.interceptor.OnlineCacheInterceptor;
 import com.vise.xsnow.net.mode.CacheMode;
 
+import java.io.File;
 import java.net.Proxy;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +19,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Cache;
+import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -36,6 +38,7 @@ public class NetConfig implements INetConfig {
     private SSLSocketFactory sslSocketFactory;
     private HostnameVerifier hostnameVerifier;
     private ConnectionPool connectionPool;
+    private File httpCacheDirectory;
     private ApiCookie apiCookie;
     private CacheMode cacheMode;
     private Boolean isCookie;
@@ -405,6 +408,78 @@ public class NetConfig implements INetConfig {
         interceptor(new OfflineCacheInterceptor(ViseNet.getContext(), cacheControlValue));
         this.cache = cache;
         return this;
+    }
+
+    /**
+     * 设置缓存路径
+     * @param httpCacheDirectory
+     * @return
+     */
+    public NetConfig setHttpCacheDirectory(File httpCacheDirectory) {
+        this.httpCacheDirectory = httpCacheDirectory;
+        return this;
+    }
+
+    /**
+     * 设置缓存
+     * @param cache
+     * @return
+     */
+    public NetConfig setCache(Cache cache) {
+        this.cache = cache;
+        return this;
+    }
+
+    public File getHttpCacheDirectory() {
+        return httpCacheDirectory;
+    }
+
+    public CallAdapter.Factory getCallAdapterFactory() {
+        return callAdapterFactory;
+    }
+
+    public Converter.Factory getConverterFactory() {
+        return converterFactory;
+    }
+
+    public Call.Factory getCallFactory() {
+        return callFactory;
+    }
+
+    public SSLSocketFactory getSslSocketFactory() {
+        return sslSocketFactory;
+    }
+
+    public HostnameVerifier getHostnameVerifier() {
+        return hostnameVerifier;
+    }
+
+    public ConnectionPool getConnectionPool() {
+        return connectionPool;
+    }
+
+    public ApiCookie getApiCookie() {
+        return apiCookie;
+    }
+
+    public CacheMode getCacheMode() {
+        return cacheMode;
+    }
+
+    public Boolean isCookie() {
+        return isCookie;
+    }
+
+    public Boolean isCache() {
+        return isCache;
+    }
+
+    public Cache getCache() {
+        return cache;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
     }
 
     private static <T> T checkNotNull(T t, String message) {
