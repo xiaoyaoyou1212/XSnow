@@ -8,7 +8,6 @@ import com.vise.xsnow.net.interceptor.GzipRequestInterceptor;
 import com.vise.xsnow.net.interceptor.HeadersInterceptor;
 import com.vise.xsnow.net.interceptor.OfflineCacheInterceptor;
 import com.vise.xsnow.net.interceptor.OnlineCacheInterceptor;
-import com.vise.xsnow.net.mode.CacheMode;
 
 import java.io.File;
 import java.net.Proxy;
@@ -32,12 +31,12 @@ import retrofit2.Converter;
  * @date: 2017-04-28 17:17
  */
 public class NetConfig {
-    private CallAdapter.Factory callAdapterFactory;
-    private Converter.Factory converterFactory;
-    private okhttp3.Call.Factory callFactory;
-    private SSLSocketFactory sslSocketFactory;
-    private HostnameVerifier hostnameVerifier;
-    private ConnectionPool connectionPool;
+    private CallAdapter.Factory callAdapterFactory;//Call适配器工厂
+    private Converter.Factory converterFactory;//转换工厂
+    private okhttp3.Call.Factory callFactory;//Call工厂
+    private SSLSocketFactory sslSocketFactory;//SSL工厂
+    private HostnameVerifier hostnameVerifier;//主机域名验证
+    private ConnectionPool connectionPool;//连接池
     private File httpCacheDirectory;//Http缓存路径
     private Boolean isHttpCache;//是否使用Http缓存
     private ApiCookie apiCookie;//Cookie配置

@@ -52,6 +52,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected long writeTimeOut;//写入超时时间
     protected long connectTimeout;//连接超时时间
     protected int retryCount;//重试次数
+    protected boolean isHttpCache;//是否使用Http缓存
     protected boolean isLocalCache;//是否使用本地缓存
     protected CacheMode cacheMode;//本地缓存类型
     protected String cacheKey;//本地缓存Key
