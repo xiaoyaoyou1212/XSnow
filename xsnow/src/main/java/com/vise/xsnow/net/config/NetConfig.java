@@ -27,24 +27,23 @@ import retrofit2.CallAdapter;
 import retrofit2.Converter;
 
 /**
- * @Description:
+ * @Description: 请求全局配置
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-04-28 17:17
  */
-public class NetConfig implements INetConfig {
+public class NetConfig {
     private CallAdapter.Factory callAdapterFactory;
     private Converter.Factory converterFactory;
     private okhttp3.Call.Factory callFactory;
     private SSLSocketFactory sslSocketFactory;
     private HostnameVerifier hostnameVerifier;
     private ConnectionPool connectionPool;
-    private File httpCacheDirectory;
-    private ApiCookie apiCookie;
-    private CacheMode cacheMode;
-    private Boolean isCookie;
-    private Boolean isCache;
-    private String baseUrl;
-    private Cache cache;
+    private File httpCacheDirectory;//Http缓存路径
+    private Boolean isHttpCache;//是否使用Http缓存
+    private ApiCookie apiCookie;//Cookie配置
+    private Boolean isCookie;//是否使用Cookie
+    private String baseUrl;//基础域名
+    private Cache httpCache;//Http缓存对象
 
     private static NetConfig sNetConfig;
     private NetConfig() {
@@ -127,11 +126,11 @@ public class NetConfig implements INetConfig {
     /**
      * 设置是否添加缓存
      *
-     * @param isCache
+     * @param isHttpCache
      * @return
      */
-    public NetConfig cache(boolean isCache) {
-        this.isCache = isCache;
+    public NetConfig cache(boolean isHttpCache) {
+        this.isHttpCache = isHttpCache;
         return this;
     }
 
@@ -348,65 +347,54 @@ public class NetConfig implements INetConfig {
     }
 
     /**
-     * 设置缓存类型，可根据类型自动配置缓存策略，主要针对网络请求结果进行缓存
-     *
-     * @param cacheMode
-     * @return
-     */
-    public NetConfig cacheMode(CacheMode cacheMode) {
-        this.cacheMode = cacheMode;
-        return this;
-    }
-
-    /**
      * 设置在线缓存，主要针对网路请求过程进行缓存
      *
-     * @param cache
+     * @param httpCache
      * @return
      */
-    public NetConfig cacheOnline(Cache cache) {
+    public NetConfig cacheOnline(Cache httpCache) {
         networkInterceptor(new OnlineCacheInterceptor());
-        this.cache = cache;
+        this.httpCache = httpCache;
         return this;
     }
 
     /**
      * 设置在线缓存，主要针对网路请求过程进行缓存
      *
-     * @param cache
+     * @param httpCache
      * @param cacheControlValue
      * @return
      */
-    public NetConfig cacheOnline(Cache cache, final int cacheControlValue) {
+    public NetConfig cacheOnline(Cache httpCache, final int cacheControlValue) {
         networkInterceptor(new OnlineCacheInterceptor(cacheControlValue));
-        this.cache = cache;
+        this.httpCache = httpCache;
         return this;
     }
 
     /**
      * 设置离线缓存，主要针对网路请求过程进行缓存
      *
-     * @param cache
+     * @param httpCache
      * @return
      */
-    public NetConfig cacheOffline(Cache cache) {
+    public NetConfig cacheOffline(Cache httpCache) {
         networkInterceptor(new OfflineCacheInterceptor(ViseNet.getContext()));
         interceptor(new OfflineCacheInterceptor(ViseNet.getContext()));
-        this.cache = cache;
+        this.httpCache = httpCache;
         return this;
     }
 
     /**
      * 设置离线缓存，主要针对网路请求过程进行缓存
      *
-     * @param cache
+     * @param httpCache
      * @param cacheControlValue
      * @return
      */
-    public NetConfig cacheOffline(Cache cache, final int cacheControlValue) {
+    public NetConfig cacheOffline(Cache httpCache, final int cacheControlValue) {
         networkInterceptor(new OfflineCacheInterceptor(ViseNet.getContext(), cacheControlValue));
         interceptor(new OfflineCacheInterceptor(ViseNet.getContext(), cacheControlValue));
-        this.cache = cache;
+        this.httpCache = httpCache;
         return this;
     }
 
@@ -422,11 +410,11 @@ public class NetConfig implements INetConfig {
 
     /**
      * 设置缓存
-     * @param cache
+     * @param httpCache
      * @return
      */
-    public NetConfig setCache(Cache cache) {
-        this.cache = cache;
+    public NetConfig setCache(Cache httpCache) {
+        this.httpCache = httpCache;
         return this;
     }
 
@@ -462,20 +450,16 @@ public class NetConfig implements INetConfig {
         return apiCookie;
     }
 
-    public CacheMode getCacheMode() {
-        return cacheMode;
-    }
-
     public Boolean isCookie() {
         return isCookie;
     }
 
     public Boolean isCache() {
-        return isCache;
+        return isHttpCache;
     }
 
     public Cache getCache() {
-        return cache;
+        return httpCache;
     }
 
     public String getBaseUrl() {

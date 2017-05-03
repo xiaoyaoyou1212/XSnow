@@ -46,19 +46,20 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected Retrofit retrofit;
     protected ApiCache apiCache;
 
-    protected String url;
-    protected String baseUrl;
-    protected long readTimeOut;
-    protected long writeTimeOut;
-    protected long connectTimeout;
-    protected int retryCount;
-    protected CacheMode cacheMode;
-    protected String cacheKey;
-    protected long cacheTime;
-    protected Map<String, String> params = new LinkedHashMap<>();
-    protected HttpHeaders headers = new HttpHeaders();
-    protected ApiCallback apiCallback;
-    protected Class clazz;
+    protected String baseUrl;//基础域名
+    protected String suffixUrl;//链接后缀
+    protected long readTimeOut;//读取超时时间
+    protected long writeTimeOut;//写入超时时间
+    protected long connectTimeout;//连接超时时间
+    protected int retryCount;//重试次数
+    protected boolean isLocalCache;//是否使用本地缓存
+    protected CacheMode cacheMode;//本地缓存类型
+    protected String cacheKey;//本地缓存Key
+    protected long cacheTime;//本地缓存时间
+    protected Map<String, String> params = new LinkedHashMap<>();//请求参数
+    protected HttpHeaders headers = new HttpHeaders();//请求头
+    protected ApiCallback apiCallback;//请求回调
+    protected Class clazz;//响应实体类
 
     public <T> Observable<T> request(Class<T> clazz) {
         generateGlobalConfig();
