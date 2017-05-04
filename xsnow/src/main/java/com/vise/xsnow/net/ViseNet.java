@@ -2,13 +2,12 @@ package com.vise.xsnow.net;
 
 import android.content.Context;
 
-import com.vise.xsnow.net.config.NetConfig;
+import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.request.GetRequest;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import rx.Observable;
 
 /**
  * @Description: 网络请求入口
@@ -16,58 +15,58 @@ import rx.Observable;
  * @date: 2017-04-28 15:07
  */
 public class ViseNet {
-    private static ViseNet sViseNet;
-    private static Context sContext;
-    private static OkHttpClient.Builder sOkHttpBuilder;
-    private static Retrofit.Builder sRetrofitBuilder;
-    private static ApiCache.Builder sApiCacheBuilder;
+    private static ViseNet viseNet;
+    private static Context context;
+    private static OkHttpClient.Builder okHttpBuilder;
+    private static Retrofit.Builder retrofitBuilder;
+    private static ApiCache.Builder apiCacheBuilder;
 
-    private final NetConfig NET_CONFIG = NetConfig.getInstance();
+    private final NetGlobalConfig NET_GLOBAL_CONFIG = NetGlobalConfig.getInstance();
 
     private ViseNet() {
     }
 
     public static ViseNet getInstance() {
-        if (sViseNet == null) {
+        if (viseNet == null) {
             synchronized (ViseNet.class) {
-                if (sViseNet == null) {
-                    sViseNet = new ViseNet();
+                if (viseNet == null) {
+                    viseNet = new ViseNet();
                 }
             }
         }
-        return sViseNet;
+        return viseNet;
     }
 
-    public static void init(Context context) {
-        if (sContext == null && context != null) {
-            sContext = context.getApplicationContext();
-            sOkHttpBuilder = new OkHttpClient.Builder();
-            sRetrofitBuilder = new Retrofit.Builder();
-            sApiCacheBuilder = new ApiCache.Builder(sContext);
+    public static void init(Context appContext) {
+        if (appContext == null && appContext != null) {
+            context = appContext.getApplicationContext();
+            okHttpBuilder = new OkHttpClient.Builder();
+            retrofitBuilder = new Retrofit.Builder();
+            apiCacheBuilder = new ApiCache.Builder(context);
         }
     }
 
     public static Context getContext() {
-        if (sContext == null) {
+        if (context == null) {
             throw new IllegalStateException("Please call ViseNet.init(this) in Application to initialize!");
         }
-        return sContext;
+        return context;
     }
 
     public static OkHttpClient.Builder getOkHttpBuilder() {
-        return sOkHttpBuilder;
+        return okHttpBuilder;
     }
 
     public static Retrofit.Builder getRetrofitBuilder() {
-        return sRetrofitBuilder;
+        return retrofitBuilder;
     }
 
     public static ApiCache.Builder getApiCacheBuilder() {
-        return sApiCacheBuilder;
+        return apiCacheBuilder;
     }
 
-    public NetConfig Config() {
-        return NET_CONFIG;
+    public NetGlobalConfig Config() {
+        return NET_GLOBAL_CONFIG;
     }
 
     public static GetRequest get() {

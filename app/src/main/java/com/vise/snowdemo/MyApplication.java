@@ -37,27 +37,6 @@ public class MyApplication extends BaseApplication {
         ViseNet.getInstance().Config()
                 .baseUrl(ViseConfig.API_HOST)
                 .cookie(true);
-        ViseNet.get().request(new ApiCallback<String>() {
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onError(ApiException e) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-
-            }
-        });
     }
 
 }

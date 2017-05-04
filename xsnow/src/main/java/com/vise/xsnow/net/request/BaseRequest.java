@@ -6,13 +6,14 @@ import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.api.ApiService;
 import com.vise.xsnow.net.callback.ApiCallback;
-import com.vise.xsnow.net.config.NetConfig;
+import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.convert.GsonConverterFactory;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.core.ApiCookie;
 import com.vise.xsnow.net.func.ApiDataFunc;
 import com.vise.xsnow.net.func.ApiErrFunc;
 import com.vise.xsnow.net.func.ApiFunc;
+import com.vise.xsnow.net.func.ApiRetryFunc;
 import com.vise.xsnow.net.mode.ApiHost;
 import com.vise.xsnow.net.mode.ApiResult;
 import com.vise.xsnow.net.mode.CacheMode;
@@ -40,27 +41,11 @@ import rx.schedulers.Schedulers;
  * @date: 2017-04-28 16:05
  */
 public abstract class BaseRequest<R extends BaseRequest> {
-    protected NetConfig netConfig;
+    protected NetGlobalConfig netGlobalConfig;
     protected ApiService apiService;
     protected OkHttpClient okHttpClient;
     protected Retrofit retrofit;
     protected ApiCache apiCache;
-
-    protected String baseUrl;//基础域名
-    protected String suffixUrl;//链接后缀
-    protected long readTimeOut;//读取超时时间
-    protected long writeTimeOut;//写入超时时间
-    protected long connectTimeout;//连接超时时间
-    protected int retryCount;//重试次数
-    protected boolean isHttpCache;//是否使用Http缓存
-    protected boolean isLocalCache;//是否使用本地缓存
-    protected CacheMode cacheMode;//本地缓存类型
-    protected String cacheKey;//本地缓存Key
-    protected long cacheTime;//本地缓存时间
-    protected Map<String, String> params = new LinkedHashMap<>();//请求参数
-    protected HttpHeaders headers = new HttpHeaders();//请求头
-    protected ApiCallback apiCallback;//请求回调
-    protected Class clazz;//响应实体类
 
     public <T> Observable<T> request(Class<T> clazz) {
         generateGlobalConfig();
@@ -84,7 +69,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
             public Observable<T> call(Observable<ResponseBody> apiResultObservable) {
                 return apiResultObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn
                         (AndroidSchedulers
-                                .mainThread()).map(new ApiFunc<T>(clazz)).onErrorResumeNext(new ApiErrFunc<T>());
+                                .mainThread()).map(new ApiFunc<T>(clazz)).retryWhen(new ApiRetryFunc(3, 3000));
             }
         };
     }
@@ -94,7 +79,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
             @Override
             public Observable<T> call(Observable<ApiResult<T>> apiResultObservable) {
                 return apiResultObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers
-                        .mainThread()).map(new ApiDataFunc<T>()).onErrorResumeNext(new ApiErrFunc<T>());
+                        .mainThread()).map(new ApiDataFunc<T>()).retryWhen(new ApiRetryFunc(3, 3000));
             }
         };
     }
@@ -110,66 +95,66 @@ public abstract class BaseRequest<R extends BaseRequest> {
      * 生成全局配置
      */
     private void generateGlobalConfig() {
-        netConfig = ViseNet.getInstance().Config();
+        netGlobalConfig = ViseNet.getInstance().Config();
 
-        if (netConfig.getBaseUrl() == null) {
-            netConfig.baseUrl(ApiHost.getHost());
+        if (netGlobalConfig.getBaseUrl() == null) {
+            netGlobalConfig.baseUrl(ApiHost.getHost());
         }
-        ViseNet.getRetrofitBuilder().baseUrl(netConfig.getBaseUrl());
+        ViseNet.getRetrofitBuilder().baseUrl(netGlobalConfig.getBaseUrl());
 
-        if (netConfig.getConverterFactory() == null) {
-            netConfig.converterFactory(GsonConverterFactory.create());
+        if (netGlobalConfig.getConverterFactory() == null) {
+            netGlobalConfig.converterFactory(GsonConverterFactory.create());
         }
-        ViseNet.getRetrofitBuilder().addConverterFactory(netConfig.getConverterFactory());
+        ViseNet.getRetrofitBuilder().addConverterFactory(netGlobalConfig.getConverterFactory());
 
-        if (netConfig.getCallAdapterFactory() == null) {
-            netConfig.callAdapterFactory(RxJavaCallAdapterFactory.create());
+        if (netGlobalConfig.getCallAdapterFactory() == null) {
+            netGlobalConfig.callAdapterFactory(RxJavaCallAdapterFactory.create());
         }
-        ViseNet.getRetrofitBuilder().addCallAdapterFactory(netConfig.getCallAdapterFactory());
+        ViseNet.getRetrofitBuilder().addCallAdapterFactory(netGlobalConfig.getCallAdapterFactory());
 
-        if (netConfig.getCallFactory() != null) {
-            ViseNet.getRetrofitBuilder().callFactory(netConfig.getCallFactory());
+        if (netGlobalConfig.getCallFactory() != null) {
+            ViseNet.getRetrofitBuilder().callFactory(netGlobalConfig.getCallFactory());
         }
 
-        if (netConfig.getHostnameVerifier() == null) {
-            netConfig.hostnameVerifier(new SSLUtil.UnSafeHostnameVerifier(netConfig.getBaseUrl()));
+        if (netGlobalConfig.getHostnameVerifier() == null) {
+            netGlobalConfig.hostnameVerifier(new SSLUtil.UnSafeHostnameVerifier(netGlobalConfig.getBaseUrl()));
         }
-        ViseNet.getOkHttpBuilder().hostnameVerifier(netConfig.getHostnameVerifier());
+        ViseNet.getOkHttpBuilder().hostnameVerifier(netGlobalConfig.getHostnameVerifier());
 
-        if (netConfig.getSslSocketFactory() == null) {
-            netConfig.SSLSocketFactory(SSLUtil.getSslSocketFactory(null, null, null));
+        if (netGlobalConfig.getSslSocketFactory() == null) {
+            netGlobalConfig.SSLSocketFactory(SSLUtil.getSslSocketFactory(null, null, null));
         }
-        ViseNet.getOkHttpBuilder().sslSocketFactory(netConfig.getSslSocketFactory());
+        ViseNet.getOkHttpBuilder().sslSocketFactory(netGlobalConfig.getSslSocketFactory());
 
-        if (netConfig.getConnectionPool() == null) {
-            netConfig.connectionPool(new ConnectionPool(ViseConfig.DEFAULT_MAX_IDLE_CONNECTIONS,
+        if (netGlobalConfig.getConnectionPool() == null) {
+            netGlobalConfig.connectionPool(new ConnectionPool(ViseConfig.DEFAULT_MAX_IDLE_CONNECTIONS,
                     ViseConfig.DEFAULT_KEEP_ALIVE_DURATION, TimeUnit.SECONDS));
         }
-        ViseNet.getOkHttpBuilder().connectionPool(netConfig.getConnectionPool());
+        ViseNet.getOkHttpBuilder().connectionPool(netGlobalConfig.getConnectionPool());
 
-        if (netConfig.isCookie() && netConfig.getApiCookie() == null) {
-            netConfig.cookieManager(new ApiCookie(ViseNet.getContext()));
+        if (netGlobalConfig.isCookie() && netGlobalConfig.getApiCookie() == null) {
+            netGlobalConfig.cookieManager(new ApiCookie(ViseNet.getContext()));
         }
-        if (netConfig.isCookie()) {
-            ViseNet.getOkHttpBuilder().cookieJar(netConfig.getApiCookie());
+        if (netGlobalConfig.isCookie()) {
+            ViseNet.getOkHttpBuilder().cookieJar(netGlobalConfig.getApiCookie());
         }
 
-        if (netConfig.getHttpCacheDirectory() == null) {
-            netConfig.setHttpCacheDirectory(new File(ViseNet.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR));
+        if (netGlobalConfig.getHttpCacheDirectory() == null) {
+            netGlobalConfig.setHttpCacheDirectory(new File(ViseNet.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR));
         }
-        if (netConfig.isCache()) {
+        if (netGlobalConfig.isCache()) {
             try {
-                if (netConfig.getCache() == null) {
-                    netConfig.setCache(new Cache(netConfig.getHttpCacheDirectory(), ViseConfig.CACHE_MAX_SIZE));
+                if (netGlobalConfig.getCache() == null) {
+                    netGlobalConfig.setCache(new Cache(netGlobalConfig.getHttpCacheDirectory(), ViseConfig.CACHE_MAX_SIZE));
                 }
-                netConfig.cacheOnline(netConfig.getCache());
-                netConfig.cacheOffline(netConfig.getCache());
+                netGlobalConfig.cacheOnline(netGlobalConfig.getCache());
+                netGlobalConfig.cacheOffline(netGlobalConfig.getCache());
             } catch (Exception e) {
                 ViseLog.e("Could not create http cache" + e);
             }
         }
-        if (netConfig.getCache() != null) {
-            ViseNet.getOkHttpBuilder().cache(netConfig.getCache());
+        if (netGlobalConfig.getCache() != null) {
+            ViseNet.getOkHttpBuilder().cache(netGlobalConfig.getCache());
         }
 
         okHttpClient = ViseNet.getOkHttpBuilder().build();
