@@ -38,7 +38,7 @@ public class ViseNet {
     }
 
     public static void init(Context appContext) {
-        if (appContext == null && appContext != null) {
+        if (context == null && appContext != null) {
             context = appContext.getApplicationContext();
             okHttpBuilder = new OkHttpClient.Builder();
             retrofitBuilder = new Retrofit.Builder();
@@ -65,7 +65,7 @@ public class ViseNet {
         return apiCacheBuilder;
     }
 
-    public NetGlobalConfig Config() {
+    public NetGlobalConfig config() {
         return NET_GLOBAL_CONFIG;
     }
 

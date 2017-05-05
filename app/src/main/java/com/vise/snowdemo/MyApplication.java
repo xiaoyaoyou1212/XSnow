@@ -7,8 +7,6 @@ import com.vise.xsnow.BaseApplication;
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.loader.LoaderFactory;
 import com.vise.xsnow.net.ViseNet;
-import com.vise.xsnow.net.callback.ApiCallback;
-import com.vise.xsnow.net.exception.ApiException;
 
 /**
  * @Description: 自定义Application，主要负责一些初始化操作
@@ -34,7 +32,7 @@ public class MyApplication extends BaseApplication {
 
     private void initNet() {
         ViseNet.init(this);
-        ViseNet.getInstance().Config()
+        ViseNet.getInstance().config()
                 .baseUrl(ViseConfig.API_HOST)
                 .setCookie(true);
     }

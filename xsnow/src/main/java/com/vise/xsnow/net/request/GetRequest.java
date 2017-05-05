@@ -17,7 +17,10 @@ public class GetRequest extends BaseRequest<GetRequest> {
 
     @Override
     protected <T> Observable<T> execute(Class<T> clazz) {
-        return apiService.get(netLocalConfig.getSuffixUrl(), netLocalConfig.getParams()).compose(this.norTransformer(clazz));
+        if (isLocalCache) {
+            return apiService.get(suffixUrl, params).compose(this.norTransformer(clazz));
+        }
+        return apiService.get(suffixUrl, params).compose(this.norTransformer(clazz));
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.core.ApiCookie;
 import com.vise.xsnow.net.interceptor.GzipRequestInterceptor;
-import com.vise.xsnow.net.interceptor.HeadersInterceptor;
 import com.vise.xsnow.net.interceptor.OfflineCacheInterceptor;
 import com.vise.xsnow.net.interceptor.OnlineCacheInterceptor;
 
@@ -38,10 +37,10 @@ public class NetGlobalConfig {
     private ConnectionPool connectionPool;//连接池
     private Map<String, String> globalParams = new LinkedHashMap<>();//请求参数
     private Map<String, String> globalHeaders = new LinkedHashMap<>();//请求头
-    private Boolean isHttpCache;//是否使用Http缓存
+    private boolean isHttpCache;//是否使用Http缓存
     private File httpCacheDirectory;//Http缓存路径
     private Cache httpCache;//Http缓存对象
-    private Boolean isCookie;//是否使用Cookie
+    private boolean isCookie;//是否使用Cookie
     private ApiCookie apiCookie;//Cookie配置
     private String baseUrl;//基础域名
     private int retryDelayMillis;//请求失败重试间隔时间
@@ -137,7 +136,6 @@ public class NetGlobalConfig {
     public NetGlobalConfig globalHeaders(Map<String, String> globalHeaders) {
         if (globalHeaders != null) {
             this.globalHeaders = globalHeaders;
-            interceptor(new HeadersInterceptor(globalHeaders));
         }
         return this;
     }
@@ -444,11 +442,11 @@ public class NetGlobalConfig {
         return globalHeaders;
     }
 
-    public Boolean isHttpCache() {
+    public boolean isHttpCache() {
         return isHttpCache;
     }
 
-    public Boolean isCookie() {
+    public boolean isCookie() {
         return isCookie;
     }
 

@@ -77,6 +77,12 @@ public class HttpHeaders implements Serializable {
         }
     }
 
+    public void put(Map<String, String> headers) {
+        if (headers != null) {
+            headersMap.putAll(headers);
+        }
+    }
+
     public void put(HttpHeaders headers) {
         if (headers != null) {
             if (headers.headersMap != null && !headers.headersMap.isEmpty()) headersMap.putAll(headers.headersMap);
