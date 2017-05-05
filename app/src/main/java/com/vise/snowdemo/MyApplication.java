@@ -36,7 +36,7 @@ public class MyApplication extends BaseApplication {
         ViseNet.init(this);
         ViseNet.getInstance().Config()
                 .baseUrl(ViseConfig.API_HOST)
-                .cookie(true);
+                .setCookie(true);
     }
 
 }

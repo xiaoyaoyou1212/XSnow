@@ -7,6 +7,7 @@ import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.api.ApiService;
 import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
+import com.vise.xsnow.net.config.NetLocalConfig;
 import com.vise.xsnow.net.convert.GsonConverterFactory;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.core.ApiCookie;
@@ -42,6 +43,7 @@ import rx.schedulers.Schedulers;
  */
 public abstract class BaseRequest<R extends BaseRequest> {
     protected NetGlobalConfig netGlobalConfig;
+    protected NetLocalConfig netLocalConfig;
     protected ApiService apiService;
     protected OkHttpClient okHttpClient;
     protected Retrofit retrofit;
@@ -133,7 +135,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
         ViseNet.getOkHttpBuilder().connectionPool(netGlobalConfig.getConnectionPool());
 
         if (netGlobalConfig.isCookie() && netGlobalConfig.getApiCookie() == null) {
-            netGlobalConfig.cookieManager(new ApiCookie(ViseNet.getContext()));
+            netGlobalConfig.apiCookie(new ApiCookie(ViseNet.getContext()));
         }
         if (netGlobalConfig.isCookie()) {
             ViseNet.getOkHttpBuilder().cookieJar(netGlobalConfig.getApiCookie());
@@ -142,19 +144,19 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (netGlobalConfig.getHttpCacheDirectory() == null) {
             netGlobalConfig.setHttpCacheDirectory(new File(ViseNet.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR));
         }
-        if (netGlobalConfig.isCache()) {
+        if (netGlobalConfig.isHttpCache()) {
             try {
-                if (netGlobalConfig.getCache() == null) {
-                    netGlobalConfig.setCache(new Cache(netGlobalConfig.getHttpCacheDirectory(), ViseConfig.CACHE_MAX_SIZE));
+                if (netGlobalConfig.getHttpCache() == null) {
+                    netGlobalConfig.httpCache(new Cache(netGlobalConfig.getHttpCacheDirectory(), ViseConfig.CACHE_MAX_SIZE));
                 }
-                netGlobalConfig.cacheOnline(netGlobalConfig.getCache());
-                netGlobalConfig.cacheOffline(netGlobalConfig.getCache());
+                netGlobalConfig.cacheOnline(netGlobalConfig.getHttpCache());
+                netGlobalConfig.cacheOffline(netGlobalConfig.getHttpCache());
             } catch (Exception e) {
                 ViseLog.e("Could not create http cache" + e);
             }
         }
-        if (netGlobalConfig.getCache() != null) {
-            ViseNet.getOkHttpBuilder().cache(netGlobalConfig.getCache());
+        if (netGlobalConfig.getHttpCache() != null) {
+            ViseNet.getOkHttpBuilder().cache(netGlobalConfig.getHttpCache());
         }
 
         okHttpClient = ViseNet.getOkHttpBuilder().build();

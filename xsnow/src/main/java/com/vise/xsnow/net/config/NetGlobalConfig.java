@@ -1,6 +1,5 @@
 package com.vise.xsnow.net.config;
 
-import com.vise.xsnow.cache.DiskCache;
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.core.ApiCookie;
@@ -8,7 +7,6 @@ import com.vise.xsnow.net.interceptor.GzipRequestInterceptor;
 import com.vise.xsnow.net.interceptor.HeadersInterceptor;
 import com.vise.xsnow.net.interceptor.OfflineCacheInterceptor;
 import com.vise.xsnow.net.interceptor.OnlineCacheInterceptor;
-import com.vise.xsnow.net.mode.HttpHeaders;
 
 import java.io.File;
 import java.net.Proxy;
@@ -39,7 +37,7 @@ public class NetGlobalConfig {
     private HostnameVerifier hostnameVerifier;//主机域名验证
     private ConnectionPool connectionPool;//连接池
     private Map<String, String> globalParams = new LinkedHashMap<>();//请求参数
-    private HttpHeaders globalHeaders = new HttpHeaders();//请求头
+    private Map<String, String> globalHeaders = new LinkedHashMap<>();//请求头
     private Boolean isHttpCache;//是否使用Http缓存
     private File httpCacheDirectory;//Http缓存路径
     private Cache httpCache;//Http缓存对象
@@ -136,10 +134,10 @@ public class NetGlobalConfig {
      * @param globalHeaders
      * @return
      */
-    public NetGlobalConfig globalHeaders(HttpHeaders globalHeaders) {
-        this.globalHeaders = globalHeaders;
+    public NetGlobalConfig globalHeaders(Map<String, String> globalHeaders) {
         if (globalHeaders != null) {
-            interceptor(new HeadersInterceptor(globalHeaders.headersMap));
+            this.globalHeaders = globalHeaders;
+            interceptor(new HeadersInterceptor(globalHeaders));
         }
         return this;
     }
@@ -151,7 +149,9 @@ public class NetGlobalConfig {
      * @return
      */
     public NetGlobalConfig globalParams(Map<String, String> globalParams) {
-        this.globalParams = globalParams;
+        if (globalParams != null) {
+            this.globalParams = globalParams;
+        }
         return this;
     }
 
@@ -161,7 +161,7 @@ public class NetGlobalConfig {
      * @param isHttpCache
      * @return
      */
-    public NetGlobalConfig isHttpCache(boolean isHttpCache) {
+    public NetGlobalConfig setHttpCache(boolean isHttpCache) {
         this.isHttpCache = isHttpCache;
         return this;
     }
@@ -192,7 +192,7 @@ public class NetGlobalConfig {
      * @param isCookie
      * @return
      */
-    public NetGlobalConfig isCookie(boolean isCookie) {
+    public NetGlobalConfig setCookie(boolean isCookie) {
         this.isCookie = isCookie;
         return this;
     }
@@ -440,7 +440,7 @@ public class NetGlobalConfig {
         return globalParams;
     }
 
-    public HttpHeaders getGlobalHeaders() {
+    public Map<String, String> getGlobalHeaders() {
         return globalHeaders;
     }
 

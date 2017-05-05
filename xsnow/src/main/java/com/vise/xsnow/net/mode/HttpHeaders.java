@@ -23,8 +23,8 @@ import java.util.TimeZone;
  * @date: 17/5/1 21:03.
  */
 public class HttpHeaders implements Serializable {
-    public static final String FORMAT_HTTP_DATA = "EEE, dd MMM y HH:mm:ss 'GMT'";
-    public static final TimeZone GMT_TIME_ZONE = TimeZone.getTimeZone("GMT");
+    private static final String FORMAT_HTTP_DATA = "EEE, dd MMM y HH:mm:ss 'GMT'";
+    private static final TimeZone GMT_TIME_ZONE = TimeZone.getTimeZone("GMT");
 
     public static final String HEAD_KEY_RESPONSE_CODE = "ResponseCode";
     public static final String HEAD_KEY_RESPONSE_MESSAGE = "ResponseMessage";
@@ -166,7 +166,7 @@ public class HttpHeaders implements Serializable {
         return acceptLanguage;
     }
 
-    public static long parseGMTToMillis(String gmtTime) throws ParseException {
+    private static long parseGMTToMillis(String gmtTime) throws ParseException {
         if (TextUtils.isEmpty(gmtTime)) return 0;
         SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
         formatter.setTimeZone(GMT_TIME_ZONE);
@@ -174,7 +174,7 @@ public class HttpHeaders implements Serializable {
         return date.getTime();
     }
 
-    public static String formatMillisToGMT(long milliseconds) {
+    private static String formatMillisToGMT(long milliseconds) {
         Date date = new Date(milliseconds);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
         simpleDateFormat.setTimeZone(GMT_TIME_ZONE);

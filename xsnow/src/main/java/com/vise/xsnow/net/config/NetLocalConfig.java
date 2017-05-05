@@ -66,7 +66,7 @@ public class NetLocalConfig {
      * @return
      */
     public NetLocalConfig params(Map<String, String> params) {
-        this.params = params;
+        this.params.putAll(params);
         return this;
     }
 
