@@ -18,6 +18,7 @@ import com.vise.xsnow.net.interceptor.HeadersInterceptor;
 import com.vise.xsnow.net.mode.ApiHost;
 import com.vise.xsnow.net.mode.ApiResult;
 import com.vise.xsnow.net.mode.CacheMode;
+import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.mode.HttpHeaders;
 
 import java.io.File;
@@ -343,6 +344,12 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return execute(clazz);
     }
 
+    public <T> Observable<CacheResult<T>> cacheRequest(Class<T> clazz) {
+        generateGlobalConfig();
+        generateLocalConfig();
+        return cacheExecute(clazz);
+    }
+
     public <T> Subscription request(ApiCallback<T> apiCallback) {
         generateGlobalConfig();
         generateLocalConfig();
@@ -350,6 +357,8 @@ public abstract class BaseRequest<R extends BaseRequest> {
     }
 
     protected abstract <T> Observable<T> execute(Class<T> clazz);
+
+    protected abstract <T> Observable<CacheResult<T>> cacheExecute(Class<T> clazz);
 
     protected abstract <T> Subscription execute(ApiCallback<T> apiCallback);
 
@@ -377,7 +386,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
     /**
      * 生成局部配置
      */
-    private void generateLocalConfig() {
+    protected void generateLocalConfig() {
         OkHttpClient.Builder newBuilder = okHttpClient.newBuilder();
 
         if (netGlobalConfig.getGlobalParams() != null) {
@@ -458,7 +467,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
     /**
      * 生成全局配置
      */
-    private void generateGlobalConfig() {
+    protected void generateGlobalConfig() {
         netGlobalConfig = ViseNet.getInstance().config();
 
         if (netGlobalConfig.getBaseUrl() == null) {

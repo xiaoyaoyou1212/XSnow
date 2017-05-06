@@ -11,7 +11,10 @@ import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
 import retrofit2.http.Multipart;
+import retrofit2.http.OPTIONS;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -26,8 +29,11 @@ import rx.Observable;
  * @date: 2016-12-30 16:42
  */
 public interface ApiService {
-    @POST()
+    @GET()
+    Observable<ResponseBody> get(@Url String url, @QueryMap Map<String, String> maps);
+
     @FormUrlEncoded
+    @POST()
     Observable<ResponseBody> post(@Url() String url, @FieldMap Map<String, String> maps);
 
     @FormUrlEncoded
@@ -40,14 +46,23 @@ public interface ApiService {
     @POST()
     Observable<ResponseBody> postBody(@Url() String url, @Body Object object);
 
-    @GET()
-    Observable<ResponseBody> get(@Url String url, @QueryMap Map<String, String> maps);
+    @HEAD()
+    Observable<ResponseBody> head(@Url String url, @QueryMap Map<String, String> maps);
 
-    @DELETE()
-    Observable<ResponseBody> delete(@Url() String url, @QueryMap Map<String, String> maps);
+    @OPTIONS()
+    Observable<ResponseBody> options(@Url String url, @QueryMap Map<String, String> maps);
 
+    @FormUrlEncoded
     @PUT()
-    Observable<ResponseBody> put(@Url() String url, @QueryMap Map<String, String> maps);
+    Observable<ResponseBody> put(@Url() String url, @FieldMap Map<String, String> maps);
+
+    @FormUrlEncoded
+    @PATCH()
+    Observable<ResponseBody> patch(@Url() String url, @FieldMap Map<String, String> maps);
+
+    @FormUrlEncoded
+    @DELETE()
+    Observable<ResponseBody> delete(@Url() String url, @FieldMap Map<String, String> maps);
 
     @Multipart
     @POST()
