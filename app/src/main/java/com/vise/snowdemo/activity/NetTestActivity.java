@@ -9,18 +9,12 @@ import android.widget.TextView;
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.mode.GithubModel;
-import com.vise.utils.assist.SSLUtil;
-import com.vise.xsnow.net.api.ViseApi;
+import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.exception.ApiException;
-import com.vise.xsnow.net.mode.ApiHost;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.ui.BaseActivity;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * @Description: 网络获取相关展示
@@ -37,7 +31,6 @@ public class NetTestActivity extends BaseActivity {
     private Button mCache_and_remote_request;
     private Button mClear_cache;
     private TextView mShow_response_data;
-    private ViseApi mViseApi;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,8 +95,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void normalRequest() {
         mShow_response_data.setText("");
-        mViseApi = new ViseApi.Builder(mContext).build();
-        mViseApi.get("", new HashMap<String, String>(), new ApiCallback<GithubModel>() {
+        ViseNet.GET().request(mContext, new ApiCallback<GithubModel>() {
             @Override
             public void onStart() {
                 ViseLog.i("request start");
@@ -132,180 +124,186 @@ public class NetTestActivity extends BaseActivity {
 
     private void firstCacheRequest() {
         mShow_response_data.setText("");
-        mViseApi = new ViseApi.Builder(mContext).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.FIRST_CACHE).build();
-        mViseApi.cacheGet("", new HashMap<String, String>(), new ApiCallback<CacheResult<GithubModel>>() {
-            @Override
-            public void onStart() {
-                ViseLog.i("request start");
-            }
+        ViseNet.GET()
+                .setLocalCache(true)
+                .cacheMode(CacheMode.FIRST_CACHE)
+                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                    @Override
+                    public void onStart() {
+                        ViseLog.i("request start");
+                    }
 
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.e("request error" + e);
-            }
+                    @Override
+                    public void onError(ApiException e) {
+                        ViseLog.e("request error" + e);
+                    }
 
-            @Override
-            public void onCompleted() {
-                ViseLog.i("request completed");
-            }
+                    @Override
+                    public void onCompleted() {
+                        ViseLog.i("request completed");
+                    }
 
-            @Override
-            public void onNext(CacheResult<GithubModel> cacheResult) {
-                ViseLog.i("request next");
-                if (cacheResult == null) {
-                    return;
-                }
-                if (cacheResult.isCache()) {
-                    mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
-                } else {
-                    mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request next");
+                        if (cacheResult == null) {
+                            return;
+                        }
+                        if (cacheResult.isCache()) {
+                            mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
+                        } else {
+                            mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
+                        }
+                    }
+                });
     }
 
     private void firstRemoteRequest() {
         mShow_response_data.setText("");
-        mViseApi = new ViseApi.Builder(mContext).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.FIRST_REMOTE).build();
-        mViseApi.cacheGet("", new HashMap<String, String>(), new ApiCallback<CacheResult<GithubModel>>() {
-            @Override
-            public void onStart() {
-                ViseLog.i("request start");
-            }
+        ViseNet.GET()
+                .setLocalCache(true)
+                .cacheMode(CacheMode.FIRST_REMOTE)
+                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                    @Override
+                    public void onStart() {
+                        ViseLog.i("request start");
+                    }
 
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.e("request error" + e);
-            }
+                    @Override
+                    public void onError(ApiException e) {
+                        ViseLog.e("request error" + e);
+                    }
 
-            @Override
-            public void onCompleted() {
-                ViseLog.i("request completed");
-            }
+                    @Override
+                    public void onCompleted() {
+                        ViseLog.i("request completed");
+                    }
 
-            @Override
-            public void onNext(CacheResult<GithubModel> cacheResult) {
-                ViseLog.i("request next");
-                if (cacheResult == null) {
-                    return;
-                }
-                if (cacheResult.isCache()) {
-                    mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
-                } else {
-                    mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request next");
+                        if (cacheResult == null) {
+                            return;
+                        }
+                        if (cacheResult.isCache()) {
+                            mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
+                        } else {
+                            mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
+                        }
+                    }
+                });
     }
 
     private void onlyCacheRequest() {
         mShow_response_data.setText("");
-        mViseApi = new ViseApi.Builder(mContext).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.ONLY_CACHE).build();
-        mViseApi.cacheGet("", new HashMap<String, String>(), new ApiCallback<CacheResult<GithubModel>>() {
-            @Override
-            public void onStart() {
-                ViseLog.i("request start");
-            }
+        ViseNet.GET()
+                .setLocalCache(true)
+                .cacheMode(CacheMode.ONLY_CACHE)
+                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                    @Override
+                    public void onStart() {
+                        ViseLog.i("request start");
+                    }
 
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.e("request error" + e);
-            }
+                    @Override
+                    public void onError(ApiException e) {
+                        ViseLog.e("request error" + e);
+                    }
 
-            @Override
-            public void onCompleted() {
-                ViseLog.i("request completed");
-            }
+                    @Override
+                    public void onCompleted() {
+                        ViseLog.i("request completed");
+                    }
 
-            @Override
-            public void onNext(CacheResult<GithubModel> cacheResult) {
-                ViseLog.i("request next");
-                if (cacheResult == null) {
-                    return;
-                }
-                if (cacheResult.isCache()) {
-                    mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
-                } else {
-                    mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request next");
+                        if (cacheResult == null) {
+                            return;
+                        }
+                        if (cacheResult.isCache()) {
+                            mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
+                        } else {
+                            mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
+                        }
+                    }
+                });
     }
 
     private void onlyRemoteRequest() {
         mShow_response_data.setText("");
-        mViseApi = new ViseApi.Builder(mContext).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.ONLY_REMOTE).build();
-        mViseApi.cacheGet("", new HashMap<String, String>(), new ApiCallback<CacheResult<GithubModel>>() {
-            @Override
-            public void onStart() {
-                ViseLog.i("request start");
-            }
+        ViseNet.GET()
+                .setLocalCache(true)
+                .cacheMode(CacheMode.ONLY_REMOTE)
+                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                    @Override
+                    public void onStart() {
+                        ViseLog.i("request start");
+                    }
 
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.e("request error" + e);
-            }
+                    @Override
+                    public void onError(ApiException e) {
+                        ViseLog.e("request error" + e);
+                    }
 
-            @Override
-            public void onCompleted() {
-                ViseLog.i("request completed");
-            }
+                    @Override
+                    public void onCompleted() {
+                        ViseLog.i("request completed");
+                    }
 
-            @Override
-            public void onNext(CacheResult<GithubModel> cacheResult) {
-                ViseLog.i("request next");
-                if (cacheResult == null) {
-                    return;
-                }
-                if (cacheResult.isCache()) {
-                    mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
-                } else {
-                    mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request next");
+                        if (cacheResult == null) {
+                            return;
+                        }
+                        if (cacheResult.isCache()) {
+                            mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
+                        } else {
+                            mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
+                        }
+                    }
+                });
     }
 
     private void cacheAndRemoteRequest() {
         mShow_response_data.setText("");
-        try {
-            mViseApi = new ViseApi.Builder(mContext).SSLSocketFactory(SSLUtil.getSslSocketFactory(new InputStream[]{this.getAssets().open("srca.cer")}, null, null)).cacheKey(ApiHost.getHost()).cacheMode(CacheMode.CACHE_AND_REMOTE).build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mViseApi.cacheGet("", new HashMap<String, String>(), new ApiCallback<CacheResult<GithubModel>>() {
-            @Override
-            public void onStart() {
-                ViseLog.i("request start");
-            }
+        ViseNet.GET()
+                .setLocalCache(true)
+                .cacheMode(CacheMode.CACHE_AND_REMOTE)
+                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                    @Override
+                    public void onStart() {
+                        ViseLog.i("request start");
+                    }
 
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.e("request error" + e);
-            }
+                    @Override
+                    public void onError(ApiException e) {
+                        ViseLog.e("request error" + e);
+                    }
 
-            @Override
-            public void onCompleted() {
-                ViseLog.i("request completed");
-            }
+                    @Override
+                    public void onCompleted() {
+                        ViseLog.i("request completed");
+                    }
 
-            @Override
-            public void onNext(CacheResult<GithubModel> cacheResult) {
-                ViseLog.i("request next");
-                if (cacheResult == null) {
-                    return;
-                }
-                if (cacheResult.isCache()) {
-                    mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
-                } else {
-                    mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request next");
+                        if (cacheResult == null) {
+                            return;
+                        }
+                        if (cacheResult.isCache()) {
+                            mShow_response_data.setText("From Cache:\n" + cacheResult.getCacheData().toString());
+                        } else {
+                            mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
+                        }
+                    }
+                });
     }
 
     private void clearCache() {
-        mViseApi.clearCache();
+        ViseNet.getInstance().clearCache();
     }
 
 }

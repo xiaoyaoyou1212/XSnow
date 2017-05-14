@@ -1,5 +1,7 @@
 package com.vise.xsnow.net.request;
 
+import android.content.Context;
+
 import com.vise.log.ViseLog;
 import com.vise.utils.assist.SSLUtil;
 import com.vise.xsnow.cache.DiskCache;
@@ -9,25 +11,26 @@ import com.vise.xsnow.net.api.ApiService;
 import com.vise.xsnow.net.callback.ApiCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.convert.GsonConverterFactory;
-import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.core.ApiCookie;
-import com.vise.xsnow.net.func.ApiDataFunc;
 import com.vise.xsnow.net.func.ApiFunc;
 import com.vise.xsnow.net.func.ApiRetryFunc;
 import com.vise.xsnow.net.interceptor.HeadersInterceptor;
+import com.vise.xsnow.net.interceptor.TagInterceptor;
 import com.vise.xsnow.net.mode.ApiHost;
-import com.vise.xsnow.net.mode.ApiResult;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.mode.HttpHeaders;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.ConnectionPool;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -45,15 +48,16 @@ import rx.schedulers.Schedulers;
 public abstract class BaseRequest<R extends BaseRequest> {
     protected NetGlobalConfig netGlobalConfig;//全局配置
     protected ApiService apiService;//通用接口服务
-    protected OkHttpClient okHttpClient;//OkHttp客户端
     protected Retrofit retrofit;//Retrofit对象
-    protected ApiCache apiCache;//本地缓存对象
+    protected List<Interceptor> interceptors = new ArrayList<>();//局部请求的拦截器
+    protected List<Interceptor> networkInterceptors = new ArrayList<>();//局部请求的网络拦截器
     protected Map<String, String> params = new LinkedHashMap<>();//请求参数
     protected HttpHeaders headers = new HttpHeaders();//请求头
     protected int retryDelayMillis;//请求失败重试间隔时间
     protected int retryCount;//重试次数
     protected String baseUrl;//基础域名
-    protected String suffixUrl;//链接后缀
+    protected String suffixUrl = "";//链接后缀
+    protected Object tag;//请求标签
     protected long readTimeOut;//读取超时时间
     protected long writeTimeOut;//写入超时时间
     protected long connectTimeOut;//连接超时时间
@@ -198,6 +202,16 @@ public abstract class BaseRequest<R extends BaseRequest> {
     }
 
     /**
+     * 设置请求标签
+     * @param tag
+     * @return
+     */
+    public R tag(Object tag) {
+        this.tag = tag;
+        return (R) this;
+    }
+
+    /**
      * 设置连接超时时间（秒）
      *
      * @param connectTimeOut
@@ -282,6 +296,32 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return (R) this;
     }
 
+    /**
+     * 局部设置拦截器
+     *
+     * @param interceptor
+     * @return
+     */
+    public R interceptor(Interceptor interceptor) {
+        if (interceptor != null) {
+            interceptors.add(interceptor);
+        }
+        return (R) this;
+    }
+
+    /**
+     * 局部设置网络拦截器
+     *
+     * @param interceptor
+     * @return
+     */
+    public R networkInterceptor(Interceptor interceptor) {
+        if (interceptor != null) {
+            networkInterceptors.add(interceptor);
+        }
+        return (R) this;
+    }
+
     public Map<String, String> getParams() {
         return params;
     }
@@ -350,17 +390,17 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return cacheExecute(clazz);
     }
 
-    public <T> Subscription request(ApiCallback<T> apiCallback) {
+    public <T> Subscription request(Context context, ApiCallback<T> apiCallback) {
         generateGlobalConfig();
         generateLocalConfig();
-        return execute(apiCallback);
+        return execute(context, apiCallback);
     }
 
     protected abstract <T> Observable<T> execute(Class<T> clazz);
 
     protected abstract <T> Observable<CacheResult<T>> cacheExecute(Class<T> clazz);
 
-    protected abstract <T> Subscription execute(ApiCallback<T> apiCallback);
+    protected abstract <T> Subscription execute(Context context, ApiCallback<T> apiCallback);
 
     protected <T> Observable.Transformer<ResponseBody, T> norTransformer(final Class<T> clazz) {
         return new Observable.Transformer<ResponseBody, T>() {
@@ -373,21 +413,11 @@ public abstract class BaseRequest<R extends BaseRequest> {
         };
     }
 
-    protected <T> Observable.Transformer<ApiResult<T>, T> apiTransformer() {
-        return new Observable.Transformer<ApiResult<T>, T>() {
-            @Override
-            public Observable<T> call(Observable<ApiResult<T>> apiResultObservable) {
-                return apiResultObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers
-                        .mainThread()).map(new ApiDataFunc<T>()).retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
-            }
-        };
-    }
-
     /**
      * 生成局部配置
      */
     protected void generateLocalConfig() {
-        OkHttpClient.Builder newBuilder = okHttpClient.newBuilder();
+        OkHttpClient.Builder newBuilder = ViseNet.getInstance().getOkHttpClient().newBuilder();
 
         if (netGlobalConfig.getGlobalParams() != null) {
             params.putAll(netGlobalConfig.getGlobalParams());
@@ -397,8 +427,24 @@ public abstract class BaseRequest<R extends BaseRequest> {
             headers.put(netGlobalConfig.getGlobalHeaders());
         }
 
+        if (!interceptors.isEmpty()) {
+            for (Interceptor interceptor : interceptors) {
+                newBuilder.addInterceptor(interceptor);
+            }
+        }
+
+        if (!networkInterceptors.isEmpty()) {
+            for (Interceptor interceptor : networkInterceptors) {
+                newBuilder.addNetworkInterceptor(interceptor);
+            }
+        }
+
         if (headers.headersMap.size() > 0) {
             newBuilder.addInterceptor(new HeadersInterceptor(headers.headersMap));
+        }
+
+        if (tag != null) {
+            newBuilder.addInterceptor(new TagInterceptor(tag));
         }
 
         if (retryCount <= 0) {
@@ -444,7 +490,6 @@ public abstract class BaseRequest<R extends BaseRequest> {
                 ViseNet.getApiCacheBuilder().cacheTime(DiskCache.CACHE_NEVER_EXPIRE);
             }
         }
-        apiCache = ViseNet.getApiCacheBuilder().build();
 
         if (baseUrl != null) {
             Retrofit.Builder newRetrofitBuilder = new Retrofit.Builder();
@@ -454,10 +499,10 @@ public abstract class BaseRequest<R extends BaseRequest> {
             if (netGlobalConfig.getCallFactory() != null) {
                 newRetrofitBuilder.callFactory(netGlobalConfig.getCallFactory());
             }
-            newRetrofitBuilder.client(okHttpClient);
+            newRetrofitBuilder.client(ViseNet.getInstance().getOkHttpClient());
             retrofit = newRetrofitBuilder.build();
         } else {
-            ViseNet.getRetrofitBuilder().client(okHttpClient);
+            ViseNet.getRetrofitBuilder().client(ViseNet.getInstance().getOkHttpClient());
             retrofit = ViseNet.getRetrofitBuilder().build();
         }
 
@@ -468,7 +513,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
      * 生成全局配置
      */
     protected void generateGlobalConfig() {
-        netGlobalConfig = ViseNet.getInstance().config();
+        netGlobalConfig = ViseNet.CONFIG();
 
         if (netGlobalConfig.getBaseUrl() == null) {
             netGlobalConfig.baseUrl(ApiHost.getHost());
@@ -529,7 +574,5 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (netGlobalConfig.getHttpCache() != null) {
             ViseNet.getOkHttpBuilder().cache(netGlobalConfig.getHttpCache());
         }
-
-        okHttpClient = ViseNet.getOkHttpBuilder().build();
     }
 }

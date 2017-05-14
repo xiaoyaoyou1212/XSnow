@@ -12,14 +12,14 @@ import rx.Observable;
 import rx.Subscription;
 
 /**
- * @Description: Get请求
+ * @Description: Patch请求
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
- * @date: 2017-04-28 16:05
+ * @date: 17/5/14 20:29.
  */
-public class GetRequest extends BaseRequest<GetRequest> {
+public class PatchRequest extends BaseRequest<PatchRequest> {
     @Override
     protected <T> Observable<T> execute(Class<T> clazz) {
-        return apiService.get(suffixUrl, params).compose(this.norTransformer(clazz));
+        return apiService.patch(suffixUrl, params).compose(this.norTransformer(clazz));
     }
 
     @Override

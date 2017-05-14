@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.vise.log.ViseLog;
 import com.vise.xsnow.cache.DiskCache;
+import com.vise.xsnow.net.mode.ApiHost;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.strategy.ICacheStrategy;
@@ -100,6 +101,10 @@ public class ApiCache {
         diskCache.remove(key);
     }
 
+    public boolean isClosed() {
+        return diskCache.isClosed();
+    }
+
     public Subscription clear() {
         return Observable.create(new SimpleSubscribe<Boolean>() {
             @Override
@@ -129,7 +134,7 @@ public class ApiCache {
         private File diskDir;
         private long diskMaxSize;
         private long cacheTime = DiskCache.CACHE_NEVER_EXPIRE;
-        private String cacheKey;
+        private String cacheKey = ApiHost.getHost();
 
         public Builder(Context context) {
             this.context = context;

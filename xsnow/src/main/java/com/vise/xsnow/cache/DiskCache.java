@@ -124,6 +124,10 @@ public class DiskCache implements ICache {
         return false;
     }
 
+    public boolean isClosed() {
+        return cache.isClosed();
+    }
+
     public void clear() {
         try {
             cache.delete();
