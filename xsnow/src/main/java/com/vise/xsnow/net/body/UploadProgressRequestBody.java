@@ -1,6 +1,6 @@
 package com.vise.xsnow.net.body;
 
-import com.vise.xsnow.net.callback.UploadProgressCallback;
+import com.vise.xsnow.net.callback.UCallback;
 
 import java.io.IOException;
 
@@ -23,13 +23,13 @@ import rx.functions.Action1;
 public class UploadProgressRequestBody extends RequestBody {
 
     private RequestBody requestBody;
-    private UploadProgressCallback uploadProgressCallback;
+    private UCallback callback;
 
-    public UploadProgressRequestBody(RequestBody requestBody, UploadProgressCallback uploadProgressCallback) {
+    public UploadProgressRequestBody(RequestBody requestBody, UCallback callback) {
         this.requestBody = requestBody;
-        this.uploadProgressCallback = uploadProgressCallback;
-        if (requestBody == null || uploadProgressCallback == null) {
-            throw new NullPointerException("this requestBody and uploadProgressCallback must not null.");
+        this.callback = callback;
+        if (requestBody == null || callback == null) {
+            throw new NullPointerException("this requestBody and callback must not null.");
         }
     }
 
@@ -78,7 +78,12 @@ public class UploadProgressRequestBody extends RequestBody {
             Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
                 @Override
                 public void call(Long aLong) {
-                    uploadProgressCallback.onProgress(currentLength, totalLength, (100.0f * currentLength) / totalLength);
+                    callback.onProgress(currentLength, totalLength, (100.0f * currentLength) / totalLength);
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    callback.onFail(-1, throwable.getMessage());
                 }
             });
         }

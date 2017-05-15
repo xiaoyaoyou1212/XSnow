@@ -1,7 +1,7 @@
 package com.vise.xsnow.net.interceptor;
 
 import com.vise.xsnow.net.body.UploadProgressRequestBody;
-import com.vise.xsnow.net.callback.UploadProgressCallback;
+import com.vise.xsnow.net.callback.UCallback;
 
 import java.io.IOException;
 
@@ -16,12 +16,12 @@ import okhttp3.Response;
  */
 public class UploadProgressInterceptor implements Interceptor {
 
-    private UploadProgressCallback uploadProgressCallback;
+    private UCallback callback;
 
-    public UploadProgressInterceptor(UploadProgressCallback uploadProgressCallback) {
-        this.uploadProgressCallback = uploadProgressCallback;
-        if (uploadProgressCallback == null) {
-            throw new NullPointerException("this uploadProgressCallback must not null.");
+    public UploadProgressInterceptor(UCallback callback) {
+        this.callback = callback;
+        if (callback == null) {
+            throw new NullPointerException("this callback must not null.");
         }
     }
 
@@ -33,7 +33,7 @@ public class UploadProgressInterceptor implements Interceptor {
         }
         Request progressRequest = originalRequest.newBuilder()
                 .method(originalRequest.method(),
-                        new UploadProgressRequestBody(originalRequest.body(), uploadProgressCallback))
+                        new UploadProgressRequestBody(originalRequest.body(), callback))
                 .build();
         return chain.proceed(progressRequest);
     }

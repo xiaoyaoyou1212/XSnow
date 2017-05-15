@@ -1,10 +1,11 @@
 package com.vise.xsnow.net.callback;
 
 /**
- * @Description: 上传进度回调接口
+ * @Description: 上传进度回调
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
- * @date: 2017-04-08 15:03
+ * @date: 17/5/15 10:58.
  */
-public interface UploadProgressCallback {
+public interface UCallback {
     void onProgress(long currentLength, long totalLength, float percent);
+    void onFail(int errCode, String errMsg);
 }
