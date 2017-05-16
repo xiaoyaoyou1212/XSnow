@@ -6,6 +6,7 @@ package com.vise.xsnow.net.callback;
  * @date: 17/5/15 10:55.
  */
 public interface DCallback {
-    void onProgress(long currentLength, long totalLength, float percent, boolean isFinish);
+    void onProgress(long currentLength, long totalLength);
+    void onComplete();
     void onFail(int errCode, String errMsg);
 }

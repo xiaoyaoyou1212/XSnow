@@ -8,14 +8,18 @@ import com.vise.xsnow.cache.DiskCache;
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.api.ApiService;
-import com.vise.xsnow.net.callback.ApiCallback;
+import com.vise.xsnow.net.callback.ACallback;
+import com.vise.xsnow.net.callback.DCallback;
+import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.convert.GsonConverterFactory;
 import com.vise.xsnow.net.core.ApiCookie;
 import com.vise.xsnow.net.func.ApiFunc;
 import com.vise.xsnow.net.func.ApiRetryFunc;
+import com.vise.xsnow.net.interceptor.DownloadProgressInterceptor;
 import com.vise.xsnow.net.interceptor.HeadersInterceptor;
 import com.vise.xsnow.net.interceptor.TagInterceptor;
+import com.vise.xsnow.net.interceptor.UploadProgressInterceptor;
 import com.vise.xsnow.net.mode.ApiHost;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
@@ -66,6 +70,8 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected CacheMode cacheMode;//本地缓存类型
     protected String cacheKey;//本地缓存Key
     protected long cacheTime;//本地缓存时间
+    protected DCallback downCallback;//下载进度回调
+    protected UCallback uploadCallback;//上传进度回调
 
     /**
      * 添加请求参数
@@ -390,17 +396,17 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return cacheExecute(clazz);
     }
 
-    public <T> Subscription request(Context context, ApiCallback<T> apiCallback) {
+    public <T> Subscription request(Context context, ACallback<T> callback) {
         generateGlobalConfig();
         generateLocalConfig();
-        return execute(context, apiCallback);
+        return execute(context, callback);
     }
 
     protected abstract <T> Observable<T> execute(Class<T> clazz);
 
     protected abstract <T> Observable<CacheResult<T>> cacheExecute(Class<T> clazz);
 
-    protected abstract <T> Subscription execute(Context context, ApiCallback<T> apiCallback);
+    protected abstract <T> Subscription execute(Context context, ACallback<T> callback);
 
     protected <T> Observable.Transformer<ResponseBody, T> norTransformer(final Class<T> clazz) {
         return new Observable.Transformer<ResponseBody, T>() {
@@ -445,6 +451,14 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
         if (tag != null) {
             newBuilder.addInterceptor(new TagInterceptor(tag));
+        }
+
+        if (downCallback != null) {
+            newBuilder.addNetworkInterceptor(new DownloadProgressInterceptor(downCallback));
+        }
+
+        if (uploadCallback != null) {
+            newBuilder.addNetworkInterceptor(new UploadProgressInterceptor(uploadCallback));
         }
 
         if (retryCount <= 0) {

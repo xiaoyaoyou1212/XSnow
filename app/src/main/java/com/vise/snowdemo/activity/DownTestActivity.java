@@ -1,7 +1,6 @@
 package com.vise.snowdemo.activity;
 
 import android.Manifest;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -15,15 +14,10 @@ import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.download.ViseDownload;
 import com.vise.xsnow.download.mode.DownEvent;
 import com.vise.xsnow.download.mode.DownProgress;
-import com.vise.xsnow.net.callback.ApiCallback;
-import com.vise.xsnow.net.exception.ApiException;
+import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.permission.OnPermissionCallback;
-import com.vise.xsnow.permission.Permission;
 import com.vise.xsnow.permission.PermissionManager;
-import com.vise.xsnow.permission.RxPermissions;
 import com.vise.xsnow.ui.BaseActivity;
-
-import rx.functions.Action1;
 
 /**
  * @Description: 下载展示
@@ -101,24 +95,9 @@ public class DownTestActivity extends BaseActivity {
     }
 
     private void serverDownload() {
-        viseDownload.receiveDownProgress(url, new ApiCallback<DownEvent>() {
+        viseDownload.receiveDownProgress(url, new ACallback<DownEvent>() {
             @Override
-            public void onStart() {
-                ViseLog.i("down start");
-            }
-
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.i("down error" + e);
-            }
-
-            @Override
-            public void onCompleted() {
-                ViseLog.i("down completed");
-            }
-
-            @Override
-            public void onNext(DownEvent downEvent) {
+            public void onSuccess(DownEvent downEvent) {
                 if (downEvent == null || downEvent.getDownProgress() == null
                         || downEvent.getDownProgress().getDownloadSize() > downEvent.getDownProgress().getTotalSize()) {
                     return;
@@ -127,35 +106,32 @@ public class DownTestActivity extends BaseActivity {
                         * 100 / downEvent.getDownProgress().getTotalSize()));
                 mService_download_desc.setText(downEvent.getDownProgress().getPercent());
             }
+
+            @Override
+            public void onFail(int errCode, String errMsg) {
+                ViseLog.i("down errorCode:" + errCode + ",errorMsg:" + errMsg);
+            }
+
         });
         viseDownload.serviceDownload(url, saveName, null).subscribe();
     }
 
     private void normalDownload() {
-        viseDownload.download(url, saveName, null, new ApiCallback<DownProgress>() {
+        viseDownload.download(url, saveName, null, new ACallback<DownProgress>() {
             @Override
-            public void onStart() {
-                ViseLog.i("down start");
-            }
-
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.i("down error" + e);
-            }
-
-            @Override
-            public void onCompleted() {
-                ViseLog.i("down completed");
-            }
-
-            @Override
-            public void onNext(DownProgress downProgress) {
+            public void onSuccess(DownProgress downProgress) {
                 if (downProgress == null) {
                     return;
                 }
                 mNormal_download_progress.setProgress((int) (downProgress.getDownloadSize() * 100 / downProgress.getTotalSize()));
                 mNormal_download_desc.setText(downProgress.getPercent());
             }
+
+            @Override
+            public void onFail(int errCode, String errMsg) {
+                ViseLog.i("down errorCode:" + errCode + ",errorMsg:" + errMsg);
+            }
+
         });
     }
 }

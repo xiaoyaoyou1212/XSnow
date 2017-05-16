@@ -15,8 +15,7 @@ import com.vise.xsnow.download.db.DownDbManager;
 import com.vise.xsnow.download.mode.DownEvent;
 import com.vise.xsnow.download.mode.DownProgress;
 import com.vise.xsnow.download.mode.DownRecord;
-import com.vise.xsnow.net.callback.ApiCallback;
-import com.vise.xsnow.net.exception.ApiException;
+import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.mode.ApiCode;
 
 import java.io.File;
@@ -155,21 +154,24 @@ public class ViseDownload {
         }).compose(this.<DownEvent>norTransformer());
     }
 
-    public Subscription receiveDownProgress(final String url, final ApiCallback<DownEvent> callback) {
+    public Subscription receiveDownProgress(final String url, final ACallback<DownEvent> callback) {
         return this.receiveDownProgress(url).subscribe(new Subscriber<DownEvent>() {
             @Override
             public void onCompleted() {
-                callback.onCompleted();
             }
 
             @Override
             public void onError(Throwable e) {
-                callback.onError(new ApiException(e, ApiCode.Request.UNKNOWN));
+                if (e == null) {
+                    callback.onFail(ApiCode.Request.UNKNOWN, "This Throwable is Null.");
+                    return;
+                }
+                callback.onFail(ApiCode.Request.UNKNOWN, e.getMessage());
             }
 
             @Override
             public void onNext(DownEvent downEvent) {
-                callback.onNext(downEvent);
+                callback.onSuccess(downEvent);
             }
         });
     }
@@ -285,21 +287,24 @@ public class ViseDownload {
     }
 
     public Subscription download(@NonNull final String url, @NonNull final String saveName,
-                                 @Nullable final String savePath, @NonNull final ApiCallback<DownProgress> callback) {
+                                 @Nullable final String savePath, @NonNull final ACallback<DownProgress> callback) {
         return this.download(url, saveName, savePath).subscribe(new Subscriber<DownProgress>() {
             @Override
             public void onCompleted() {
-                callback.onCompleted();
             }
 
             @Override
             public void onError(Throwable e) {
-                callback.onError(new ApiException(e, ApiCode.Request.UNKNOWN));
+                if (e == null) {
+                    callback.onFail(ApiCode.Request.UNKNOWN, "This Throwable is Null.");
+                    return;
+                }
+                callback.onFail(ApiCode.Request.UNKNOWN, e.getMessage());
             }
 
             @Override
             public void onNext(DownProgress downProgress) {
-                callback.onNext(downProgress);
+                callback.onSuccess(downProgress);
             }
         });
     }

@@ -2,7 +2,7 @@ package com.vise.xsnow.net.subscriber;
 
 import android.content.Context;
 
-import com.vise.xsnow.net.callback.ApiCallback;
+import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.exception.ApiException;
 
 /**
@@ -12,9 +12,9 @@ import com.vise.xsnow.net.exception.ApiException;
  */
 public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
-    protected ApiCallback<T> callBack;
+    protected ACallback<T> callBack;
 
-    public ApiCallbackSubscriber(Context context, ApiCallback<T> callBack) {
+    public ApiCallbackSubscriber(Context context, ACallback<T> callBack) {
         super(context);
         if (callBack == null) {
             throw new NullPointerException("this callback is null!");
@@ -25,21 +25,23 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
     @Override
     public void onStart() {
         super.onStart();
-        callBack.onStart();
     }
 
     @Override
     public void onError(ApiException e) {
-        callBack.onError(e);
+        if (e == null) {
+            callBack.onFail(-1, "This ApiException is Null.");
+            return;
+        }
+        callBack.onFail(e.getCode(), e.getMessage());
     }
 
     @Override
     public void onCompleted() {
-        callBack.onCompleted();
     }
 
     @Override
     public void onNext(T t) {
-        callBack.onNext(t);
+        callBack.onSuccess(t);
     }
 }

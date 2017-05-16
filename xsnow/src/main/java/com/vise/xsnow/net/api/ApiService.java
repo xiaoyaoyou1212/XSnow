@@ -18,8 +18,8 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -41,10 +41,7 @@ public interface ApiService {
     Observable<ResponseBody> postForm(@Url() String url, @FieldMap Map<String, Object> maps);
 
     @POST()
-    Observable<ResponseBody> postJson(@Url() String url, @Body RequestBody jsonBody);
-
-    @POST()
-    Observable<ResponseBody> postBody(@Url() String url, @Body Object object);
+    Observable<ResponseBody> postBody(@Url() String url, @Body RequestBody requestBody);
 
     @HEAD()
     Observable<ResponseBody> head(@Url String url, @QueryMap Map<String, String> maps);
@@ -64,21 +61,12 @@ public interface ApiService {
     @DELETE()
     Observable<ResponseBody> delete(@Url() String url, @FieldMap Map<String, String> maps);
 
-    @Multipart
-    @POST()
-    Observable<ResponseBody> uploadImage(@Url() String url, @Part("image\"; filename=\"image" + ".jpg") RequestBody requestBody);
+    @Streaming
+    @GET()
+    Observable<ResponseBody> downFile(@Url() String url, @QueryMap Map<String, String> maps);
 
     @Multipart
     @POST()
-    Observable<ResponseBody> uploadFile(@Url String fileUrl, @Part("description") RequestBody description,
-                                        @Part("files") MultipartBody.Part file);
-
-    @Multipart
-    @POST()
-    Observable<ResponseBody> uploadFiles(@Url() String url, @PartMap() Map<String, RequestBody> maps);
-
-    @Multipart
-    @POST()
-    Observable<ResponseBody> uploadFiles(@Url() String path, @Part() List<MultipartBody.Part> parts);
+    Observable<ResponseBody> uploadFiles(@Url() String url, @Part() List<MultipartBody.Part> parts);
 
 }

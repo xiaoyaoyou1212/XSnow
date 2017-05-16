@@ -10,8 +10,7 @@ import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.mode.GithubModel;
 import com.vise.xsnow.net.ViseNet;
-import com.vise.xsnow.net.callback.ApiCallback;
-import com.vise.xsnow.net.exception.ApiException;
+import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.ui.BaseActivity;
@@ -95,29 +94,19 @@ public class NetTestActivity extends BaseActivity {
 
     private void normalRequest() {
         mShow_response_data.setText("");
-        ViseNet.GET().request(mContext, new ApiCallback<GithubModel>() {
+        ViseNet.GET().request(mContext, new ACallback<GithubModel>() {
             @Override
-            public void onStart() {
-                ViseLog.i("request start");
-            }
-
-            @Override
-            public void onError(ApiException e) {
-                ViseLog.e("request error" + e);
-            }
-
-            @Override
-            public void onCompleted() {
-                ViseLog.i("request completed");
-            }
-
-            @Override
-            public void onNext(GithubModel githubModel) {
-                ViseLog.i("request next");
+            public void onSuccess(GithubModel githubModel) {
+                ViseLog.i("request onSuccess!");
                 if (githubModel == null) {
                     return;
                 }
                 mShow_response_data.setText(githubModel.toString());
+            }
+
+            @Override
+            public void onFail(int errCode, String errMsg) {
+                ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
             }
         });
     }
@@ -127,25 +116,10 @@ public class NetTestActivity extends BaseActivity {
         ViseNet.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_CACHE)
-                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
                     @Override
-                    public void onStart() {
-                        ViseLog.i("request start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.e("request error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("request completed");
-                    }
-
-                    @Override
-                    public void onNext(CacheResult<GithubModel> cacheResult) {
-                        ViseLog.i("request next");
+                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
                         }
@@ -154,6 +128,11 @@ public class NetTestActivity extends BaseActivity {
                         } else {
                             mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
                         }
+                    }
+
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 });
     }
@@ -163,25 +142,10 @@ public class NetTestActivity extends BaseActivity {
         ViseNet.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_REMOTE)
-                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
                     @Override
-                    public void onStart() {
-                        ViseLog.i("request start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.e("request error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("request completed");
-                    }
-
-                    @Override
-                    public void onNext(CacheResult<GithubModel> cacheResult) {
-                        ViseLog.i("request next");
+                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
                         }
@@ -190,6 +154,11 @@ public class NetTestActivity extends BaseActivity {
                         } else {
                             mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
                         }
+                    }
+
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 });
     }
@@ -199,25 +168,10 @@ public class NetTestActivity extends BaseActivity {
         ViseNet.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_CACHE)
-                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
                     @Override
-                    public void onStart() {
-                        ViseLog.i("request start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.e("request error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("request completed");
-                    }
-
-                    @Override
-                    public void onNext(CacheResult<GithubModel> cacheResult) {
-                        ViseLog.i("request next");
+                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
                         }
@@ -226,6 +180,11 @@ public class NetTestActivity extends BaseActivity {
                         } else {
                             mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
                         }
+                    }
+
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 });
     }
@@ -235,25 +194,10 @@ public class NetTestActivity extends BaseActivity {
         ViseNet.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_REMOTE)
-                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
                     @Override
-                    public void onStart() {
-                        ViseLog.i("request start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.e("request error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("request completed");
-                    }
-
-                    @Override
-                    public void onNext(CacheResult<GithubModel> cacheResult) {
-                        ViseLog.i("request next");
+                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
                         }
@@ -262,6 +206,11 @@ public class NetTestActivity extends BaseActivity {
                         } else {
                             mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
                         }
+                    }
+
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 });
     }
@@ -271,25 +220,10 @@ public class NetTestActivity extends BaseActivity {
         ViseNet.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.CACHE_AND_REMOTE)
-                .request(mContext, new ApiCallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
                     @Override
-                    public void onStart() {
-                        ViseLog.i("request start");
-                    }
-
-                    @Override
-                    public void onError(ApiException e) {
-                        ViseLog.e("request error" + e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        ViseLog.i("request completed");
-                    }
-
-                    @Override
-                    public void onNext(CacheResult<GithubModel> cacheResult) {
-                        ViseLog.i("request next");
+                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                        ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
                         }
@@ -298,6 +232,11 @@ public class NetTestActivity extends BaseActivity {
                         } else {
                             mShow_response_data.setText("From Remote:\n" + cacheResult.getCacheData().toString());
                         }
+                    }
+
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 });
     }

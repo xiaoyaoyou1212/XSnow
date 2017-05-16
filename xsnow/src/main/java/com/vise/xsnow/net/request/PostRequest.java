@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.vise.utils.assist.ClassUtil;
 import com.vise.xsnow.net.ViseNet;
-import com.vise.xsnow.net.callback.ApiCallback;
+import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.subscriber.ApiCallbackSubscriber;
 
@@ -28,12 +28,12 @@ public class PostRequest extends BaseRequest<PostRequest> {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ApiCallback<T> apiCallback) {
+    protected <T> Subscription execute(Context context, ACallback<T> callback) {
         if (isLocalCache) {
-            return this.cacheExecute(ClassUtil.getTClass(apiCallback))
-                    .subscribe(new ApiCallbackSubscriber(context, apiCallback));
+            return this.cacheExecute(ClassUtil.getTClass(callback))
+                    .subscribe(new ApiCallbackSubscriber(context, callback));
         }
-        return this.execute(ClassUtil.getTClass(apiCallback))
-                .subscribe(new ApiCallbackSubscriber(context, apiCallback));
+        return this.execute(ClassUtil.getTClass(callback))
+                .subscribe(new ApiCallbackSubscriber(context, callback));
     }
 }
