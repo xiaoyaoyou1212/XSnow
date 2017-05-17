@@ -1,9 +1,9 @@
-package com.vise.xsnow.net.func;
+package com.vise.netexpand.func;
 
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.vise.xsnow.net.mode.ApiResult;
+import com.vise.netexpand.mode.ApiResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;

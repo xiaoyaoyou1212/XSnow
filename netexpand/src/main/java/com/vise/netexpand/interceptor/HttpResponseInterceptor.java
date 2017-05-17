@@ -1,11 +1,11 @@
-package com.vise.xsnow.net.interceptor;
+package com.vise.netexpand.interceptor;
 
 import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
+import com.vise.netexpand.mode.ApiResult;
+import com.vise.netexpand.mode.ResponseCode;
 import com.vise.xsnow.common.GSONUtil;
-import com.vise.xsnow.net.mode.ApiCode;
-import com.vise.xsnow.net.mode.ApiResult;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -54,17 +54,17 @@ public abstract class HttpResponseInterceptor implements Interceptor {
             ApiResult apiResult = GSONUtil.gson().fromJson(bodyString, ApiResult.class);
             if (apiResult != null) {
                 switch (apiResult.getCode()) {
-                    case ApiCode.Response.ACCESS_TOKEN_EXPIRED: //AccessToken错误或已过期
+                    case ResponseCode.ACCESS_TOKEN_EXPIRED: //AccessToken错误或已过期
                         return processAccessTokenExpired(chain, request);
-                    case ApiCode.Response.REFRESH_TOKEN_EXPIRED://RefreshToken错误或已过期
+                    case ResponseCode.REFRESH_TOKEN_EXPIRED://RefreshToken错误或已过期
                         return processRefreshTokenExpired(chain, request);
-                    case ApiCode.Response.OTHER_PHONE_LOGIN://帐号在其它手机已登录
+                    case ResponseCode.OTHER_PHONE_LOGIN://帐号在其它手机已登录
                         return processOtherPhoneLogin(chain, request);
-                    case ApiCode.Response.SIGN_ERROR://签名错误
+                    case ResponseCode.SIGN_ERROR://签名错误
                         return processSignError(chain, request);
-                    case ApiCode.Response.TIMESTAMP_ERROR://timestamp过期
+                    case ResponseCode.TIMESTAMP_ERROR://timestamp过期
                         return processTimestampError(chain, request);
-                    case ApiCode.Response.NO_ACCESS_TOKEN://缺少授权信息
+                    case ResponseCode.NO_ACCESS_TOKEN://缺少授权信息
                         return processNoAccessToken(chain, request);
                     default:
                         break;

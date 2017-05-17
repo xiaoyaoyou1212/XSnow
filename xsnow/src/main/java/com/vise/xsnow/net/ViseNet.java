@@ -6,6 +6,7 @@ import com.vise.xsnow.net.callback.DCallback;
 import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.core.ApiCache;
+import com.vise.xsnow.net.request.BaseRequest;
 import com.vise.xsnow.net.request.DeleteRequest;
 import com.vise.xsnow.net.request.DownloadRequest;
 import com.vise.xsnow.net.request.GetRequest;
@@ -104,6 +105,18 @@ public class ViseNet {
             apiCache = getApiCacheBuilder().build();
         }
         return apiCache;
+    }
+
+    /**
+     * 通用请求，可传入自定义请求
+     * @param request
+     * @return
+     */
+    public static BaseRequest BASE(BaseRequest request) {
+        if (request == null) {
+            throw new NullPointerException("this request is null!");
+        }
+        return request;
     }
 
     /**

@@ -1,10 +1,11 @@
-package com.vise.xsnow.net.convert;
+package com.vise.netexpand.convert;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.vise.xsnow.net.exception.ApiException;
-import com.vise.xsnow.net.mode.ApiResult;
+import com.vise.netexpand.common.ResponseHelper;
+import com.vise.netexpand.mode.ApiResult;
+import com.vise.netexpand.mode.ResponseCode;
 
 import java.io.IOException;
 import java.net.UnknownServiceException;
@@ -35,7 +36,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
                 if (data == null) throw new UnknownServiceException("server back data is null");
                 if (data instanceof ApiResult) {
                     ApiResult apiResult = (ApiResult) data;
-                    if (!ApiException.isSuccess(apiResult)) {
+                    if (!ResponseHelper.isSuccess(apiResult)) {
                         throw new UnknownServiceException(apiResult.getMsg() == null ? "unknow error" : apiResult.getMsg());
                     }
                 }

@@ -1,7 +1,7 @@
-package com.vise.xsnow.net.func;
+package com.vise.netexpand.func;
 
-import com.vise.xsnow.net.exception.ApiException;
-import com.vise.xsnow.net.mode.ApiResult;
+import com.vise.netexpand.common.ResponseHelper;
+import com.vise.netexpand.mode.ApiResult;
 
 import rx.functions.Func1;
 
@@ -16,10 +16,9 @@ public class ApiDataFunc<T> implements Func1<ApiResult<T>, T> {
 
     @Override
     public T call(ApiResult<T> response) {
-        if (ApiException.isSuccess(response)) {
+        if (ResponseHelper.isSuccess(response)) {
             return response.getData();
-        } else {
-            return (T) new ApiException(new Throwable(response.getMsg()), response.getCode());
         }
+        return null;
     }
 }

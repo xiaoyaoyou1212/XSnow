@@ -1,1 +1,1 @@
-include ':app', ':xsnow'
+include ':app', ':xsnow', ':netexpand'

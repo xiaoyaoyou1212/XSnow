@@ -1,4 +1,4 @@
-package com.vise.xsnow.net.convert;
+package com.vise.netexpand.convert;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

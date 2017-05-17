@@ -1,4 +1,4 @@
-package com.vise.xsnow.net.mode;
+package com.vise.netexpand.mode;
 
 /**
  * @Description: 封装的通用服务器返回对象，可自行定义

@@ -12,7 +12,6 @@ import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.callback.DCallback;
 import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
-import com.vise.xsnow.net.convert.GsonConverterFactory;
 import com.vise.xsnow.net.core.ApiCookie;
 import com.vise.xsnow.net.func.ApiFunc;
 import com.vise.xsnow.net.func.ApiRetryFunc;
@@ -534,10 +533,9 @@ public abstract class BaseRequest<R extends BaseRequest> {
         }
         ViseNet.getRetrofitBuilder().baseUrl(netGlobalConfig.getBaseUrl());
 
-        if (netGlobalConfig.getConverterFactory() == null) {
-            netGlobalConfig.converterFactory(GsonConverterFactory.create());
+        if (netGlobalConfig.getConverterFactory() != null) {
+            ViseNet.getRetrofitBuilder().addConverterFactory(netGlobalConfig.getConverterFactory());
         }
-        ViseNet.getRetrofitBuilder().addConverterFactory(netGlobalConfig.getConverterFactory());
 
         if (netGlobalConfig.getCallAdapterFactory() == null) {
             netGlobalConfig.callAdapterFactory(RxJavaCallAdapterFactory.create());
