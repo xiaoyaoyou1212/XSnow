@@ -7,6 +7,7 @@ import com.vise.xsnow.net.body.UploadProgressRequestBody;
 import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.net.mode.CacheResult;
+import com.vise.xsnow.net.mode.MediaTypes;
 import com.vise.xsnow.net.subscriber.ApiCallbackSubscriber;
 
 import java.io.File;
@@ -77,7 +78,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         if (key == null || file == null) {
             return this;
         }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+        RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, file);
         if (callback != null) {
             UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
             MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
@@ -97,7 +98,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         if (key == null || file == null) {
             return this;
         }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+        RequestBody requestBody = RequestBody.create(MediaTypes.IMAGE_TYPE, file);
         if (callback != null) {
             UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
             MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), uploadProgressRequestBody);
@@ -117,7 +118,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         if (key == null || bytes == null || name == null) {
             return this;
         }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), bytes);
+        RequestBody requestBody = RequestBody.create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, bytes);
         if (callback != null) {
             UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
             MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);
@@ -138,7 +139,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
             return this;
         }
 
-        RequestBody requestBody = create(MediaType.parse("application/octet-stream"), inputStream);
+        RequestBody requestBody = create(MediaTypes.APPLICATION_OCTET_STREAM_TYPE, inputStream);
         if (callback != null) {
             UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, callback);
             MultipartBody.Part part = MultipartBody.Part.createFormData(key, name, uploadProgressRequestBody);

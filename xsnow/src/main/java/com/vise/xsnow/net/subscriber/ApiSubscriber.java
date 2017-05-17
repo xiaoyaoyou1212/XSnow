@@ -20,7 +20,7 @@ public abstract class ApiSubscriber<T> extends Subscriber<T> {
     public WeakReference<Context> contextWeakReference;
 
     public ApiSubscriber(Context context) {
-        contextWeakReference = new WeakReference<Context>(context);
+        contextWeakReference = new WeakReference<>(context);
     }
 
     @Override
