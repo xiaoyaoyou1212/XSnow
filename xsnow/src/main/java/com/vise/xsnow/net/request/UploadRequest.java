@@ -35,6 +35,9 @@ import rx.Subscription;
  */
 public class UploadRequest extends BaseRequest<UploadRequest> {
 
+    protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
+    protected StringBuilder stringBuilder = new StringBuilder();
+
     public UploadRequest() {
     }
 
@@ -42,10 +45,11 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
         this.uploadCallback = callback;
     }
 
-    protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
-
     @Override
     protected <T> Observable<T> execute(Class<T> clazz) {
+        if (stringBuilder.length() > 0) {
+            suffixUrl = suffixUrl + stringBuilder.toString();
+        }
         if (params != null && params.size() > 0) {
             Iterator<Map.Entry<String, String>> entryIterator = params.entrySet().iterator();
             Map.Entry<String, String> entry;
@@ -68,6 +72,18 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
     protected <T> Subscription execute(Context context, ACallback<T> callback) {
         return this.execute(ClassUtil.getTClass(callback))
                 .subscribe(new ApiCallbackSubscriber(context, callback));
+    }
+
+    public UploadRequest addUrlParam(String paramKey, String paramValue) {
+        if (paramKey != null && paramValue != null) {
+            if (stringBuilder.length() == 0) {
+                stringBuilder.append("?");
+            } else {
+                stringBuilder.append("&");
+            }
+            stringBuilder.append(paramKey).append("=").append(paramValue);
+        }
+        return this;
     }
 
     public UploadRequest addFile(String key, File file) {

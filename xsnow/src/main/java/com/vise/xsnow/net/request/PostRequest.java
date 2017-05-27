@@ -29,12 +29,16 @@ import rx.Subscription;
 public class PostRequest extends BaseRequest<PostRequest> {
 
     protected Map<String, Object> forms = new LinkedHashMap<>();
+    protected StringBuilder stringBuilder = new StringBuilder();
     protected RequestBody requestBody;
     protected MediaType mediaType;
     protected String content;
 
     @Override
     protected <T> Observable<T> execute(Class<T> clazz) {
+        if (stringBuilder.length() > 0) {
+            suffixUrl = suffixUrl + stringBuilder.toString();
+        }
         if (forms != null && forms.size() > 0) {
             if (params != null && params.size() > 0) {
                 Iterator<Map.Entry<String, String>> entryIterator = params.entrySet().iterator();
@@ -71,6 +75,18 @@ public class PostRequest extends BaseRequest<PostRequest> {
         }
         return this.execute(ClassUtil.getTClass(callback))
                 .subscribe(new ApiCallbackSubscriber(context, callback));
+    }
+
+    public PostRequest addUrlParam(String paramKey, String paramValue) {
+        if (paramKey != null && paramValue != null) {
+            if (stringBuilder.length() == 0) {
+                stringBuilder.append("?");
+            } else {
+                stringBuilder.append("&");
+            }
+            stringBuilder.append(paramKey).append("=").append(paramValue);
+        }
+        return this;
     }
 
     public PostRequest addForm(String formKey, Object formValue) {
