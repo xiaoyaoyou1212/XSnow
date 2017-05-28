@@ -3,6 +3,8 @@ package com.vise.xsnow.net.strategy;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.mode.CacheResult;
 
+import java.lang.reflect.Type;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -13,8 +15,8 @@ import rx.functions.Func1;
  */
 public class FirstRemoteStrategy<T> extends CacheStrategy<T> {
     @Override
-    public <T> Observable<CacheResult<T>> execute(ApiCache apiCache, String cacheKey, Observable<T> source, Class<T> clazz) {
-        Observable<CacheResult<T>> cache = loadCache(apiCache, cacheKey, clazz);
+    public <T> Observable<CacheResult<T>> execute(ApiCache apiCache, String cacheKey, Observable<T> source, Type type) {
+        Observable<CacheResult<T>> cache = loadCache(apiCache, cacheKey, type);
         cache.onErrorReturn(new Func1<Throwable, CacheResult<T>>() {
             @Override
             public CacheResult<T> call(Throwable throwable) {

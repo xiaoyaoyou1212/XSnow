@@ -2,7 +2,6 @@ package com.vise.xsnow.net.request;
 
 import android.content.Context;
 
-import com.vise.utils.assist.ClassUtil;
 import com.vise.xsnow.net.body.UploadProgressRequestBody;
 import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.callback.UCallback;
@@ -13,6 +12,7 @@ import com.vise.xsnow.net.subscriber.ApiCallbackSubscriber;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -46,7 +46,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
     }
 
     @Override
-    protected <T> Observable<T> execute(Class<T> clazz) {
+    protected <T> Observable<T> execute(Type type) {
         if (stringBuilder.length() > 0) {
             suffixUrl = suffixUrl + stringBuilder.toString();
         }
@@ -60,17 +60,17 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
                 }
             }
         }
-        return apiService.uploadFiles(suffixUrl, multipartBodyParts).compose(this.norTransformer(clazz));
+        return apiService.uploadFiles(suffixUrl, multipartBodyParts).compose(this.<T>norTransformer(type));
     }
 
     @Override
-    protected <T> Observable<CacheResult<T>> cacheExecute(Class<T> clazz) {
+    protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
         return null;
     }
 
     @Override
     protected <T> Subscription execute(Context context, ACallback<T> callback) {
-        return this.execute(ClassUtil.getTClass(callback))
+        return this.execute(getType(callback))
                 .subscribe(new ApiCallbackSubscriber(context, callback));
     }
 

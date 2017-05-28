@@ -10,6 +10,7 @@ import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.strategy.ICacheStrategy;
 
 import java.io.File;
+import java.lang.reflect.Type;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -62,13 +63,13 @@ public class ApiCache {
         diskCache = new DiskCache(context, diskDir, diskMaxSize).setCacheTime(time);
     }
 
-    public <T> Observable.Transformer<T, CacheResult<T>> transformer(CacheMode cacheMode, final Class<T> clazz) {
+    public <T> Observable.Transformer<T, CacheResult<T>> transformer(CacheMode cacheMode, final Type type) {
         final ICacheStrategy strategy = loadStrategy(cacheMode);//获取缓存策略
         return new Observable.Transformer<T, CacheResult<T>>() {
             @Override
             public Observable<CacheResult<T>> call(Observable<T> apiResultObservable) {
                 ViseLog.i("cacheKey=" + ApiCache.this.cacheKey);
-                return strategy.execute(ApiCache.this, ApiCache.this.cacheKey, apiResultObservable, clazz);
+                return strategy.execute(ApiCache.this, ApiCache.this.cacheKey, apiResultObservable, type);
             }
         };
     }

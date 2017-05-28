@@ -25,6 +25,8 @@ import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.mode.HttpHeaders;
 
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -383,16 +385,16 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return cacheTime;
     }
 
-    public <T> Observable<T> request(Class<T> clazz) {
+    public <T> Observable<T> request(Type type) {
         generateGlobalConfig();
         generateLocalConfig();
-        return execute(clazz);
+        return execute(type);
     }
 
-    public <T> Observable<CacheResult<T>> cacheRequest(Class<T> clazz) {
+    public <T> Observable<CacheResult<T>> cacheRequest(Type type) {
         generateGlobalConfig();
         generateLocalConfig();
-        return cacheExecute(clazz);
+        return cacheExecute(type);
     }
 
     public <T> Subscription request(Context context, ACallback<T> callback) {
@@ -401,19 +403,19 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return execute(context, callback);
     }
 
-    protected abstract <T> Observable<T> execute(Class<T> clazz);
+    protected abstract <T> Observable<T> execute(Type type);
 
-    protected abstract <T> Observable<CacheResult<T>> cacheExecute(Class<T> clazz);
+    protected abstract <T> Observable<CacheResult<T>> cacheExecute(Type type);
 
     protected abstract <T> Subscription execute(Context context, ACallback<T> callback);
 
-    protected <T> Observable.Transformer<ResponseBody, T> norTransformer(final Class<T> clazz) {
+    protected <T> Observable.Transformer<ResponseBody, T> norTransformer(final Type type) {
         return new Observable.Transformer<ResponseBody, T>() {
             @Override
             public Observable<T> call(Observable<ResponseBody> apiResultObservable) {
                 return apiResultObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn
                         (AndroidSchedulers
-                                .mainThread()).map(new ApiFunc<T>(clazz)).retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
+                                .mainThread()).map(new ApiFunc<T>(type)).retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
             }
         };
     }
@@ -507,8 +509,12 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (baseUrl != null) {
             Retrofit.Builder newRetrofitBuilder = new Retrofit.Builder();
             newRetrofitBuilder.baseUrl(baseUrl);
-            newRetrofitBuilder.addConverterFactory(netGlobalConfig.getConverterFactory());
-            newRetrofitBuilder.addCallAdapterFactory(netGlobalConfig.getCallAdapterFactory());
+            if (netGlobalConfig.getConverterFactory() != null) {
+                newRetrofitBuilder.addConverterFactory(netGlobalConfig.getConverterFactory());
+            }
+            if (netGlobalConfig.getCallAdapterFactory() != null) {
+                newRetrofitBuilder.addCallAdapterFactory(netGlobalConfig.getCallAdapterFactory());
+            }
             if (netGlobalConfig.getCallFactory() != null) {
                 newRetrofitBuilder.callFactory(netGlobalConfig.getCallFactory());
             }
@@ -586,5 +592,19 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (netGlobalConfig.getHttpCache() != null) {
             ViseNet.getOkHttpBuilder().cache(netGlobalConfig.getHttpCache());
         }
+    }
+
+    protected  <T> Type getType(T t) {
+        Type genType = t.getClass().getGenericSuperclass();
+        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+        Type type = params[0];
+        Type finalNeedType;
+        if (params.length > 1) {
+            if (!(type instanceof ParameterizedType)) throw new IllegalStateException("没有填写泛型参数");
+            finalNeedType = ((ParameterizedType) type).getActualTypeArguments()[0];
+        } else {
+            finalNeedType = type;
+        }
+        return finalNeedType;
     }
 }

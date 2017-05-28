@@ -1,11 +1,11 @@
 package com.vise.xsnow.permission;
 
 import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.app.Fragment;
 import android.util.Log;
 
 import com.vise.log.ViseLog;

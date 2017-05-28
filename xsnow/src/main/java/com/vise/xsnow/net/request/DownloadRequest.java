@@ -2,11 +2,12 @@ package com.vise.xsnow.net.request;
 
 import android.content.Context;
 
-import com.vise.utils.assist.ClassUtil;
 import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.callback.DCallback;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.net.subscriber.ApiCallbackSubscriber;
+
+import java.lang.reflect.Type;
 
 import rx.Observable;
 import rx.Subscription;
@@ -26,18 +27,18 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
     }
 
     @Override
-    protected <T> Observable<T> execute(Class<T> clazz) {
-        return apiService.downFile(suffixUrl, params).compose(this.norTransformer(clazz));
+    protected <T> Observable<T> execute(Type type) {
+        return apiService.downFile(suffixUrl, params).compose(this.<T>norTransformer(type));
     }
 
     @Override
-    protected <T> Observable<CacheResult<T>> cacheExecute(Class<T> clazz) {
+    protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
         return null;
     }
 
     @Override
     protected <T> Subscription execute(Context context, ACallback<T> callback) {
-        return this.execute(ClassUtil.getTClass(callback))
+        return this.execute(getType(callback))
                 .subscribe(new ApiCallbackSubscriber(context, callback));
     }
 }

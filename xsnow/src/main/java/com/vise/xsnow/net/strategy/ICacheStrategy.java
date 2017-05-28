@@ -3,6 +3,8 @@ package com.vise.xsnow.net.strategy;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.mode.CacheResult;
 
+import java.lang.reflect.Type;
+
 import rx.Observable;
 
 /**
@@ -11,5 +13,5 @@ import rx.Observable;
  * @date: 16/12/31 14:21.
  */
 public interface ICacheStrategy<T> {
-    <T> Observable<CacheResult<T>> execute(ApiCache apiCache, String cacheKey, Observable<T> source, Class<T> clazz);
+    <T> Observable<CacheResult<T>> execute(ApiCache apiCache, String cacheKey, Observable<T> source, Type type);
 }

@@ -5,6 +5,8 @@ import com.vise.xsnow.common.GSONUtil;
 import com.vise.xsnow.net.core.ApiCache;
 import com.vise.xsnow.net.mode.CacheResult;
 
+import java.lang.reflect.Type;
+
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -16,8 +18,7 @@ import rx.schedulers.Schedulers;
  * @date: 16/12/31 14:28.
  */
 public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
-    <T> Observable<CacheResult<T>> loadCache(final ApiCache apiCache, final String key, final Class<T>
-            clazz) {
+    <T> Observable<CacheResult<T>> loadCache(final ApiCache apiCache, final String key, final Type type) {
         return apiCache.<T>get(key).filter(new Func1<String, Boolean>() {
             @Override
             public Boolean call(String s) {
@@ -26,7 +27,7 @@ public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
         }).map(new Func1<String, CacheResult<T>>() {
             @Override
             public CacheResult<T> call(String s) {
-                T t = GSONUtil.gson().fromJson(s, clazz);
+                T t = GSONUtil.gson().fromJson(s, type);
                 ViseLog.i("loadCache result=" + t);
                 return new CacheResult<T>(true, t);
             }
