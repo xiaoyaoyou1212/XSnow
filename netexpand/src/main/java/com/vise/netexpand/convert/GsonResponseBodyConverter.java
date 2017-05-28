@@ -5,7 +5,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.vise.netexpand.common.ResponseHelper;
 import com.vise.netexpand.mode.ApiResult;
-import com.vise.netexpand.mode.ResponseCode;
 
 import java.io.IOException;
 import java.net.UnknownServiceException;

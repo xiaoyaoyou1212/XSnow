@@ -4,11 +4,13 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.vise.netexpand.mode.ApiResult;
+import com.vise.netexpand.mode.ResponseCode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import okhttp3.ResponseBody;
 import rx.functions.Func1;
@@ -19,10 +21,10 @@ import rx.functions.Func1;
  * @date: 2016-12-30 17:55
  */
 public class ApiResultFunc<T> implements Func1<ResponseBody, ApiResult<T>> {
-    protected Class<T> clazz;
+    protected Type type;
 
-    public ApiResultFunc(Class<T> clazz) {
-        this.clazz = clazz;
+    public ApiResultFunc(Type type) {
+        this.type = type;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class ApiResultFunc<T> implements Func1<ResponseBody, ApiResult<T>> {
         apiResult.setCode(-1);
         try {
             String json = responseBody.string();
-            if (clazz.equals(String.class)) {
+            if (type.equals(String.class)) {
                 apiResult.setData((T) json);
                 apiResult.setCode(0);
             } else {
@@ -40,8 +42,9 @@ public class ApiResultFunc<T> implements Func1<ResponseBody, ApiResult<T>> {
                 if (result != null) {
                     apiResult = result;
                     if (apiResult.getData() != null) {
-                        T data = gson.fromJson(apiResult.getData().toString(), clazz);
+                        T data = gson.fromJson(apiResult.getData().toString(), type);
                         apiResult.setData(data);
+                        apiResult.setCode(ResponseCode.HTTP_SUCCESS);
                     } else {
                         apiResult.setMsg("ApiResult's data is null");
                     }
