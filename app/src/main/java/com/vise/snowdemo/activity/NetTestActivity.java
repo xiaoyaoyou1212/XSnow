@@ -7,13 +7,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.vise.log.ViseLog;
+import com.vise.netexpand.mode.ApiResult;
+import com.vise.netexpand.request.ApiGetRequest;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.mode.GithubModel;
+import com.vise.snowdemo.mode.ZhiHuModel;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.mode.CacheMode;
 import com.vise.xsnow.net.mode.CacheResult;
 import com.vise.xsnow.ui.BaseActivity;
+
+import java.util.List;
 
 /**
  * @Description: 网络获取相关展示
@@ -94,6 +99,24 @@ public class NetTestActivity extends BaseActivity {
 
     private void normalRequest() {
         mShow_response_data.setText("");
+        /*ViseNet.BASE(new ApiGetRequest())
+                .baseUrl("http://news-at.zhihu.com/")
+                .suffixUrl("api/3/sections")
+                .request(mContext, new ACallback<List<ZhiHuModel>>() {
+                    @Override
+                    public void onSuccess(List<ZhiHuModel> data) {
+                        ViseLog.i("request onSuccess:" + data);
+                        if (data == null) {
+                            return;
+                        }
+                        mShow_response_data.setText(data.toString());
+                    }
+
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+                });*/
         ViseNet.GET().request(mContext, new ACallback<GithubModel>() {
             @Override
             public void onSuccess(GithubModel githubModel) {

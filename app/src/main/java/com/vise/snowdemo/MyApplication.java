@@ -2,6 +2,7 @@ package com.vise.snowdemo;
 
 import com.vise.log.ViseLog;
 import com.vise.log.inner.DefaultTree;
+import com.vise.netexpand.convert.GsonConverterFactory;
 import com.vise.snowdemo.db.DbHelper;
 import com.vise.xsnow.BaseApplication;
 import com.vise.xsnow.common.ViseConfig;
@@ -35,7 +36,8 @@ public class MyApplication extends BaseApplication {
         ViseNet.init(this);
         ViseNet.CONFIG()
                 .baseUrl(ViseConfig.API_HOST)
-                .setCookie(true)
+                .retryCount(1)
+                .converterFactory(GsonConverterFactory.create())
                 .interceptor(new HttpLogInterceptor()
                         .setLevel(HttpLogInterceptor.Level.BODY));
     }

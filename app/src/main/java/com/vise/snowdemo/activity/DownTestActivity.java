@@ -11,10 +11,9 @@ import android.widget.TextView;
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
 import com.vise.utils.view.DialogUtil;
-import com.vise.xsnow.download.ViseDownload;
-import com.vise.xsnow.download.mode.DownEvent;
-import com.vise.xsnow.download.mode.DownProgress;
+import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.callback.ACallback;
+import com.vise.xsnow.net.callback.DCallback;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
 import com.vise.xsnow.ui.BaseActivity;
@@ -33,7 +32,6 @@ public class DownTestActivity extends BaseActivity {
     private ProgressBar mService_download_progress;
     private TextView mService_download_desc;
 
-    private ViseDownload viseDownload;
     private String saveName = "weixin.apk";
     private String url = "http://dldir1.qq.com/weixin/android/weixin6330android920.apk";
 
@@ -77,9 +75,6 @@ public class DownTestActivity extends BaseActivity {
                 DialogUtil.showTips(mContext, "权限控制", "拒绝授权，不在提醒！\n" + permissionName);
             }
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-        viseDownload = ViseDownload.getInstance()
-                .maxThread(3)
-                .context(mContext);
     }
 
     @Override
@@ -95,43 +90,37 @@ public class DownTestActivity extends BaseActivity {
     }
 
     private void serverDownload() {
-        viseDownload.receiveDownProgress(url, new ACallback<DownEvent>() {
-            @Override
-            public void onSuccess(DownEvent downEvent) {
-                if (downEvent == null || downEvent.getDownProgress() == null
-                        || downEvent.getDownProgress().getDownloadSize() > downEvent.getDownProgress().getTotalSize()) {
-                    return;
-                }
-                mService_download_progress.setProgress((int) (downEvent.getDownProgress().getDownloadSize()
-                        * 100 / downEvent.getDownProgress().getTotalSize()));
-                mService_download_desc.setText(downEvent.getDownProgress().getPercent());
-            }
-
-            @Override
-            public void onFail(int errCode, String errMsg) {
-                ViseLog.i("down errorCode:" + errCode + ",errorMsg:" + errMsg);
-            }
-
-        });
-        viseDownload.serviceDownload(url, saveName, null).subscribe();
     }
 
     private void normalDownload() {
-        viseDownload.download(url, saveName, null, new ACallback<DownProgress>() {
+        ViseNet.DOWNLOAD(new DCallback() {
             @Override
-            public void onSuccess(DownProgress downProgress) {
-                if (downProgress == null) {
-                    return;
-                }
-                mNormal_download_progress.setProgress((int) (downProgress.getDownloadSize() * 100 / downProgress.getTotalSize()));
-                mNormal_download_desc.setText(downProgress.getPercent());
+            public void onProgress(long currentLength, long totalLength) {
+                ViseLog.i("down progress currentLength:" + currentLength + ",totalLength:" + totalLength);
+                mNormal_download_progress.setProgress((int) (currentLength * 100 / totalLength));
+                mNormal_download_desc.setText((float) currentLength * 100 / totalLength + "%");
+            }
+
+            @Override
+            public void onComplete() {
+                ViseLog.i("down complete!");
+            }
+
+            @Override
+            public void onFail(int errCode, String errMsg) {
+                ViseLog.i("down errorCode:" + errCode + ",errorMsg:" + errMsg);
+            }}).baseUrl("http://dldir1.qq.com/")
+                .suffixUrl("weixin/android/weixin6330android920.apk")
+                .request(mContext, new ACallback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                ViseLog.i("down request success:" + data);
             }
 
             @Override
             public void onFail(int errCode, String errMsg) {
                 ViseLog.i("down errorCode:" + errCode + ",errorMsg:" + errMsg);
             }
-
         });
     }
 }
