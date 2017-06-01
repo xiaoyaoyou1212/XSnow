@@ -518,10 +518,10 @@ public abstract class BaseRequest<R extends BaseRequest> {
             if (netGlobalConfig.getCallFactory() != null) {
                 newRetrofitBuilder.callFactory(netGlobalConfig.getCallFactory());
             }
-            newRetrofitBuilder.client(ViseNet.getInstance().getOkHttpClient());
+            newRetrofitBuilder.client(newBuilder.build());
             retrofit = newRetrofitBuilder.build();
         } else {
-            ViseNet.getRetrofitBuilder().client(ViseNet.getInstance().getOkHttpClient());
+            ViseNet.getRetrofitBuilder().client(newBuilder.build());
             retrofit = ViseNet.getRetrofitBuilder().build();
         }
 
