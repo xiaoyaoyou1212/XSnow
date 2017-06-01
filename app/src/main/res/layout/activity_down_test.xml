@@ -7,40 +7,40 @@
     android:padding="15dp">
 
     <Button
-        android:id="@+id/normal_download"
+        android:id="@+id/download_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
-        android:text="Normal Download"/>
+        android:text="下载"/>
 
     <ProgressBar
-        android:id="@+id/normal_download_progress"
+        android:id="@+id/download_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
 
     <TextView
-        android:id="@+id/normal_download_desc"
+        android:id="@+id/download_progress_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0.00%"/>
 
     <Button
-        android:id="@+id/service_download"
+        android:id="@+id/upload_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
-        android:text="Service Download"/>
+        android:text="上传"/>
 
     <ProgressBar
-        android:id="@+id/service_download_progress"
+        android:id="@+id/upload_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
 
     <TextView
-        android:id="@+id/service_download_desc"
+        android:id="@+id/upload_progress_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -14,9 +14,12 @@ import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.callback.ACallback;
 import com.vise.xsnow.net.callback.DCallback;
+import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
 import com.vise.xsnow.ui.BaseActivity;
+
+import java.io.File;
 
 /**
  * @Description: 下载展示
@@ -25,12 +28,12 @@ import com.vise.xsnow.ui.BaseActivity;
  */
 public class DownTestActivity extends BaseActivity {
 
-    private Button mNormal_download;
-    private ProgressBar mNormal_download_progress;
-    private TextView mNormal_download_desc;
-    private Button mService_download;
-    private ProgressBar mService_download_progress;
-    private TextView mService_download_desc;
+    private Button mDownload_btn;
+    private ProgressBar mDownload_progress;
+    private TextView mDownload_progress_desc;
+    private Button mUpload_btn;
+    private ProgressBar mUpload_progress;
+    private TextView mUpload_progress_desc;
 
     private String saveName = "weixin.apk";
     private String url = "http://dldir1.qq.com/weixin/android/weixin6330android920.apk";
@@ -43,18 +46,21 @@ public class DownTestActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mNormal_download = F(R.id.normal_download);
-        mNormal_download_progress = F(R.id.normal_download_progress);
-        mNormal_download_desc = F(R.id.normal_download_desc);
-        mService_download = F(R.id.service_download);
-        mService_download_progress = F(R.id.service_download_progress);
-        mService_download_desc = F(R.id.service_download_desc);
+        mDownload_btn = F(R.id.download_btn);
+        mDownload_progress = F(R.id.download_progress);
+        mDownload_progress_desc = F(R.id.download_progress_desc);
+        mUpload_btn = F(R.id.upload_btn);
+        mUpload_progress = F(R.id.upload_progress);
+        mUpload_progress_desc = F(R.id.upload_progress_desc);
+
+        mUpload_btn.setClickable(false);
+        mUpload_btn.setFocusable(false);
     }
 
     @Override
     protected void bindEvent() {
-        C(mNormal_download);
-        C(mService_download);
+        C(mDownload_btn);
+        C(mUpload_btn);
     }
 
     @Override
@@ -80,25 +86,46 @@ public class DownTestActivity extends BaseActivity {
     @Override
     protected void processClick(View view) {
         switch (view.getId()) {
-            case R.id.normal_download:
-                normalDownload();
+            case R.id.download_btn:
+                download();
                 break;
-            case R.id.service_download:
-                serverDownload();
+            case R.id.upload_btn:
+                upload();
                 break;
         }
     }
 
-    private void serverDownload() {
+    private void upload() {
+        ViseNet.UPLOAD(new UCallback() {
+            @Override
+            public void onProgress(long currentLength, long totalLength, float percent) {
+
+            }
+
+            @Override
+            public void onFail(int errCode, String errMsg) {
+
+            }
+        }).addFile("", new File("")).baseUrl("").suffixUrl("").request(mContext, new ACallback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onFail(int errCode, String errMsg) {
+
+            }
+        });
     }
 
-    private void normalDownload() {
+    private void download() {
         ViseNet.DOWNLOAD(new DCallback() {
             @Override
             public void onProgress(long currentLength, long totalLength) {
                 ViseLog.i("down progress currentLength:" + currentLength + ",totalLength:" + totalLength);
-                mNormal_download_progress.setProgress((int) (currentLength * 100 / totalLength));
-                mNormal_download_desc.setText((float) currentLength * 100 / totalLength + "%");
+                mDownload_progress.setProgress((int) (currentLength * 100 / totalLength));
+                mDownload_progress_desc.setText((float) currentLength * 100 / totalLength + "%");
             }
 
             @Override
