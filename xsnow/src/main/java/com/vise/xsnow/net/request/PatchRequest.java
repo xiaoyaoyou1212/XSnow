@@ -31,7 +31,7 @@ public class PatchRequest extends BaseRequest<PatchRequest> {
     @Override
     protected <T> Subscription execute(Context context, ACallback<T> callback) {
         if (isLocalCache) {
-            return this.cacheExecute(getType(callback))
+            return this.cacheExecute(getSubType(callback))
                     .subscribe(new ApiCallbackSubscriber(context, callback));
         }
         return this.execute(getType(callback))
