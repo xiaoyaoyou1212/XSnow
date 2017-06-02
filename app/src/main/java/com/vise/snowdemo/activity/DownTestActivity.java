@@ -1,7 +1,9 @@
 package com.vise.snowdemo.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -61,7 +63,6 @@ public class DownTestActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mUpload_btn.setClickable(false);
         PermissionManager.instance().with(this).request(new OnPermissionCallback() {
             @Override
             public void onRequestAllow(String permissionName) {
@@ -93,25 +94,40 @@ public class DownTestActivity extends BaseActivity {
     }
 
     private void upload() {
+        mUpload_btn.setClickable(false);
         ViseNet.UPLOAD(new UCallback() {
             @Override
             public void onProgress(long currentLength, long totalLength, float percent) {
-
+                if (percent == 100) {
+                    mUpload_btn.setClickable(true);
+                }
+                mUpload_progress.setProgress((int) percent);
+                mUpload_progress_desc.setText(percent + "%");
+                ViseLog.i("upload progress currentLength:" + currentLength + ",totalLength:" + totalLength + ",percent:" + percent);
             }
 
             @Override
             public void onFail(int errCode, String errMsg) {
-
-            }
-        }).addFile("", new File("")).suffixUrl("").request(mContext, new ACallback<Object>() {
+                mUpload_btn.setClickable(true);
+                ViseLog.i("upload errorCode:" + errCode + ",errorMsg:" + errMsg);
+            }}).addParam("strategyId", "41")
+                .addParam("title", "初秋美白养成计划")
+                .addParam("tagIds", "95,96,208")
+                .addParam("content", "夏天晒黑了？初秋正是美白的好时机，快快行动起来。")
+                .addParam("status", "1")
+                .addFile("androidPicFile", getUploadFile(mContext, "test.jpg"))
+                .baseUrl("https://api.clife.cn/")
+                .suffixUrl("v1/web/cms/skinStrategy/addOrUpdateSkinStrategy")
+                .request(mContext, new ACallback<Object>() {
             @Override
             public void onSuccess(Object data) {
-
+                ViseLog.i("upload success:" + data);
             }
 
             @Override
             public void onFail(int errCode, String errMsg) {
-
+                mUpload_btn.setClickable(true);
+                ViseLog.i("upload errorCode:" + errCode + ",errorMsg:" + errMsg);
             }
         });
     }
@@ -142,5 +158,15 @@ public class DownTestActivity extends BaseActivity {
                         mDownload_btn.setClickable(true);
                     }
                 });
+    }
+
+    private File getUploadFile(Context context, String fileName) {
+        String cachePath;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
+            cachePath = context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
+        return new File(cachePath + File.separator + fileName);
     }
 }
