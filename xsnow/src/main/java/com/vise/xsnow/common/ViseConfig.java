@@ -29,4 +29,7 @@ public class ViseConfig {
 
     public static final int DEFAULT_RETRY_COUNT = 3;//默认重试次数
     public static final int DEFAULT_RETRY_DELAY_MILLIS = 3000;//默认重试间隔时间（毫秒）
+
+    public static final String DEFAULT_DOWNLOAD_DIR = "download";//默认下载目录
+    public static final String DEFAULT_DOWNLOAD_FILE_NAME = "download_file.tmp";//默认下载文件名称
 }

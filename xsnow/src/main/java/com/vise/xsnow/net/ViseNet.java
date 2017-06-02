@@ -2,7 +2,6 @@ package com.vise.xsnow.net;
 
 import android.content.Context;
 
-import com.vise.xsnow.net.callback.DCallback;
 import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.core.ApiCache;
@@ -193,20 +192,11 @@ public class ViseNet {
     }
 
     /**
-     * 下载
+     * 下载（回调DownProgress）
      * @return
      */
     public static DownloadRequest DOWNLOAD() {
         return new DownloadRequest();
-    }
-
-    /**
-     * 下载（包含下载进度）
-     * @param callback 下载进度回调
-     * @return
-     */
-    public static DownloadRequest DOWNLOAD(DCallback callback) {
-        return new DownloadRequest(callback);
     }
 
     /**

@@ -9,13 +9,11 @@ import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.net.ViseNet;
 import com.vise.xsnow.net.api.ApiService;
 import com.vise.xsnow.net.callback.ACallback;
-import com.vise.xsnow.net.callback.DCallback;
 import com.vise.xsnow.net.callback.UCallback;
 import com.vise.xsnow.net.config.NetGlobalConfig;
 import com.vise.xsnow.net.core.ApiCookie;
 import com.vise.xsnow.net.func.ApiFunc;
 import com.vise.xsnow.net.func.ApiRetryFunc;
-import com.vise.xsnow.net.interceptor.DownloadProgressInterceptor;
 import com.vise.xsnow.net.interceptor.HeadersInterceptor;
 import com.vise.xsnow.net.interceptor.TagInterceptor;
 import com.vise.xsnow.net.interceptor.UploadProgressInterceptor;
@@ -71,11 +69,11 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected CacheMode cacheMode;//本地缓存类型
     protected String cacheKey;//本地缓存Key
     protected long cacheTime;//本地缓存时间
-    protected DCallback downCallback;//下载进度回调
     protected UCallback uploadCallback;//上传进度回调
 
     /**
      * 添加请求参数
+     *
      * @param paramKey
      * @param paramValue
      * @return
@@ -89,6 +87,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 添加请求参数
+     *
      * @param params
      * @return
      */
@@ -101,6 +100,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 移除请求参数
+     *
      * @param paramKey
      * @return
      */
@@ -113,6 +113,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置请求参数
+     *
      * @param params
      * @return
      */
@@ -125,6 +126,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 添加请求头
+     *
      * @param headerKey
      * @param headerValue
      * @return
@@ -136,6 +138,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 添加请求头
+     *
      * @param headers
      * @return
      */
@@ -146,6 +149,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 移除请求头
+     *
      * @param headerKey
      * @return
      */
@@ -156,6 +160,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置请求头
+     *
      * @param headers
      * @return
      */
@@ -168,6 +173,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置请求失败重试间隔时间（毫秒）
+     *
      * @param retryDelayMillis
      * @return
      */
@@ -178,6 +184,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置请求失败重试次数
+     *
      * @param retryCount
      * @return
      */
@@ -188,6 +195,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置基础域名，当前请求会替换全局域名
+     *
      * @param baseUrl
      * @return
      */
@@ -200,6 +208,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置请求链接后缀
+     *
      * @param suffixUrl
      * @return
      */
@@ -210,6 +219,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置请求标签
+     *
      * @param tag
      * @return
      */
@@ -253,6 +263,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置是否进行HTTP缓存
+     *
      * @param isHttpCache
      * @return
      */
@@ -263,6 +274,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置是否进行本地缓存
+     *
      * @param isLocalCache
      * @return
      */
@@ -273,6 +285,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 设置本地缓存类型
+     *
      * @param cacheMode
      * @return
      */
@@ -413,9 +426,12 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return new Observable.Transformer<ResponseBody, T>() {
             @Override
             public Observable<T> call(Observable<ResponseBody> apiResultObservable) {
-                return apiResultObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn
-                        (AndroidSchedulers
-                                .mainThread()).map(new ApiFunc<T>(type)).retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
+                return apiResultObservable
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(new ApiFunc<T>(type))
+                        .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
             }
         };
     }
@@ -452,10 +468,6 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
         if (tag != null) {
             newBuilder.addInterceptor(new TagInterceptor(tag));
-        }
-
-        if (downCallback != null) {
-            newBuilder.addNetworkInterceptor(new DownloadProgressInterceptor(downCallback));
         }
 
         if (uploadCallback != null) {
@@ -596,6 +608,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 获取第一级type
+     *
      * @param t
      * @param <T>
      * @return
@@ -616,6 +629,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     /**
      * 获取次一级type(如果有)
+     *
      * @param t
      * @param <T>
      * @return
