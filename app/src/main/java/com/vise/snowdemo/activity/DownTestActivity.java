@@ -51,9 +51,6 @@ public class DownTestActivity extends BaseActivity {
         mUpload_btn = F(R.id.upload_btn);
         mUpload_progress = F(R.id.upload_progress);
         mUpload_progress_desc = F(R.id.upload_progress_desc);
-
-        mUpload_btn.setClickable(false);
-        mUpload_btn.setFocusable(false);
     }
 
     @Override
@@ -64,6 +61,7 @@ public class DownTestActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        mUpload_btn.setClickable(false);
         PermissionManager.instance().with(this).request(new OnPermissionCallback() {
             @Override
             public void onRequestAllow(String permissionName) {
@@ -105,7 +103,7 @@ public class DownTestActivity extends BaseActivity {
             public void onFail(int errCode, String errMsg) {
 
             }
-        }).addFile("", new File("")).baseUrl("").suffixUrl("").request(mContext, new ACallback<Object>() {
+        }).addFile("", new File("")).suffixUrl("").request(mContext, new ACallback<Object>() {
             @Override
             public void onSuccess(Object data) {
 
@@ -119,6 +117,7 @@ public class DownTestActivity extends BaseActivity {
     }
 
     private void download() {
+        mDownload_btn.setClickable(false);
         ViseNet.DOWNLOAD()
                 .baseUrl("http://dldir1.qq.com/")
                 .suffixUrl("weixin/android/weixin6330android920.apk")
@@ -132,11 +131,15 @@ public class DownTestActivity extends BaseActivity {
                         ViseLog.i("down progress currentLength:" + downProgress.getDownloadSize() + ",totalLength:" + downProgress.getTotalSize());
                         mDownload_progress.setProgress((int) (downProgress.getDownloadSize() * 100 / downProgress.getTotalSize()));
                         mDownload_progress_desc.setText(downProgress.getPercent());
+                        if (downProgress.isDownComplete()) {
+                            mDownload_btn.setClickable(true);
+                        }
                     }
 
                     @Override
                     public void onFail(int errCode, String errMsg) {
                         ViseLog.i("down errorCode:" + errCode + ",errorMsg:" + errMsg);
+                        mDownload_btn.setClickable(true);
                     }
                 });
     }
