@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
 import com.vise.utils.view.DialogUtil;
-import com.vise.xsnow.net.ViseNet;
-import com.vise.xsnow.net.callback.ACallback;
-import com.vise.xsnow.net.callback.UCallback;
-import com.vise.xsnow.net.mode.DownProgress;
+import com.vise.xsnow.http.ViseHttp;
+import com.vise.xsnow.http.callback.ACallback;
+import com.vise.xsnow.http.callback.UCallback;
+import com.vise.xsnow.http.mode.DownProgress;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
 import com.vise.xsnow.ui.BaseActivity;
@@ -95,7 +95,7 @@ public class DownTestActivity extends BaseActivity {
 
     private void upload() {
         mUpload_btn.setClickable(false);
-        ViseNet.UPLOAD(new UCallback() {
+        ViseHttp.UPLOAD(new UCallback() {
             @Override
             public void onProgress(long currentLength, long totalLength, float percent) {
                 if (percent == 100) {
@@ -133,7 +133,7 @@ public class DownTestActivity extends BaseActivity {
 
     private void download() {
         mDownload_btn.setClickable(false);
-        ViseNet.DOWNLOAD()
+        ViseHttp.DOWNLOAD()
                 .baseUrl("http://dldir1.qq.com/")
                 .suffixUrl("weixin/android/weixin6330android920.apk")
                 .setFileName(saveName)

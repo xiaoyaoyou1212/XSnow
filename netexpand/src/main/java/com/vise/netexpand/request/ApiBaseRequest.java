@@ -2,8 +2,8 @@ package com.vise.netexpand.request;
 
 import com.vise.netexpand.func.ApiDataFunc;
 import com.vise.netexpand.mode.ApiResult;
-import com.vise.xsnow.net.func.ApiRetryFunc;
-import com.vise.xsnow.net.request.BaseRequest;
+import com.vise.xsnow.http.func.ApiRetryFunc;
+import com.vise.xsnow.http.request.BaseRequest;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;

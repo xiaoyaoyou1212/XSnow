@@ -6,9 +6,9 @@ import com.vise.netexpand.convert.GsonConverterFactory;
 import com.vise.snowdemo.db.DbHelper;
 import com.vise.xsnow.BaseApplication;
 import com.vise.xsnow.common.ViseConfig;
+import com.vise.xsnow.http.ViseHttp;
+import com.vise.xsnow.http.interceptor.HttpLogInterceptor;
 import com.vise.xsnow.loader.LoaderFactory;
-import com.vise.xsnow.net.ViseNet;
-import com.vise.xsnow.net.interceptor.HttpLogInterceptor;
 
 /**
  * @Description: 自定义Application，主要负责一些初始化操作
@@ -33,8 +33,8 @@ public class MyApplication extends BaseApplication {
     }
 
     private void initNet() {
-        ViseNet.init(this);
-        ViseNet.CONFIG()
+        ViseHttp.init(this);
+        ViseHttp.CONFIG()
                 .baseUrl(ViseConfig.API_HOST)
                 .retryCount(1)
                 .converterFactory(GsonConverterFactory.create())

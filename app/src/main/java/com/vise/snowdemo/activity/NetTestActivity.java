@@ -7,18 +7,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.vise.log.ViseLog;
-import com.vise.netexpand.mode.ApiResult;
-import com.vise.netexpand.request.ApiGetRequest;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.mode.GithubModel;
-import com.vise.snowdemo.mode.ZhiHuModel;
-import com.vise.xsnow.net.ViseNet;
-import com.vise.xsnow.net.callback.ACallback;
-import com.vise.xsnow.net.mode.CacheMode;
-import com.vise.xsnow.net.mode.CacheResult;
+import com.vise.xsnow.http.ViseHttp;
+import com.vise.xsnow.http.callback.ACallback;
+import com.vise.xsnow.http.mode.CacheMode;
+import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.ui.BaseActivity;
-
-import java.util.List;
 
 /**
  * @Description: 网络获取相关展示
@@ -99,7 +94,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void normalRequest() {
         mShow_response_data.setText("");
-        /*ViseNet.BASE(new ApiGetRequest())
+        /*ViseHttp.BASE(new ApiGetRequest())
                 .baseUrl("http://news-at.zhihu.com/")
                 .suffixUrl("api/3/sections")
                 .request(mContext, new ACallback<List<ZhiHuModel>>() {
@@ -117,7 +112,7 @@ public class NetTestActivity extends BaseActivity {
                         ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 });*/
-        ViseNet.GET().request(mContext, new ACallback<GithubModel>() {
+        ViseHttp.GET().request(mContext, new ACallback<GithubModel>() {
             @Override
             public void onSuccess(GithubModel githubModel) {
                 ViseLog.i("request onSuccess!");
@@ -136,7 +131,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void firstCacheRequest() {
         mShow_response_data.setText("");
-        ViseNet.GET()
+        ViseHttp.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_CACHE)
                 .request(mContext, new ACallback<CacheResult<GithubModel>>() {
@@ -162,7 +157,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void firstRemoteRequest() {
         mShow_response_data.setText("");
-        ViseNet.GET()
+        ViseHttp.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_REMOTE)
                 .request(mContext, new ACallback<CacheResult<GithubModel>>() {
@@ -188,7 +183,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void onlyCacheRequest() {
         mShow_response_data.setText("");
-        ViseNet.GET()
+        ViseHttp.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_CACHE)
                 .request(mContext, new ACallback<CacheResult<GithubModel>>() {
@@ -214,7 +209,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void onlyRemoteRequest() {
         mShow_response_data.setText("");
-        ViseNet.GET()
+        ViseHttp.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_REMOTE)
                 .request(mContext, new ACallback<CacheResult<GithubModel>>() {
@@ -240,7 +235,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void cacheAndRemoteRequest() {
         mShow_response_data.setText("");
-        ViseNet.GET()
+        ViseHttp.GET()
                 .setLocalCache(true)
                 .cacheMode(CacheMode.CACHE_AND_REMOTE)
                 .request(mContext, new ACallback<CacheResult<GithubModel>>() {
@@ -265,7 +260,7 @@ public class NetTestActivity extends BaseActivity {
     }
 
     private void clearCache() {
-        ViseNet.getInstance().clearCache();
+        ViseHttp.getInstance().clearCache();
     }
 
 }

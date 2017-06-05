@@ -1,8 +1,7 @@
-package com.vise.netexpand.request;
+package com.vise.xsnow.http.request;
 
 import android.content.Context;
 
-import com.vise.netexpand.func.ApiResultFunc;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.mode.CacheResult;
@@ -23,11 +22,12 @@ import rx.Observable;
 import rx.Subscription;
 
 /**
- * @Description:
+ * @Description: Post请求
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
- * @date: 17/5/28 15:48.
+ * @date: 2017-04-28 16:06
  */
-public class ApiPostRequest extends ApiBaseRequest {
+public class PostRequest extends BaseRequest<PostRequest> {
+
     protected Map<String, Object> forms = new LinkedHashMap<>();
     protected StringBuilder stringBuilder = new StringBuilder();
     protected RequestBody requestBody;
@@ -50,24 +50,16 @@ public class ApiPostRequest extends ApiBaseRequest {
                     }
                 }
             }
-            return apiService.postForm(suffixUrl, forms)
-                    .map(new ApiResultFunc<T>(type))
-                    .compose(this.<T>apiTransformer());
+            return apiService.postForm(suffixUrl, forms).compose(this.<T>norTransformer(type));
         }
         if (requestBody != null) {
-            return apiService.postBody(suffixUrl, requestBody)
-                    .map(new ApiResultFunc<T>(type))
-                    .compose(this.<T>apiTransformer());
+            return apiService.postBody(suffixUrl, requestBody).compose(this.<T>norTransformer(type));
         }
         if (content != null && mediaType != null) {
             requestBody = RequestBody.create(mediaType, content);
-            return apiService.postBody(suffixUrl, requestBody)
-                    .map(new ApiResultFunc<T>(type))
-                    .compose(this.<T>apiTransformer());
+            return apiService.postBody(suffixUrl, requestBody).compose(this.<T>norTransformer(type));
         }
-        return apiService.post(suffixUrl, params)
-                .map(new ApiResultFunc<T>(type))
-                .compose(this.<T>apiTransformer());
+        return apiService.post(suffixUrl, params).compose(this.<T>norTransformer(type));
     }
 
     @Override
@@ -85,7 +77,7 @@ public class ApiPostRequest extends ApiBaseRequest {
                 .subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
-    public ApiPostRequest addUrlParam(String paramKey, String paramValue) {
+    public PostRequest addUrlParam(String paramKey, String paramValue) {
         if (paramKey != null && paramValue != null) {
             if (stringBuilder.length() == 0) {
                 stringBuilder.append("?");
@@ -97,43 +89,43 @@ public class ApiPostRequest extends ApiBaseRequest {
         return this;
     }
 
-    public ApiPostRequest addForm(String formKey, Object formValue) {
+    public PostRequest addForm(String formKey, Object formValue) {
         if (formKey != null && formValue != null) {
             forms.put(formKey, formValue);
         }
         return this;
     }
 
-    public ApiPostRequest setRequestBody(RequestBody requestBody) {
+    public PostRequest setRequestBody(RequestBody requestBody) {
         this.requestBody = requestBody;
         return this;
     }
 
-    public ApiPostRequest setString(String string) {
+    public PostRequest setString(String string) {
         this.content = string;
         this.mediaType = MediaTypes.TEXT_PLAIN_TYPE;
         return this;
     }
 
-    public ApiPostRequest setString(String string, MediaType mediaType) {
+    public PostRequest setString(String string, MediaType mediaType) {
         this.content = string;
         this.mediaType = mediaType;
         return this;
     }
 
-    public ApiPostRequest setJson(String json) {
+    public PostRequest setJson(String json) {
         this.content = json;
         this.mediaType = MediaTypes.APPLICATION_JSON_TYPE;
         return this;
     }
 
-    public ApiPostRequest setJson(JSONObject jsonObject) {
+    public PostRequest setJson(JSONObject jsonObject) {
         this.content = jsonObject.toString();
         this.mediaType = MediaTypes.APPLICATION_JSON_TYPE;
         return this;
     }
 
-    public ApiPostRequest setJson(JSONArray jsonArray) {
+    public PostRequest setJson(JSONArray jsonArray) {
         this.content = jsonArray.toString();
         this.mediaType = MediaTypes.APPLICATION_JSON_TYPE;
         return this;
