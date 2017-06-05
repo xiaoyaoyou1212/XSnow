@@ -103,18 +103,18 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
                 int downloadSize = 0;
                 byte[] buffer = new byte[8192];
 
-                DownProgress status = new DownProgress();
+                DownProgress downProgress = new DownProgress();
                 inputStream = resp.byteStream();
                 outputStream = new FileOutputStream(saveFile);
 
                 long contentLength = resp.contentLength();
-                status.setTotalSize(contentLength);
+                downProgress.setTotalSize(contentLength);
 
                 while ((readLen = inputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, readLen);
                     downloadSize += readLen;
-                    status.setDownloadSize(downloadSize);
-                    sub.onNext(status);
+                    downProgress.setDownloadSize(downloadSize);
+                    sub.onNext(downProgress);
                 }
                 outputStream.flush();
                 sub.onCompleted();

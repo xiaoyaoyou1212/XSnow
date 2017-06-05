@@ -530,6 +530,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
             if (netGlobalConfig.getCallFactory() != null) {
                 newRetrofitBuilder.callFactory(netGlobalConfig.getCallFactory());
             }
+            newBuilder.hostnameVerifier(new SSLUtil.UnSafeHostnameVerifier(baseUrl));
             newRetrofitBuilder.client(newBuilder.build());
             retrofit = newRetrofitBuilder.build();
         } else {

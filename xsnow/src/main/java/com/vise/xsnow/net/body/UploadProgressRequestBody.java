@@ -1,5 +1,6 @@
 package com.vise.xsnow.net.body;
 
+import com.vise.log.ViseLog;
 import com.vise.xsnow.net.callback.UCallback;
 
 import java.io.IOException;
@@ -24,6 +25,8 @@ public class UploadProgressRequestBody extends RequestBody {
 
     private RequestBody requestBody;
     private UCallback callback;
+    private long lastTime;
+    private long currentTime;
 
     public UploadProgressRequestBody(RequestBody requestBody, UCallback callback) {
         this.requestBody = requestBody;
@@ -75,17 +78,22 @@ public class UploadProgressRequestBody extends RequestBody {
             if (totalLength == 0) {
                 totalLength = contentLength();
             }
-            Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
-                @Override
-                public void call(Long aLong) {
-                    callback.onProgress(currentLength, totalLength, (100.0f * currentLength) / totalLength);
-                }
-            }, new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    callback.onFail(-1, throwable.getMessage());
-                }
-            });
+            currentTime = System.currentTimeMillis();
+            if (currentTime - lastTime >= 100 || lastTime == 0 || currentLength == totalLength) {
+                lastTime = currentTime;
+                Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        ViseLog.i("upload progress currentLength:" + currentLength + ",totalLength:" + totalLength);
+                        callback.onProgress(currentLength, totalLength, (100.0f * currentLength) / totalLength);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        callback.onFail(-1, throwable.getMessage());
+                    }
+                });
+            }
         }
     }
 

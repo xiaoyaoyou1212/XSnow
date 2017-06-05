@@ -103,7 +103,6 @@ public class DownTestActivity extends BaseActivity {
                 }
                 mUpload_progress.setProgress((int) percent);
                 mUpload_progress_desc.setText(percent + "%");
-                ViseLog.i("upload progress currentLength:" + currentLength + ",totalLength:" + totalLength + ",percent:" + percent);
             }
 
             @Override
@@ -116,7 +115,7 @@ public class DownTestActivity extends BaseActivity {
                 .addParam("content", "夏天晒黑了？初秋正是美白的好时机，快快行动起来。")
                 .addParam("status", "1")
                 .addFile("androidPicFile", getUploadFile(mContext, "test.jpg"))
-                .baseUrl("https://api.clife.cn/")
+                .baseUrl("https://200.200.200.50/")
                 .suffixUrl("v1/web/cms/skinStrategy/addOrUpdateSkinStrategy")
                 .request(mContext, new ACallback<Object>() {
             @Override
