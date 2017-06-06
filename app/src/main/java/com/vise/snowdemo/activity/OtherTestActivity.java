@@ -9,6 +9,7 @@ import com.vise.snowdemo.R;
 import com.vise.snowdemo.db.DbHelper;
 import com.vise.snowdemo.mode.AuthorEvent;
 import com.vise.snowdemo.mode.AuthorModel;
+import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.cache.MemoryCache;
 import com.vise.xsnow.cache.SpCache;
 import com.vise.xsnow.event.BusFactory;
@@ -74,13 +75,13 @@ public class OtherTestActivity extends BaseActivity {
         spCache = new SpCache(mContext);
         mAuthorModel = new AuthorModel();
         mAuthorModel.setAuthor_id(1000);
-        mAuthorModel.setAuthor_name("胡伟");
-        mAuthorModel.setAuthor_nickname("逍遥游");
+        mAuthorModel.setAuthor_name(getString(R.string.author_name));
+        mAuthorModel.setAuthor_nickname(getString(R.string.author_nickname));
         mAuthorModel.setAuthor_account("xiaoyaoyou1212");
         mAuthorModel.setAuthor_github("https://github.com/xiaoyaoyou1212");
         mAuthorModel.setAuthor_csdn("http://blog.csdn.net/xiaoyaoyou1212");
         mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
-        mAuthorModel.setAuthor_introduction("幻变的生命里，留下的永远是最真诚的记忆！");
+        mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
     }
 
     @Override
@@ -106,18 +107,25 @@ public class OtherTestActivity extends BaseActivity {
                 break;
             case R.id.db_query:
                 ViseLog.i(DbHelper.getInstance().author().loadAll());
+                DialogUtil.showTips(mContext, "db_query", DbHelper.getInstance().author().loadAll().toString());
                 break;
             case R.id.memory_cache_put:
                 MemoryCache.getInstance().put("authorInfo", mAuthorModel);
                 break;
             case R.id.memory_cache_get:
-                ViseLog.i(MemoryCache.getInstance().get("authorInfo"));
+                if (MemoryCache.getInstance().get("authorInfo") != null) {
+                    ViseLog.i(MemoryCache.getInstance().get("authorInfo"));
+                    DialogUtil.showTips(mContext, "memory_cache_get", MemoryCache.getInstance().get("authorInfo").toString());
+                }
                 break;
             case R.id.sp_cache_put:
                 spCache.put("authorInfo", mAuthorModel);
                 break;
             case R.id.sp_cache_get:
-                ViseLog.i(spCache.get("authorInfo"));
+                if (spCache.get("authorInfo") != null) {
+                    ViseLog.i(spCache.get("authorInfo"));
+                    DialogUtil.showTips(mContext, "sp_cache_get", spCache.get("authorInfo").toString());
+                }
                 break;
             case R.id.send_event:
                 BusFactory.getBus().post(new AuthorEvent().setAuthorModel(mAuthorModel));
@@ -129,6 +137,7 @@ public class OtherTestActivity extends BaseActivity {
     public void showAuthor(IEvent event) {
         if (event != null && event instanceof AuthorEvent) {
             ViseLog.i("Receive Event Message:" + ((AuthorEvent) event).getAuthorModel());
+            DialogUtil.showTips(mContext, "Receive Event Message", "OtherTestActivity:\n" + ((AuthorEvent) event).getAuthorModel().toString());
         }
     }
 }

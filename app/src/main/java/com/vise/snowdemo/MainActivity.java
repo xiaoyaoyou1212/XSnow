@@ -16,11 +16,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.vise.log.ViseLog;
-import com.vise.snowdemo.activity.DownTestActivity;
 import com.vise.snowdemo.activity.ImageLoaderActivity;
 import com.vise.snowdemo.activity.NetTestActivity;
 import com.vise.snowdemo.activity.OtherTestActivity;
 import com.vise.snowdemo.activity.StatusSwitchActivity;
+import com.vise.snowdemo.activity.UploadDownActivity;
 import com.vise.snowdemo.mode.AuthorEvent;
 import com.vise.utils.view.ActivityUtil;
 import com.vise.utils.view.DialogUtil;
@@ -66,17 +66,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         PermissionManager.instance().with(this).request(new OnPermissionCallback() {
             @Override
             public void onRequestAllow(String permissionName) {
-                DialogUtil.showTips(mContext, "权限控制", "已经授权！\n" + permissionName);
+                DialogUtil.showTips(mContext, getString(R.string.permission_control),
+                        getString(R.string.permission_allow) + "\n" + permissionName);
             }
 
             @Override
             public void onRequestRefuse(String permissionName) {
-                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，提示请求许可理由！\n" + permissionName);
+                DialogUtil.showTips(mContext, getString(R.string.permission_control),
+                        getString(R.string.permission_refuse) + "\n" + permissionName);
             }
 
             @Override
             public void onRequestNoAsk(String permissionName) {
-                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，不在提醒！\n" + permissionName);
+                DialogUtil.showTips(mContext, getString(R.string.permission_control),
+                        getString(R.string.permission_noAsk) + "\n" + permissionName);
             }
         }, Manifest.permission.CALL_PHONE);
     }
@@ -103,7 +106,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (id == R.id.menu_net) {
             ActivityUtil.startForwardActivity(this, NetTestActivity.class);
         } else if (id == R.id.menu_down) {
-            ActivityUtil.startForwardActivity(this, DownTestActivity.class);
+            ActivityUtil.startForwardActivity(this, UploadDownActivity.class);
         } else if (id == R.id.menu_image_loader) {
             ActivityUtil.startForwardActivity(this, ImageLoaderActivity.class);
         } else if (id == R.id.menu_status_view) {
@@ -121,6 +124,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void showAuthor(IEvent event) {
         if (event != null && event instanceof AuthorEvent) {
             ViseLog.i("Receive Event Message:" + ((AuthorEvent) event).getAuthorModel());
+            DialogUtil.showTips(mContext, "Receive Event Message", "MainActivity:\n" + ((AuthorEvent) event).getAuthorModel().toString());
         }
     }
 

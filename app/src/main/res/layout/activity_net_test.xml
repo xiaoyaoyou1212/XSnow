@@ -1,69 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:layout_margin="15dp"
     >
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <Button
-            android:id="@+id/normal_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="Normal Request"/>
-
-        <Button
-            android:id="@+id/first_cache_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="First Cache Request"/>
-
-        <Button
-            android:id="@+id/first_remote_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="First Remote Request"/>
-
-        <Button
-            android:id="@+id/only_cache_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="Only Cache Request"/>
-
-        <Button
-            android:id="@+id/only_remote_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="Only Remote Request"/>
-
-        <Button
-            android:id="@+id/cache_and_remote_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="Cache And Remote Request"/>
-
-        <Button
-            android:id="@+id/clear_cache"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="Clear Cache"/>
-
-        <TextView
-            android:id="@+id/show_response_data"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="15dp"/>
-    </LinearLayout>
-</ScrollView>
+            android:orientation="vertical"
+            >
+            <Button
+                android:id="@+id/clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_cache"/>
+            <Button
+                android:id="@+id/request_get_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_get_1"/>
+            <Button
+                android:id="@+id/request_get_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_get_2"/>
+            <Button
+                android:id="@+id/request_get_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_get_3"/>
+            <Button
+                android:id="@+id/request_get_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_get_4"/>
+            <Button
+                android:id="@+id/request_get_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_get_5"/>
+            <Button
+                android:id="@+id/request_get_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_get_6"/>
+            <Button
+                android:id="@+id/request_get_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="@string/request_get_7"/>
+            <Button
+                android:id="@+id/request_get_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="@string/request_get_8"/>
+            <Button
+                android:id="@+id/request_get_9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="@string/request_get_9"/>
+            <Button
+                android:id="@+id/request_get_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="@string/request_get_10"/>
+            <Button
+                android:id="@+id/request_get_11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="@string/request_get_11"/>
+            <Button
+                android:id="@+id/request_post_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_post_1"/>
+            <Button
+                android:id="@+id/request_post_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_post_2"/>
+            <Button
+                android:id="@+id/request_post_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="@string/request_post_3"/>
+            <Button
+                android:id="@+id/request_post_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/request_post_4"/>
+        </LinearLayout>
+    </ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/show_response_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

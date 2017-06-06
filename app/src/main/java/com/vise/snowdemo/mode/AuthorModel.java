@@ -7,7 +7,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import java.io.Serializable;
 
 /**
- * @Description:
+ * @Description: 个人信息实体类
  * @author: <a href="http://xiaoyaoyou1212.360doc.com">DAWI</a>
  * @date: 2017/6/5 20:29
  */

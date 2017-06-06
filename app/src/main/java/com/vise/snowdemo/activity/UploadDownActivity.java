@@ -24,11 +24,11 @@ import com.vise.xsnow.ui.BaseActivity;
 import java.io.File;
 
 /**
- * @Description: 下载展示
+ * @Description: 上传下载展示
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:06.
  */
-public class DownTestActivity extends BaseActivity {
+public class UploadDownActivity extends BaseActivity {
 
     private Button mDownload_btn;
     private ProgressBar mDownload_progress;
@@ -66,17 +66,20 @@ public class DownTestActivity extends BaseActivity {
         PermissionManager.instance().with(this).request(new OnPermissionCallback() {
             @Override
             public void onRequestAllow(String permissionName) {
-                DialogUtil.showTips(mContext, "权限控制", "已经授权！\n" + permissionName);
+                DialogUtil.showTips(mContext, getString(R.string.permission_control),
+                        getString(R.string.permission_allow) + "\n" + permissionName);
             }
 
             @Override
             public void onRequestRefuse(String permissionName) {
-                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，提示请求许可理由！\n" + permissionName);
+                DialogUtil.showTips(mContext, getString(R.string.permission_control),
+                        getString(R.string.permission_refuse) + "\n" + permissionName);
             }
 
             @Override
             public void onRequestNoAsk(String permissionName) {
-                DialogUtil.showTips(mContext, "权限控制", "拒绝授权，不在提醒！\n" + permissionName);
+                DialogUtil.showTips(mContext, getString(R.string.permission_control),
+                        getString(R.string.permission_noAsk) + "\n" + permissionName);
             }
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }

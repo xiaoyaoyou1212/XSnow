@@ -27,12 +27,21 @@
   {
     "request" : {
       "method" : "get",
-      "uri" : "/getApiAuthor"
+      "uri" : "/getString"
     },
     "response" : {
-      "json" : {
-        "code" : 0,
-        "data" : {
+      "json" : "幻变的生命里，留下的永远是最真诚的记忆！"
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "get",
+      "uri" : "/getListAuthor"
+    },
+    "response" : {
+      "json" : [
+        {
           "author_id" : 1002,
           "author_name" : "胡伟",
           "author_nickname" : "逍遥游",
@@ -42,6 +51,176 @@
           "author_websit" : "http://www.huwei.tech/",
           "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
         },
+        {
+          "author_id" : 1003,
+          "author_name" : "胡伟",
+          "author_nickname" : "逍遥游",
+          "author_account" : "xiaoyaoyou1212",
+          "author_github" : "https://github.com/xiaoyaoyou1212",
+          "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+          "author_websit" : "http://www.huwei.tech/",
+          "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+        }
+      ]
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "get",
+      "uri" : "/getApiResultAuthor"
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : {
+          "author_id" : 1004,
+          "author_name" : "胡伟",
+          "author_nickname" : "逍遥游",
+          "author_account" : "xiaoyaoyou1212",
+          "author_github" : "https://github.com/xiaoyaoyou1212",
+          "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+          "author_websit" : "http://www.huwei.tech/",
+          "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+        },
+        "msg" : "response success."
+      }
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "get",
+      "uri" : "/getApiResultString"
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : "幻变的生命里，留下的永远是最真诚的记忆！",
+        "msg" : "response success."
+      }
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "get",
+      "uri" : "/getApiResultListAuthor"
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : [
+          {
+            "author_id" : 1005,
+            "author_name" : "胡伟",
+            "author_nickname" : "逍遥游",
+            "author_account" : "xiaoyaoyou1212",
+            "author_github" : "https://github.com/xiaoyaoyou1212",
+            "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+            "author_websit" : "http://www.huwei.tech/",
+            "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+          },
+          {
+            "author_id" : 1006,
+            "author_name" : "胡伟",
+            "author_nickname" : "逍遥游",
+            "author_account" : "xiaoyaoyou1212",
+            "author_github" : "https://github.com/xiaoyaoyou1212",
+            "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+            "author_websit" : "http://www.huwei.tech/",
+            "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+          }
+        ],
+        "msg" : "response success."
+      }
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "post",
+      "uri" : "/postAuthor"
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : "数据提交成功！",
+        "msg" : "response success."
+      }
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "post",
+      "uri" : "/postFormAuthor",
+      "forms" : {
+        "author_name" : "胡伟",
+        "author_nickname" : "逍遥游",
+        "author_account" : "xiaoyaoyou1212",
+        "author_github" : "https://github.com/xiaoyaoyou1212",
+        "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+        "author_websit" : "http://www.huwei.tech/",
+        "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+      }
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : "数据提交成功！",
+        "msg" : "response success."
+      }
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "post",
+      "uri" : "/postJsonAuthor",
+      "json" : {
+        "author_id" : 1008,
+        "author_name" : "胡伟",
+        "author_nickname" : "逍遥游",
+        "author_account" : "xiaoyaoyou1212",
+        "author_github" : "https://github.com/xiaoyaoyou1212",
+        "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+        "author_websit" : "http://www.huwei.tech/",
+        "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+      }
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : "数据提交成功！",
+        "msg" : "response success."
+      }
+    }
+  },
+
+  {
+    "request" : {
+      "method" : "post",
+      "uri" : "/postUrlAuthor",
+      "queries" : {
+        "appId" : "10001",
+        "appType" : "Android"
+      },
+      "json" : {
+        "author_id" : 1009,
+        "author_name" : "胡伟",
+        "author_nickname" : "逍遥游",
+        "author_account" : "xiaoyaoyou1212",
+        "author_github" : "https://github.com/xiaoyaoyou1212",
+        "author_csdn" : "http://blog.csdn.net/xiaoyaoyou1212",
+        "author_websit" : "http://www.huwei.tech/",
+        "author_introduction" : "幻变的生命里，留下的永远是最真诚的记忆！"
+      }
+    },
+    "response" : {
+      "json" : {
+        "code" : 0,
+        "data" : "数据提交成功！",
         "msg" : "response success."
       }
     }
