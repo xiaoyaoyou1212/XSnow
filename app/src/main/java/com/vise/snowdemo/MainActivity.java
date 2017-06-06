@@ -21,7 +21,7 @@ import com.vise.snowdemo.activity.ImageLoaderActivity;
 import com.vise.snowdemo.activity.NetTestActivity;
 import com.vise.snowdemo.activity.OtherTestActivity;
 import com.vise.snowdemo.activity.StatusSwitchActivity;
-import com.vise.snowdemo.mode.GithubEvent;
+import com.vise.snowdemo.mode.AuthorEvent;
 import com.vise.utils.view.ActivityUtil;
 import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.event.EventSubscribe;
@@ -118,9 +118,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @EventSubscribe
-    public void showGithub(IEvent event) {
-        if (event != null && event instanceof GithubEvent) {
-            ViseLog.i("Receive Event Message:" + ((GithubEvent) event).getGithubModel());
+    public void showAuthor(IEvent event) {
+        if (event != null && event instanceof AuthorEvent) {
+            ViseLog.i("Receive Event Message:" + ((AuthorEvent) event).getAuthorModel());
         }
     }
 

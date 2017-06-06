@@ -5,7 +5,6 @@ import com.vise.log.inner.DefaultTree;
 import com.vise.netexpand.convert.GsonConverterFactory;
 import com.vise.snowdemo.db.DbHelper;
 import com.vise.xsnow.BaseApplication;
-import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.interceptor.HttpLogInterceptor;
 import com.vise.xsnow.loader.LoaderFactory;
@@ -35,8 +34,8 @@ public class MyApplication extends BaseApplication {
     private void initNet() {
         ViseHttp.init(this);
         ViseHttp.CONFIG()
-                .baseUrl(ViseConfig.API_HOST)
-                .retryCount(1)
+                .baseUrl("http://10.8.4.39/")
+                .setCookie(true)
                 .converterFactory(GsonConverterFactory.create())
                 .interceptor(new HttpLogInterceptor()
                         .setLevel(HttpLogInterceptor.Level.BODY));

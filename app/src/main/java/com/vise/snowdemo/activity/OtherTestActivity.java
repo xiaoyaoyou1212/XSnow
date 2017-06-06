@@ -7,8 +7,8 @@ import android.widget.Button;
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.db.DbHelper;
-import com.vise.snowdemo.mode.GithubEvent;
-import com.vise.snowdemo.mode.GithubModel;
+import com.vise.snowdemo.mode.AuthorEvent;
+import com.vise.snowdemo.mode.AuthorModel;
 import com.vise.xsnow.cache.MemoryCache;
 import com.vise.xsnow.cache.SpCache;
 import com.vise.xsnow.event.BusFactory;
@@ -33,7 +33,7 @@ public class OtherTestActivity extends BaseActivity {
     private Button mSp_cache_get;
     private Button mSend_event;
     private SpCache spCache;
-    private GithubModel mGithubModel;
+    private AuthorModel mAuthorModel;
     private boolean mIsInsert = false;
 
     @Override
@@ -72,10 +72,15 @@ public class OtherTestActivity extends BaseActivity {
     @Override
     protected void initData() {
         spCache = new SpCache(mContext);
-        mGithubModel = new GithubModel();
-        mGithubModel.setUser_url("https://api.github.com/users/{user}");
-        mGithubModel.setEmails_url("https://api.github.com/user/emails");
-        mGithubModel.setEmojis_url("https://api.github.com/emojis");
+        mAuthorModel = new AuthorModel();
+        mAuthorModel.setAuthor_id(1000);
+        mAuthorModel.setAuthor_name("胡伟");
+        mAuthorModel.setAuthor_nickname("逍遥游");
+        mAuthorModel.setAuthor_account("xiaoyaoyou1212");
+        mAuthorModel.setAuthor_github("https://github.com/xiaoyaoyou1212");
+        mAuthorModel.setAuthor_csdn("http://blog.csdn.net/xiaoyaoyou1212");
+        mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
+        mAuthorModel.setAuthor_introduction("幻变的生命里，留下的永远是最真诚的记忆！");
     }
 
     @Override
@@ -84,46 +89,46 @@ public class OtherTestActivity extends BaseActivity {
             case R.id.db_insert:
                 if (!mIsInsert) {
                     mIsInsert = true;
-                    DbHelper.getInstance().gitHub().insert(mGithubModel);
+                    DbHelper.getInstance().author().insert(mAuthorModel);
                 }
                 break;
             case R.id.db_delete:
                 if (mIsInsert) {
                     mIsInsert = false;
-                    DbHelper.getInstance().gitHub().delete(mGithubModel);
+                    DbHelper.getInstance().author().delete(mAuthorModel);
                 }
                 break;
             case R.id.db_update:
                 if (mIsInsert) {
-                    mGithubModel.setUser_url("https://api.github.com/users/xiaoyaoyou1212");
-                    DbHelper.getInstance().gitHub().update(mGithubModel);
+                    mAuthorModel.setAuthor_github("https://api.github.com/users/xiaoyaoyou1212");
+                    DbHelper.getInstance().author().update(mAuthorModel);
                 }
                 break;
             case R.id.db_query:
-                ViseLog.i(DbHelper.getInstance().gitHub().loadAll());
+                ViseLog.i(DbHelper.getInstance().author().loadAll());
                 break;
             case R.id.memory_cache_put:
-                MemoryCache.getInstance().put("xyy", mGithubModel);
+                MemoryCache.getInstance().put("authorInfo", mAuthorModel);
                 break;
             case R.id.memory_cache_get:
-                ViseLog.i(MemoryCache.getInstance().get("xyy"));
+                ViseLog.i(MemoryCache.getInstance().get("authorInfo"));
                 break;
             case R.id.sp_cache_put:
-                spCache.put("xyy", mGithubModel);
+                spCache.put("authorInfo", mAuthorModel);
                 break;
             case R.id.sp_cache_get:
-                ViseLog.i(spCache.get("xyy"));
+                ViseLog.i(spCache.get("authorInfo"));
                 break;
             case R.id.send_event:
-                BusFactory.getBus().post(new GithubEvent().setGithubModel(mGithubModel));
+                BusFactory.getBus().post(new AuthorEvent().setAuthorModel(mAuthorModel));
                 break;
         }
     }
 
     @EventSubscribe
-    public void showGithub(IEvent event) {
-        if (event != null && event instanceof GithubEvent) {
-            ViseLog.i("Receive Event Message:" + ((GithubEvent) event).getGithubModel());
+    public void showAuthor(IEvent event) {
+        if (event != null && event instanceof AuthorEvent) {
+            ViseLog.i("Receive Event Message:" + ((AuthorEvent) event).getAuthorModel());
         }
     }
 }

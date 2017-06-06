@@ -7,15 +7,15 @@ import com.vise.xsnow.event.IEvent;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-20 10:11
  */
-public class GithubEvent implements IEvent {
-    private GithubModel githubModel;
+public class AuthorEvent implements IEvent {
+    private AuthorModel authorModel;
 
-    public GithubModel getGithubModel() {
-        return githubModel;
+    public AuthorModel getAuthorModel() {
+        return authorModel;
     }
 
-    public GithubEvent setGithubModel(GithubModel githubModel) {
-        this.githubModel = githubModel;
+    public AuthorEvent setAuthorModel(AuthorModel authorModel) {
+        this.authorModel = authorModel;
         return this;
     }
 }

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
-import com.vise.snowdemo.mode.GithubModel;
+import com.vise.snowdemo.mode.AuthorModel;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.mode.CacheMode;
@@ -46,7 +46,7 @@ public class NetTestActivity extends BaseActivity {
         mOnly_remote_request = F(R.id.only_remote_request);
         mCache_and_remote_request = F(R.id.cache_and_remote_request);
         mClear_cache = F(R.id.clear_cache);
-        mShow_response_data = (TextView) findViewById(R.id.show_response_data);
+        mShow_response_data = F(R.id.show_response_data);
     }
 
     @Override
@@ -94,32 +94,14 @@ public class NetTestActivity extends BaseActivity {
 
     private void normalRequest() {
         mShow_response_data.setText("");
-        /*ViseHttp.BASE(new ApiGetRequest())
-                .baseUrl("http://news-at.zhihu.com/")
-                .suffixUrl("api/3/sections")
-                .request(mContext, new ACallback<List<ZhiHuModel>>() {
-                    @Override
-                    public void onSuccess(List<ZhiHuModel> data) {
-                        ViseLog.i("request onSuccess:" + data);
-                        if (data == null) {
-                            return;
-                        }
-                        mShow_response_data.setText(data.toString());
-                    }
-
-                    @Override
-                    public void onFail(int errCode, String errMsg) {
-                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
-                    }
-                });*/
-        ViseHttp.GET().request(mContext, new ACallback<GithubModel>() {
+        ViseHttp.GET().suffixUrl("getAuthor").request(mContext, new ACallback<AuthorModel>() {
             @Override
-            public void onSuccess(GithubModel githubModel) {
+            public void onSuccess(AuthorModel authorModel) {
                 ViseLog.i("request onSuccess!");
-                if (githubModel == null) {
+                if (authorModel == null) {
                     return;
                 }
-                mShow_response_data.setText(githubModel.toString());
+                mShow_response_data.setText(authorModel.toString());
             }
 
             @Override
@@ -132,11 +114,12 @@ public class NetTestActivity extends BaseActivity {
     private void firstCacheRequest() {
         mShow_response_data.setText("");
         ViseHttp.GET()
+                .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_CACHE)
-                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
                     @Override
-                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                    public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
@@ -158,11 +141,12 @@ public class NetTestActivity extends BaseActivity {
     private void firstRemoteRequest() {
         mShow_response_data.setText("");
         ViseHttp.GET()
+                .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_REMOTE)
-                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
                     @Override
-                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                    public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
@@ -184,11 +168,12 @@ public class NetTestActivity extends BaseActivity {
     private void onlyCacheRequest() {
         mShow_response_data.setText("");
         ViseHttp.GET()
+                .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_CACHE)
-                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
                     @Override
-                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                    public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
@@ -210,11 +195,12 @@ public class NetTestActivity extends BaseActivity {
     private void onlyRemoteRequest() {
         mShow_response_data.setText("");
         ViseHttp.GET()
+                .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_REMOTE)
-                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
                     @Override
-                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                    public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;
@@ -236,11 +222,12 @@ public class NetTestActivity extends BaseActivity {
     private void cacheAndRemoteRequest() {
         mShow_response_data.setText("");
         ViseHttp.GET()
+                .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.CACHE_AND_REMOTE)
-                .request(mContext, new ACallback<CacheResult<GithubModel>>() {
+                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
                     @Override
-                    public void onSuccess(CacheResult<GithubModel> cacheResult) {
+                    public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
                         if (cacheResult == null) {
                             return;

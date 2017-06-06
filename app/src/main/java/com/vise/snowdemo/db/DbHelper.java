@@ -2,7 +2,7 @@ package com.vise.snowdemo.db;
 
 import android.content.Context;
 
-import com.vise.snowdemo.mode.GithubModel;
+import com.vise.snowdemo.mode.AuthorModel;
 import com.vise.xsnow.database.DBManager;
 
 import org.greenrobot.greendao.AbstractDao;
@@ -17,7 +17,7 @@ import org.greenrobot.greendao.AbstractDao;
 public class DbHelper {
     private static final String DB_NAME = "vise.db";//数据库名称
     private static DbHelper instance;
-    private static DBManager<GithubModel, Long> github;
+    private static DBManager<AuthorModel, Long> author;
     private DaoMaster.DevOpenHelper mHelper;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
@@ -49,16 +49,16 @@ public class DbHelper {
         mDaoSession = mDaoMaster.newSession();
     }
 
-    public DBManager<GithubModel, Long> gitHub() {
-        if (github == null) {
-            github = new DBManager<GithubModel, Long>(){
+    public DBManager<AuthorModel, Long> author() {
+        if (author == null) {
+            author = new DBManager<AuthorModel, Long>(){
                 @Override
-                public AbstractDao<GithubModel, Long> getAbstractDao() {
-                    return mDaoSession.getGithubModelDao();
+                public AbstractDao<AuthorModel, Long> getAbstractDao() {
+                    return mDaoSession.getAuthorModelDao();
                 }
             };
         }
-        return github;
+        return author;
     }
 
     public DaoMaster getDaoMaster() {
