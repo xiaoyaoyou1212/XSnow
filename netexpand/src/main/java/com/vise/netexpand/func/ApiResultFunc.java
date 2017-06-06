@@ -34,28 +34,20 @@ public class ApiResultFunc<T> implements Func1<ResponseBody, ApiResult<T>> {
         apiResult.setCode(-1);
         try {
             String json = responseBody.string();
-            if (type.equals(String.class)) {
-                apiResult.setData((T) json);
-                apiResult.setCode(0);
-            } else {
-                ApiResult result = parseApiResult(json, apiResult);
-                if (result != null) {
-                    apiResult = result;
-                    if (apiResult.getData() != null) {
-                        T data = gson.fromJson(apiResult.getData().toString(), type);
-                        apiResult.setData(data);
-                        apiResult.setCode(ResponseCode.HTTP_SUCCESS);
-                    } else {
-                        apiResult.setMsg("ApiResult's data is null");
-                    }
+            ApiResult result = parseApiResult(json, apiResult);
+            if (result != null) {
+                apiResult = result;
+                if (apiResult.getData() != null) {
+                    T data = gson.fromJson(apiResult.getData().toString(), type);
+                    apiResult.setData(data);
+                    apiResult.setCode(ResponseCode.HTTP_SUCCESS);
                 } else {
-                    apiResult.setMsg("json is null");
+                    apiResult.setMsg("ApiResult's data is null");
                 }
+            } else {
+                apiResult.setMsg("json is null");
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            apiResult.setMsg(e.getMessage());
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
             apiResult.setMsg(e.getMessage());
         } finally {
