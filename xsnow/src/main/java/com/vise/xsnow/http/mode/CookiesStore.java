@@ -63,15 +63,16 @@ public class CookiesStore {
                 cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
             }
             cookies.get(url.host()).put(name, cookie);
+
+            SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
+            prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
+            prefsWriter.putString(name, encodeCookie(new OkHttpCookies(cookie)));
+            prefsWriter.apply();
         } else {
             if (cookies.containsKey(url.host())) {
                 cookies.get(url.host()).remove(name);
             }
         }
-        SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
-        prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
-        prefsWriter.putString(name, encodeCookie(new OkHttpCookies(cookie)));
-        prefsWriter.apply();
     }
 
     public List<Cookie> get(HttpUrl url) {
