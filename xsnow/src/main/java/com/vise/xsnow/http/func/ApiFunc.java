@@ -5,15 +5,14 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import io.reactivex.functions.Function;
 import okhttp3.ResponseBody;
-import rx.functions.Func1;
-
 /**
  * @Description: ResponseBody转T
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-05 14:39
  */
-public class ApiFunc<T> implements Func1<ResponseBody, T> {
+public class ApiFunc<T> implements Function<ResponseBody, T> {
     protected Type type;
 
     public ApiFunc(Type type) {
@@ -21,7 +20,7 @@ public class ApiFunc<T> implements Func1<ResponseBody, T> {
     }
 
     @Override
-    public T call(ResponseBody responseBody) {
+    public T apply(ResponseBody responseBody) throws Exception {
         Gson gson = new Gson();
         String json = null;
         try {

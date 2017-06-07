@@ -16,10 +16,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import rx.Observable;
-import rx.Subscription;
 
 /**
  * @Description: Post请求
@@ -68,13 +67,11 @@ public class PostRequest extends BaseRequest<PostRequest> {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ACallback<T> callback) {
+    protected <T> void execute(Context context, ACallback<T> callback) {
         if (isLocalCache) {
-            return this.cacheExecute(getSubType(callback))
-                    .subscribe(new ApiCallbackSubscriber(context, callback));
+            this.cacheExecute(getSubType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
         }
-        return this.execute(getType(callback))
-                .subscribe(new ApiCallbackSubscriber(context, callback));
+        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
     public PostRequest addUrlParam(String paramKey, String paramValue) {

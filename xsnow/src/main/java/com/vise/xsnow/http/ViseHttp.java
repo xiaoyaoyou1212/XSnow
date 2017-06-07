@@ -16,10 +16,10 @@ import com.vise.xsnow.http.request.PostRequest;
 import com.vise.xsnow.http.request.PutRequest;
 import com.vise.xsnow.http.request.UploadRequest;
 
+import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import rx.Subscription;
 
 /**
  * @Description: 网络请求入口
@@ -239,7 +239,7 @@ public class ViseHttp {
      * 清楚所有缓存并关闭缓存
      * @return
      */
-    public Subscription clearCache() {
+    public Disposable clearCache() {
         return getApiCache().clear();
     }
 

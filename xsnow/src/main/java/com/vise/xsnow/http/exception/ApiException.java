@@ -10,7 +10,7 @@ import org.json.JSONException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
-import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.HttpException;
 
 /**
  * @Description: API异常统一管理

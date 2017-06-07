@@ -7,7 +7,7 @@ import com.vise.xsnow.event.inner.EventHelper;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * @Description: RxBus事件管理
@@ -23,8 +23,8 @@ public class RxBusImpl extends EventHelper implements IBus {
         if (object == null) {
             throw new NullPointerException("Object to register must not be null.");
         }
-        CompositeSubscription compositeSubscription = new CompositeSubscription();
-        EventComposite subscriberMethods = EventFind.findAnnotatedSubscriberMethods(object, compositeSubscription);
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        EventComposite subscriberMethods = EventFind.findAnnotatedSubscriberMethods(object, compositeDisposable);
         mEventCompositeMap.put(object, subscriberMethods);
 
         if (!STICKY_EVENT_MAP.isEmpty()) {
@@ -39,7 +39,7 @@ public class RxBusImpl extends EventHelper implements IBus {
         }
         EventComposite subscriberMethods = mEventCompositeMap.get(object);
         if (subscriberMethods != null) {
-            subscriberMethods.getCompositeSubscription().unsubscribe();
+            subscriberMethods.getCompositeDisposable().dispose();
         }
         mEventCompositeMap.remove(object);
     }

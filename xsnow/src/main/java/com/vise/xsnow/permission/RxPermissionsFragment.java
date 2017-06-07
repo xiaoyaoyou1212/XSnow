@@ -13,7 +13,7 @@ import com.vise.log.ViseLog;
 import java.util.HashMap;
 import java.util.Map;
 
-import rx.subjects.PublishSubject;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * @Description: 申请权限显示
@@ -69,7 +69,7 @@ public class RxPermissionsFragment extends Fragment {
             mSubjects.remove(permissions[i]);
             boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
             subject.onNext(new Permission(permissions[i], granted, shouldShowRequestPermissionRationale[i]));
-            subject.onCompleted();
+            subject.onComplete();
         }
     }
 

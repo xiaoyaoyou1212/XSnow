@@ -5,6 +5,8 @@ import android.content.Context;
 import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.exception.ApiException;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * @Description: 包含回调的订阅者，如果订阅这个，上层在不使用订阅者的情况下可获得回调
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
@@ -13,6 +15,7 @@ import com.vise.xsnow.http.exception.ApiException;
 public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     protected ACallback<T> callBack;
+    protected Disposable disposable;
 
     public ApiCallbackSubscriber(Context context, ACallback<T> callBack) {
         super(context);
@@ -23,12 +26,10 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onError(ApiException e) {
+        if (disposable != null) {
+            disposable.dispose();
+        }
         if (e == null) {
             callBack.onFail(-1, "This ApiException is Null.");
             return;
@@ -37,11 +38,17 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
     }
 
     @Override
-    public void onCompleted() {
+    public void onSubscribe(Disposable d) {
+        disposable = d;
     }
 
     @Override
     public void onNext(T t) {
         callBack.onSuccess(t);
+    }
+
+    @Override
+    public void onComplete() {
+
     }
 }

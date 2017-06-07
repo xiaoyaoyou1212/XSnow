@@ -17,13 +17,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import rx.Observable;
-import rx.Subscription;
 
 /**
- * @Description:
+ * @Description: 返回APIResult的POST请求类
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/28 15:48.
  */
@@ -76,13 +75,11 @@ public class ApiPostRequest extends ApiBaseRequest {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ACallback<T> callback) {
+    protected <T> void execute(Context context, ACallback<T> callback) {
         if (isLocalCache) {
-            return this.cacheExecute(getSubType(callback))
-                    .subscribe(new ApiCallbackSubscriber(context, callback));
+            this.cacheExecute(getSubType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
         }
-        return this.execute(getType(callback))
-                .subscribe(new ApiCallbackSubscriber(context, callback));
+        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
     public ApiPostRequest addUrlParam(String paramKey, String paramValue) {

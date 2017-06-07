@@ -6,6 +6,7 @@ import com.vise.xsnow.http.core.ApiCookie;
 import com.vise.xsnow.http.interceptor.GzipRequestInterceptor;
 import com.vise.xsnow.http.interceptor.OfflineCacheInterceptor;
 import com.vise.xsnow.http.interceptor.OnlineCacheInterceptor;
+import com.vise.xsnow.http.mode.ApiHost;
 
 import java.io.File;
 import java.net.Proxy;
@@ -214,6 +215,7 @@ public class HttpGlobalConfig {
      */
     public HttpGlobalConfig baseUrl(String baseUrl) {
         this.baseUrl = checkNotNull(baseUrl, "baseUrl == null");
+        ApiHost.setHost(this.baseUrl);
         return this;
     }
 

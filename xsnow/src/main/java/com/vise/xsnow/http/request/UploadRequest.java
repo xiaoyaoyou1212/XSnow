@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -25,8 +26,6 @@ import okhttp3.internal.Util;
 import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
-import rx.Observable;
-import rx.Subscription;
 
 /**
  * @Description: 上传请求
@@ -69,9 +68,8 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ACallback<T> callback) {
-        return this.execute(getType(callback))
-                .subscribe(new ApiCallbackSubscriber(context, callback));
+    protected <T> void execute(Context context, ACallback<T> callback) {
+        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
     public UploadRequest addUrlParam(String paramKey, String paramValue) {

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * @Description: 事件复合
@@ -14,16 +14,16 @@ import rx.subscriptions.CompositeSubscription;
  * @date: 2016-12-29 19:19
  */
 public class EventComposite extends EventHelper {
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
     private Object object;
     private Set<EventSubscriber> subscriberEvents;
 
-    public final CompositeSubscription getCompositeSubscription() {
-        return compositeSubscription;
+    public final CompositeDisposable getCompositeDisposable() {
+        return compositeDisposable;
     }
 
-    public final void setCompositeSubscription(CompositeSubscription compositeSubscription) {
-        this.compositeSubscription = compositeSubscription;
+    public final void setCompositeDisposable(CompositeDisposable compositeDisposable) {
+        this.compositeDisposable = compositeDisposable;
     }
 
     public final Object getObject() {
@@ -42,8 +42,8 @@ public class EventComposite extends EventHelper {
         this.subscriberEvents = subscriberEvents;
     }
 
-    public EventComposite(CompositeSubscription compositeSubscription, Object object, Set<EventSubscriber> subscriberEvents) {
-        this.compositeSubscription = compositeSubscription;
+    public EventComposite(CompositeDisposable compositeDisposable, Object object, Set<EventSubscriber> subscriberEvents) {
+        this.compositeDisposable = compositeDisposable;
         this.object = object;
         this.subscriberEvents = subscriberEvents;
     }

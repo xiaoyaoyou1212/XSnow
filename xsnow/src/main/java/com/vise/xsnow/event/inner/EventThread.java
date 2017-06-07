@@ -1,8 +1,8 @@
 package com.vise.xsnow.event.inner;
 
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @Description: 事件线程
@@ -13,9 +13,9 @@ public enum EventThread {
     MAIN_THREAD,
     NEW_THREAD,
     IO,
+    SINGLE,
     COMPUTATION,
-    TRAMPOLINE,
-    IMMEDIATE;
+    TRAMPOLINE;
 
     public static Scheduler getScheduler(EventThread thread) {
         Scheduler scheduler;
@@ -29,14 +29,14 @@ public enum EventThread {
             case IO:
                 scheduler = Schedulers.io();
                 break;
+            case SINGLE:
+                scheduler = Schedulers.single();
+                break;
             case COMPUTATION:
                 scheduler = Schedulers.computation();
                 break;
             case TRAMPOLINE:
                 scheduler = Schedulers.trampoline();
-                break;
-            case IMMEDIATE:
-                scheduler = Schedulers.immediate();
                 break;
             default:
                 scheduler = AndroidSchedulers.mainThread();

@@ -12,12 +12,15 @@ import com.vise.xsnow.http.strategy.ICacheStrategy;
 import java.io.File;
 import java.lang.reflect.Type;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.exceptions.Exceptions;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.exceptions.Exceptions;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @Description: 针对响应数据进行缓存管理
@@ -28,25 +31,24 @@ public class ApiCache {
     private final DiskCache diskCache;
     private String cacheKey;
 
-    private static abstract class SimpleSubscribe<T> implements Observable.OnSubscribe<T> {
+    private static abstract class SimpleSubscribe<T> implements ObservableOnSubscribe<T> {
         @Override
-        public final void call(Subscriber<? super T> subscriber) {
+        public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
             try {
                 T data = execute();
-                if (!subscriber.isUnsubscribed()) {
+                if (!subscriber.isDisposed() && data != null) {
                     subscriber.onNext(data);
                 }
             } catch (Throwable e) {
                 ViseLog.e(e);
                 Exceptions.throwIfFatal(e);
-                if (!subscriber.isUnsubscribed()) {
+                if (!subscriber.isDisposed()) {
                     subscriber.onError(e);
                 }
                 return;
             }
-
-            if (!subscriber.isUnsubscribed()) {
-                subscriber.onCompleted();
+            if (!subscriber.isDisposed()) {
+                subscriber.onComplete();
             }
         }
 
@@ -63,11 +65,11 @@ public class ApiCache {
         diskCache = new DiskCache(context, diskDir, diskMaxSize).setCacheTime(time);
     }
 
-    public <T> Observable.Transformer<T, CacheResult<T>> transformer(CacheMode cacheMode, final Type type) {
+    public <T> ObservableTransformer<T, CacheResult<T>> transformer(CacheMode cacheMode, final Type type) {
         final ICacheStrategy strategy = loadStrategy(cacheMode);//获取缓存策略
-        return new Observable.Transformer<T, CacheResult<T>>() {
+        return new ObservableTransformer<T, CacheResult<T>>() {
             @Override
-            public Observable<CacheResult<T>> call(Observable<T> apiResultObservable) {
+            public ObservableSource<CacheResult<T>> apply(Observable<T> apiResultObservable) {
                 ViseLog.i("cacheKey=" + ApiCache.this.cacheKey);
                 return strategy.execute(ApiCache.this, ApiCache.this.cacheKey, apiResultObservable, type);
             }
@@ -106,16 +108,16 @@ public class ApiCache {
         return diskCache.isClosed();
     }
 
-    public Subscription clear() {
+    public Disposable clear() {
         return Observable.create(new SimpleSubscribe<Boolean>() {
             @Override
             Boolean execute() throws Throwable {
                 diskCache.clear();
                 return true;
             }
-        }).subscribeOn(Schedulers.io()).subscribe(new Action1<Boolean>() {
+        }).subscribeOn(Schedulers.io()).subscribe(new Consumer<Boolean>() {
             @Override
-            public void call(Boolean status) {
+            public void accept(Boolean status) throws Exception {
                 ViseLog.i("clear status => " + status);
             }
         });

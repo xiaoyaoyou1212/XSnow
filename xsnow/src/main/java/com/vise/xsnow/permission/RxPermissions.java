@@ -12,9 +12,11 @@ import com.vise.log.ViseLog;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * @Description: 权限控制
@@ -58,16 +60,16 @@ public class RxPermissions {
      * to ask the user if he allows the permissions.
      */
     @SuppressWarnings("WeakerAccess")
-    public Observable.Transformer<Object, Boolean> ensure(final String... permissions) {
-        return new Observable.Transformer<Object, Boolean>() {
+    public ObservableTransformer<Object, Boolean> ensure(final String... permissions) {
+        return new ObservableTransformer<Object, Boolean>() {
             @Override
-            public Observable<Boolean> call(Observable<Object> o) {
+            public ObservableSource<Boolean> apply(Observable<Object> o) {
                 return request(o, permissions)
                         // Transform Observable<Permission> to Observable<Boolean>
                         .buffer(permissions.length)
-                        .flatMap(new Func1<List<Permission>, Observable<Boolean>>() {
+                        .flatMap(new Function<List<Permission>, Observable<Boolean>>() {
                             @Override
-                            public Observable<Boolean> call(List<Permission> permissions) {
+                            public Observable<Boolean> apply(List<Permission> permissions) throws Exception {
                                 if (permissions.isEmpty()) {
                                     // Occurs during orientation change, when the subject receives onComplete.
                                     // In that case we don't want to propagate that empty list to the
@@ -95,10 +97,10 @@ public class RxPermissions {
      * to ask the user if he allows the permissions.
      */
     @SuppressWarnings("WeakerAccess")
-    public Observable.Transformer<Object, Permission> ensureEach(final String... permissions) {
-        return new Observable.Transformer<Object, Permission>() {
+    public ObservableTransformer<Object, Permission> ensureEach(final String... permissions) {
+        return new ObservableTransformer<Object, Permission>() {
             @Override
-            public Observable<Permission> call(Observable<Object> o) {
+            public ObservableSource<Permission> apply(Observable<Object> o) {
                 return request(o, permissions);
             }
         };
@@ -127,9 +129,9 @@ public class RxPermissions {
             throw new IllegalArgumentException("RxPermissions.request/requestEach requires at least one input permission");
         }
         return oneOf(trigger, pending(permissions))
-                .flatMap(new Func1<Object, Observable<Permission>>() {
+                .flatMap(new Function<Object, Observable<Permission>>() {
                     @Override
-                    public Observable<Permission> call(Object o) {
+                    public Observable<Permission> apply(Object o) throws Exception {
                         return requestImplementation(permissions);
                     }
                 });
@@ -188,7 +190,7 @@ public class RxPermissions {
             String[] unrequestedPermissionsArray = unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]);
             requestPermissionsFromFragment(unrequestedPermissionsArray);
         }
-        return Observable.concat(Observable.from(list));
+        return Observable.concat(Observable.fromIterable(list));
     }
 
     /**

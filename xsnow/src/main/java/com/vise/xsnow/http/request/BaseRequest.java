@@ -31,17 +31,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * @Description: 请求基类
@@ -410,22 +411,22 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return cacheExecute(type);
     }
 
-    public <T> Subscription request(Context context, ACallback<T> callback) {
+    public <T> void request(Context context, ACallback<T> callback) {
         generateGlobalConfig();
         generateLocalConfig();
-        return execute(context, callback);
+        execute(context, callback);
     }
 
     protected abstract <T> Observable<T> execute(Type type);
 
     protected abstract <T> Observable<CacheResult<T>> cacheExecute(Type type);
 
-    protected abstract <T> Subscription execute(Context context, ACallback<T> callback);
+    protected abstract <T> void execute(Context context, ACallback<T> callback);
 
-    protected <T> Observable.Transformer<ResponseBody, T> norTransformer(final Type type) {
-        return new Observable.Transformer<ResponseBody, T>() {
+    protected <T> ObservableTransformer<ResponseBody, T> norTransformer(final Type type) {
+        return new ObservableTransformer<ResponseBody, T>() {
             @Override
-            public Observable<T> call(Observable<ResponseBody> apiResultObservable) {
+            public ObservableSource<T> apply(Observable<ResponseBody> apiResultObservable) {
                 return apiResultObservable
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
@@ -510,6 +511,8 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (isLocalCache) {
             if (cacheKey != null) {
                 ViseHttp.getApiCacheBuilder().cacheKey(cacheKey);
+            } else {
+                ViseHttp.getApiCacheBuilder().cacheKey(ApiHost.getHost());
             }
             if (cacheTime > 0) {
                 ViseHttp.getApiCacheBuilder().cacheTime(cacheTime);
@@ -521,6 +524,9 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (baseUrl != null) {
             Retrofit.Builder newRetrofitBuilder = new Retrofit.Builder();
             newRetrofitBuilder.baseUrl(baseUrl);
+            if (isLocalCache && cacheKey == null) {
+                ViseHttp.getApiCacheBuilder().cacheKey(baseUrl);
+            }
             if (httpGlobalConfig.getConverterFactory() != null) {
                 newRetrofitBuilder.addConverterFactory(httpGlobalConfig.getConverterFactory());
             }
@@ -557,7 +563,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
         }
 
         if (httpGlobalConfig.getCallAdapterFactory() == null) {
-            httpGlobalConfig.callAdapterFactory(RxJavaCallAdapterFactory.create());
+            httpGlobalConfig.callAdapterFactory(RxJava2CallAdapterFactory.create());
         }
         ViseHttp.getRetrofitBuilder().addCallAdapterFactory(httpGlobalConfig.getCallAdapterFactory());
 

@@ -5,6 +5,9 @@ import com.vise.xsnow.http.callback.UCallback;
 
 import java.io.IOException;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.Buffer;
@@ -12,9 +15,6 @@ import okio.BufferedSink;
 import okio.ForwardingSink;
 import okio.Okio;
 import okio.Sink;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * @Description: 上传进度请求实体类
@@ -81,15 +81,15 @@ public class UploadProgressRequestBody extends RequestBody {
             currentTime = System.currentTimeMillis();
             if (currentTime - lastTime >= 100 || lastTime == 0 || currentLength == totalLength) {
                 lastTime = currentTime;
-                Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+                Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
                     @Override
-                    public void call(Long aLong) {
+                    public void accept(Long aLong) throws Exception {
                         ViseLog.i("upload progress currentLength:" + currentLength + ",totalLength:" + totalLength);
                         callback.onProgress(currentLength, totalLength, (100.0f * currentLength) / totalLength);
                     }
-                }, new Action1<Throwable>() {
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void accept(Throwable throwable) throws Exception {
                         callback.onFail(-1, throwable.getMessage());
                     }
                 });

@@ -3,9 +3,9 @@ package com.vise.xsnow.event.inner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @Description: 事件订阅者
@@ -16,7 +16,7 @@ public class EventSubscriber extends EventHelper {
     private final Object target;
     private final Method method;
     private final EventThread thread;
-    private Subscription subscription;
+    private Disposable disposable;
 
     public EventSubscriber(Object target, Method method, EventThread thread) {
         if (target == null) {
@@ -40,10 +40,10 @@ public class EventSubscriber extends EventHelper {
     }
 
     private final void initObservable(Class aClass) {
-        subscription = toObservable(aClass).onBackpressureBuffer().subscribeOn(Schedulers.io()).observeOn(EventThread.getScheduler
-                (thread)).subscribe(new Action1<Object>() {
+        disposable = toFlowable(aClass).subscribeOn(Schedulers.io()).observeOn(EventThread.getScheduler
+                (thread)).subscribe(new Consumer<Object>() {
             @Override
-            public void call(Object event) {
+            public void accept(Object event) throws Exception {
                 try {
                     handleEvent(event);
                     dellSticky(event);
@@ -54,8 +54,8 @@ public class EventSubscriber extends EventHelper {
         });
     }
 
-    public final Subscription getSubscription() {
-        return subscription;
+    public final Disposable getDisposable() {
+        return disposable;
     }
 
     public final void handleEvent(Object event) throws InvocationTargetException {

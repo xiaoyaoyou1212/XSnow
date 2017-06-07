@@ -9,8 +9,7 @@ import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
 
 import java.lang.reflect.Type;
 
-import rx.Observable;
-import rx.Subscription;
+import io.reactivex.Observable;
 
 /**
  * @Description: Delete请求
@@ -29,12 +28,10 @@ public class DeleteRequest extends BaseRequest<DeleteRequest> {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ACallback<T> callback) {
+    protected <T> void execute(Context context, ACallback<T> callback) {
         if (isLocalCache) {
-            return this.cacheExecute(getSubType(callback))
-                    .subscribe(new ApiCallbackSubscriber(context, callback));
+            this.cacheExecute(getSubType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
         }
-        return this.execute(getType(callback))
-                .subscribe(new ApiCallbackSubscriber(context, callback));
+        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 }

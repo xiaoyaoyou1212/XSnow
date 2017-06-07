@@ -12,15 +12,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import io.reactivex.functions.Function;
 import okhttp3.ResponseBody;
-import rx.functions.Func1;
 
 /**
  * @Description: ResponseBody转ApiResult<T>
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-30 17:55
  */
-public class ApiResultFunc<T> implements Func1<ResponseBody, ApiResult<T>> {
+public class ApiResultFunc<T> implements Function<ResponseBody, ApiResult<T>> {
     protected Type type;
 
     public ApiResultFunc(Type type) {
@@ -28,7 +28,7 @@ public class ApiResultFunc<T> implements Func1<ResponseBody, ApiResult<T>> {
     }
 
     @Override
-    public ApiResult<T> call(ResponseBody responseBody) {
+    public ApiResult<T> apply(ResponseBody responseBody) throws Exception {
         Gson gson = new Gson();
         ApiResult<T> apiResult = new ApiResult<T>();
         apiResult.setCode(-1);

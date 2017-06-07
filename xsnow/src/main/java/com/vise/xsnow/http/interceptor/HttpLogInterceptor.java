@@ -15,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.http.OkHeaders;
+import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 
 /**
@@ -93,6 +93,7 @@ public class HttpLogInterceptor implements Interceptor {
                 log(" ");
                 if (logBody && hasRequestBody) {
                     if (isPlaintext(requestBody.contentType())) {
+                        log("\t"+requestBody.contentType());
                         bodyToString(request);
                     } else {
                         log("\tbody: maybe [file part] , too large too print , ignored!");
@@ -121,7 +122,7 @@ public class HttpLogInterceptor implements Interceptor {
                     log("\t" + headers.name(i) + ": " + headers.value(i));
                 }
                 log(" ");
-                if (logBody && OkHeaders.hasVaryAll(clone)) {
+                if (logBody && HttpHeaders.hasVaryAll(clone)) {
                     if (isPlaintext(responseBody.contentType())) {
                         String body = responseBody.string();
                         log("\tbody:" + body);

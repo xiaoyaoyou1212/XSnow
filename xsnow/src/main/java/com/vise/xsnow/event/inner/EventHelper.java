@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * @Description: 事件帮助类
@@ -16,18 +17,18 @@ import rx.subjects.SerializedSubject;
  */
 public class EventHelper {
     protected final static Map<Class<?>, Object> STICKY_EVENT_MAP;
-    protected final static SerializedSubject<Object, Object> SUBJECT;
+    protected final static Subject<Object> SUBJECT;
 
     static {
-        SUBJECT = new SerializedSubject<>(PublishSubject.create());
+        SUBJECT = PublishSubject.create().toSerialized();
         STICKY_EVENT_MAP = new HashMap<>();
     }
 
     protected EventHelper() {
     }
 
-    protected static <T> Observable<T> toObservable(Class<T> eventType) {
-        return SUBJECT.ofType(eventType);
+    protected static <T> Flowable<T> toFlowable(Class<T> eventType) {
+        return SUBJECT.ofType(eventType).toFlowable(BackpressureStrategy.BUFFER);
     }
 
     protected static synchronized void dellSticky(Object event) {

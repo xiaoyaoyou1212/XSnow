@@ -1,22 +1,20 @@
 package com.vise.xsnow.http.subscriber;
 
-import android.accounts.NetworkErrorException;
 import android.content.Context;
 
-import com.vise.utils.assist.Network;
 import com.vise.xsnow.http.exception.ApiException;
 import com.vise.xsnow.http.mode.ApiCode;
 
 import java.lang.ref.WeakReference;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
 
 /**
  * @Description: API统一订阅者，采用弱引用管理上下文，防止内存泄漏
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-03 14:07
  */
-public abstract class ApiSubscriber<T> extends Subscriber<T> {
+public abstract class ApiSubscriber<T> implements Observer<T> {
     public WeakReference<Context> contextWeakReference;
 
     public ApiSubscriber(Context context) {
@@ -29,14 +27,6 @@ public abstract class ApiSubscriber<T> extends Subscriber<T> {
             onError((ApiException) e);
         } else {
             onError(new ApiException(e, ApiCode.Request.UNKNOWN));
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!Network.isConnected(contextWeakReference.get())) {
-            onError(new ApiException(new NetworkErrorException(), ApiCode.Request.NETWORK_ERROR));
         }
     }
 

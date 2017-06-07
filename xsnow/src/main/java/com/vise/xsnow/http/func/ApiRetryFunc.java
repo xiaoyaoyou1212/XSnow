@@ -5,15 +5,16 @@ import com.vise.xsnow.http.exception.ApiException;
 
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 /**
  * @Description: 重试机制
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-05-04 17:19
  */
-public class ApiRetryFunc implements Func1<Observable<? extends Throwable>, Observable<?>> {
+public class ApiRetryFunc implements Function<Observable<? extends Throwable>, Observable<?>> {
 
     private final int maxRetries;
     private final int retryDelayMillis;
@@ -25,11 +26,11 @@ public class ApiRetryFunc implements Func1<Observable<? extends Throwable>, Obse
     }
 
     @Override
-    public Observable<?> call(Observable<? extends Throwable> observable) {
+    public Observable<?> apply(Observable<? extends Throwable> observable) throws Exception {
         return observable
-                .flatMap(new Func1<Throwable, Observable<?>>() {
+                .flatMap(new Function<Throwable, ObservableSource<?>>() {
                     @Override
-                    public Observable<?> call(Throwable throwable) {
+                    public ObservableSource<?> apply(Throwable throwable) throws Exception {
                         if (++retryCount <= maxRetries) {
                             ViseLog.d("get response data error, it will try after " + retryDelayMillis
                                     + " millisecond, retry count " + retryCount);

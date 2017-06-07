@@ -3,7 +3,7 @@ package com.vise.xsnow.permission;
 import android.app.Activity;
 import android.os.Build;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
 /**
  * @Description: 权限管理
@@ -38,9 +38,9 @@ public class PermissionManager {
     public void request(final OnPermissionCallback permissionCallback, final String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.activity != null && permissionCallback != null) {
             RxPermissions rxPermissions = new RxPermissions(this.activity);
-            rxPermissions.requestEach(permissions).subscribe(new Action1<Permission>() {
+            rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
                 @Override
-                public void call(Permission permission) {
+                public void accept(Permission permission) throws Exception {
                     if (permission.granted) {
                         permissionCallback.onRequestAllow(permission.name);
                     } else if (permission.shouldShowRequestPermissionRationale) {

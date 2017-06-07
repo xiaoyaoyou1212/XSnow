@@ -5,7 +5,7 @@ import com.vise.xsnow.http.mode.CacheResult;
 
 import java.lang.reflect.Type;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @Description: 缓存策略--只取缓存

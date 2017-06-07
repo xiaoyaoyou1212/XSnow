@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * @Description: 根据注解查找事件接收方法
@@ -15,13 +15,13 @@ import rx.subscriptions.CompositeSubscription;
  * @date: 2016-12-29 19:26
  */
 public class EventFind {
-    public static EventComposite findAnnotatedSubscriberMethods(Object listenerClass, CompositeSubscription compositeSubscription) {
+    public static EventComposite findAnnotatedSubscriberMethods(Object listenerClass, CompositeDisposable compositeDisposable) {
         Set<EventSubscriber> producerMethods = new HashSet<>();
-        return findAnnotatedMethods(listenerClass, producerMethods, compositeSubscription);
+        return findAnnotatedMethods(listenerClass, producerMethods, compositeDisposable);
     }
 
     private static EventComposite findAnnotatedMethods(Object listenerClass, Set<EventSubscriber> subscriberMethods,
-                                                       CompositeSubscription compositeSubscription) {
+                                                       CompositeDisposable compositeDisposable) {
         for (Method method : listenerClass.getClass().getDeclaredMethods()) {
             if (method.isBridge()) {
                 continue;
@@ -45,10 +45,10 @@ public class EventFind {
                 EventSubscriber subscriberEvent = new EventSubscriber(listenerClass, method, thread);
                 if (!subscriberMethods.contains(subscriberEvent)) {
                     subscriberMethods.add(subscriberEvent);
-                    compositeSubscription.add(subscriberEvent.getSubscription());
+                    compositeDisposable.add(subscriberEvent.getDisposable());
                 }
             }
         }
-        return new EventComposite(compositeSubscription, listenerClass, subscriberMethods);
+        return new EventComposite(compositeDisposable, listenerClass, subscriberMethods);
     }
 }

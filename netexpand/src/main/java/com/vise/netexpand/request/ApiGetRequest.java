@@ -10,11 +10,10 @@ import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
 
 import java.lang.reflect.Type;
 
-import rx.Observable;
-import rx.Subscription;
+import io.reactivex.Observable;
 
 /**
- * @Description:
+ * @Description: 返回APIResult的GET请求类
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/13 14:31.
  */
@@ -30,12 +29,10 @@ public class ApiGetRequest extends ApiBaseRequest {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ACallback<T> callback) {
+    protected <T> void execute(Context context, ACallback<T> callback) {
         if (isLocalCache) {
-            return this.cacheExecute(getSubType(callback))
-                    .subscribe(new ApiCallbackSubscriber(context, callback));
+            this.cacheExecute(getSubType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
         }
-        return this.execute(getType(callback))
-                .subscribe(new ApiCallbackSubscriber(context, callback));
+        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 }

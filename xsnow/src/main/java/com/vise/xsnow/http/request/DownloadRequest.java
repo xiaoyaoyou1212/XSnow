@@ -12,6 +12,8 @@ import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.mode.DownProgress;
 import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
 
+import org.reactivestreams.Publisher;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,13 +22,15 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * @Description: 下载请求
@@ -61,25 +65,26 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
                 .downFile(suffixUrl, params)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .flatMap(new Func1<ResponseBody, Observable<DownProgress>>() {
+                .toFlowable(BackpressureStrategy.LATEST)
+                .flatMap(new Function<ResponseBody, Publisher<?>>() {
                     @Override
-                    public Observable<DownProgress> call(final ResponseBody response) {
-                        return Observable.create(new Observable.OnSubscribe<DownProgress>() {
+                    public Publisher<?> apply(final ResponseBody responseBody) throws Exception {
+                        return Flowable.create(new FlowableOnSubscribe<DownProgress>() {
                             @Override
-                            public void call(Subscriber<? super DownProgress> subscriber) {
+                            public void subscribe(FlowableEmitter<DownProgress> subscriber) throws Exception {
                                 File dir = getDiskCacheDir(ViseHttp.getContext(), dirName);
                                 if (!dir.exists()) {
                                     dir.mkdir();
                                 }
                                 File file = new File(dir.getPath() + File.separator + fileName);
-                                saveFile(subscriber, file, response);
+                                saveFile(subscriber, file, responseBody);
                             }
-                        });
+                        }, BackpressureStrategy.LATEST);
                     }
                 })
                 .sample(1, TimeUnit.SECONDS)
-                .onBackpressureLatest()
                 .observeOn(AndroidSchedulers.mainThread())
+                .toObservable()
                 .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
     }
 
@@ -89,12 +94,11 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
     }
 
     @Override
-    protected <T> Subscription execute(Context context, ACallback<T> callback) {
-        return this.execute(getType(callback))
-                .subscribe(new ApiCallbackSubscriber(context, callback));
+    protected <T> void execute(Context context, ACallback<T> callback) {
+        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
-    private void saveFile(Subscriber<? super DownProgress> sub, File saveFile, ResponseBody resp) {
+    private void saveFile(FlowableEmitter<? super DownProgress> sub, File saveFile, ResponseBody resp) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -117,7 +121,7 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
                     sub.onNext(downProgress);
                 }
                 outputStream.flush();
-                sub.onCompleted();
+                sub.onComplete();
             } finally {
                 if (inputStream != null) {
                     inputStream.close();

@@ -7,10 +7,11 @@ import com.vise.xsnow.http.mode.CacheResult;
 
 import java.lang.reflect.Type;
 
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @Description: 缓存策略
@@ -19,14 +20,14 @@ import rx.schedulers.Schedulers;
  */
 public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
     <T> Observable<CacheResult<T>> loadCache(final ApiCache apiCache, final String key, final Type type) {
-        return apiCache.<T>get(key).filter(new Func1<String, Boolean>() {
+        return apiCache.<T>get(key).filter(new Predicate<String>() {
             @Override
-            public Boolean call(String s) {
+            public boolean test(String s) throws Exception {
                 return s != null;
             }
-        }).map(new Func1<String, CacheResult<T>>() {
+        }).map(new Function<String, CacheResult<T>>() {
             @Override
-            public CacheResult<T> call(String s) {
+            public CacheResult<T> apply(String s) throws Exception {
                 T t = GSONUtil.gson().fromJson(s, type);
                 ViseLog.i("loadCache result=" + t);
                 return new CacheResult<T>(true, t);
@@ -35,13 +36,13 @@ public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
     }
 
     <T> Observable<CacheResult<T>> loadRemote(final ApiCache apiCache, final String key, Observable<T> source) {
-        return source.map(new Func1<T, CacheResult<T>>() {
+        return source.map(new Function<T, CacheResult<T>>() {
             @Override
-            public CacheResult<T> call(T t) {
+            public CacheResult<T> apply(T t) throws Exception {
                 ViseLog.i("loadRemote result=" + t);
-                apiCache.put(key, t).subscribeOn(Schedulers.io()).subscribe(new Action1<Boolean>() {
+                apiCache.put(key, t).subscribeOn(Schedulers.io()).subscribe(new Consumer<Boolean>() {
                     @Override
-                    public void call(Boolean status) {
+                    public void accept(Boolean status) throws Exception {
                         ViseLog.i("save status => " + status);
                     }
                 });

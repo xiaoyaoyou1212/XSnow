@@ -1,11 +1,5 @@
 [
   {
-    "response" : {
-      "text" : "Hello world!"
-    }
-  },
-
-  {
     "request" : {
       "method" : "get",
       "uri" : "/getAuthor"

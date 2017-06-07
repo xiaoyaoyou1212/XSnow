@@ -184,7 +184,7 @@ public class NetTestActivity extends BaseActivity {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
-                        if (cacheResult == null) {
+                        if (cacheResult == null || cacheResult.getCacheData() == null) {
                             return;
                         }
                         if (cacheResult.isCache()) {
@@ -211,7 +211,7 @@ public class NetTestActivity extends BaseActivity {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
-                        if (cacheResult == null) {
+                        if (cacheResult == null || cacheResult.getCacheData() == null) {
                             return;
                         }
                         if (cacheResult.isCache()) {
@@ -238,7 +238,7 @@ public class NetTestActivity extends BaseActivity {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
-                        if (cacheResult == null) {
+                        if (cacheResult == null || cacheResult.getCacheData() == null) {
                             return;
                         }
                         if (cacheResult.isCache()) {
@@ -265,7 +265,7 @@ public class NetTestActivity extends BaseActivity {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
-                        if (cacheResult == null) {
+                        if (cacheResult == null || cacheResult.getCacheData() == null) {
                             return;
                         }
                         if (cacheResult.isCache()) {
@@ -292,7 +292,7 @@ public class NetTestActivity extends BaseActivity {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
-                        if (cacheResult == null) {
+                        if (cacheResult == null || cacheResult.getCacheData() == null) {
                             return;
                         }
                         if (cacheResult.isCache()) {
