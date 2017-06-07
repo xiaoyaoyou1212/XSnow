@@ -10,7 +10,7 @@ import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.func.ApiRetryFunc;
 import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.mode.DownProgress;
-import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
+import com.vise.xsnow.http.subscriber.DownCallbackSubscriber;
 
 import org.reactivestreams.Publisher;
 
@@ -95,7 +95,7 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
 
     @Override
     protected <T> void execute(Context context, ACallback<T> callback) {
-        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+        this.execute(getType(callback)).subscribe(new DownCallbackSubscriber(context, callback));
     }
 
     private void saveFile(FlowableEmitter<? super DownProgress> sub, File saveFile, ResponseBody resp) {

@@ -16,6 +16,7 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     protected ACallback<T> callBack;
     protected Disposable disposable;
+    protected T t;
 
     public ApiCallbackSubscriber(Context context, ACallback<T> callBack) {
         super(context);
@@ -27,7 +28,7 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     @Override
     public void onError(ApiException e) {
-        if (disposable != null) {
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
         if (e == null) {
@@ -44,11 +45,14 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     @Override
     public void onNext(T t) {
+        this.t = t;
         callBack.onSuccess(t);
     }
 
     @Override
     public void onComplete() {
-
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
     }
 }
