@@ -4,12 +4,15 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.0'`
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.1'`
 
 ### QQ交流群
 ![QQ群](http://img.blog.csdn.net/20170327191310083)
 
 ### 版本说明
+- V2.0.1
+    - 修复权限申请异常。（2017-06-08）
+
 - V2.0.0
 	- 项目大范围重构，将一些不通用功能抽离，让每一个模块功能更纯净通用，基础框架也由RxJava迁移到RxJava2。（2017-06-08）
 
