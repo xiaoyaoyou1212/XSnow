@@ -1,7 +1,7 @@
 package com.vise.snowdemo;
 
 import com.vise.log.ViseLog;
-import com.vise.log.inner.DefaultTree;
+import com.vise.log.inner.LogcatTree;
 import com.vise.netexpand.convert.GsonConverterFactory;
 import com.vise.snowdemo.db.DbHelper;
 import com.vise.xsnow.BaseApplication;
@@ -28,7 +28,7 @@ public class MyApplication extends BaseApplication {
         ViseLog.getLogConfig()
                 .configAllowLog(true)//是否输出日志
                 .configShowBorders(false);//是否排版显示
-        ViseLog.plant(new DefaultTree());//添加打印日志信息到Logcat的树
+        ViseLog.plant(new LogcatTree());//添加打印日志信息到Logcat的树
     }
 
     private void initNet() {
