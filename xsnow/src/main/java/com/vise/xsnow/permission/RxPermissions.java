@@ -121,7 +121,7 @@ public class RxPermissions {
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
     public Observable<Permission> requestEach(final String... permissions) {
-        return Observable.just(null).compose(ensureEach(permissions));
+        return Observable.just(new Object()).compose(ensureEach(permissions));
     }
 
     private Observable<Permission> request(final Observable<?> trigger, final String... permissions) {
@@ -143,12 +143,12 @@ public class RxPermissions {
                 return Observable.empty();
             }
         }
-        return Observable.just(null);
+        return Observable.just(new Object());
     }
 
     private Observable<?> oneOf(Observable<?> trigger, Observable<?> pending) {
         if (trigger == null) {
-            return Observable.just(null);
+            return Observable.just(new Object());
         }
         return Observable.merge(trigger, pending);
     }
