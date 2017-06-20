@@ -1,4 +1,7 @@
 # XSnow
+
+[![Author](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-%E8%83%A1%E4%BC%9F-blue.svg)](http://www.huwei.tech/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfcabf1d9793485d84f090e542255710)](https://www.codacy.com/app/xiaoyaoyou1212/XSnow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xiaoyaoyou1212/XSnow&amp;utm_campaign=Badge_Grade) [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/LICENSE) [![JCenter](https://img.shields.io/badge/JCenter-2.0.1-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.1/) [![API](https://img.shields.io/badge/API-12%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=12)
+
 基于RxJava+Retrofit精心打造的Android基础框架，包含网络、上传、下载、缓存、事件总线、权限管理、数据库、图片加载、UI模块，基本都是项目中必用功能，每个模块充分解耦，可随意替换。
 XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意。该框架通用纯净，只依赖公共核心库。
 
