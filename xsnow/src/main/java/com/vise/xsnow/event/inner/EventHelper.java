@@ -27,11 +27,11 @@ public class EventHelper {
     protected EventHelper() {
     }
 
-    protected static <T> Flowable<T> toFlowable(Class<T> eventType) {
+    static <T> Flowable<T> toFlowable(Class<T> eventType) {
         return SUBJECT.ofType(eventType).toFlowable(BackpressureStrategy.BUFFER);
     }
 
-    protected static synchronized void dellSticky(Object event) {
+    static synchronized void dellSticky(Object event) {
         if (!STICKY_EVENT_MAP.isEmpty()) {
             List<Class> classes = new ArrayList<>();
             for (Map.Entry<Class<?>, Object> objectEntry : STICKY_EVENT_MAP.entrySet()) {
@@ -43,7 +43,7 @@ public class EventHelper {
         }
     }
 
-    protected static void stickyEventMapRemove(List<Class> classes) {
+    static void stickyEventMapRemove(List<Class> classes) {
         for (Class aClass : classes) STICKY_EVENT_MAP.remove(aClass);
     }
 }

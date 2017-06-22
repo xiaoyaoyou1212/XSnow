@@ -14,9 +14,9 @@ import io.reactivex.disposables.Disposable;
  */
 public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
-    protected ACallback<T> callBack;
-    protected Disposable disposable;
-    protected T t;
+    ACallback<T> callBack;
+    Disposable disposable;
+    T t;
 
     public ApiCallbackSubscriber(Context context, ACallback<T> callBack) {
         super(context);

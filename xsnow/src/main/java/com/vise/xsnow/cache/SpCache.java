@@ -34,7 +34,7 @@ public class SpCache implements ICache {
         try {
             ViseLog.i(key + " put: " + ser);
             if (ser == null) {
-                sp.edit().remove(key).commit();
+                sp.edit().remove(key).apply();
             } else {
                 byte[] bytes = ByteUtil.objectToByte(ser);
                 bytes = BASE64.encode(bytes);
@@ -48,7 +48,7 @@ public class SpCache implements ICache {
     @Override
     public Object get(String key) {
         try {
-            String hex = get(key, (String) null);
+            String hex = get(key, null);
             if (hex == null) return null;
             byte[] bytes = HexUtil.decodeHex(hex.toCharArray());
             bytes = BASE64.decode(bytes);
@@ -78,26 +78,26 @@ public class SpCache implements ICache {
 
     public void put(String key, String value) {
         if (value == null) {
-            sp.edit().remove(key).commit();
+            sp.edit().remove(key).apply();
         } else {
-            sp.edit().putString(key, value).commit();
+            sp.edit().putString(key, value).apply();
         }
     }
 
     public void put(String key, boolean value) {
-        sp.edit().putBoolean(key, value).commit();
+        sp.edit().putBoolean(key, value).apply();
     }
 
     public void put(String key, float value) {
-        sp.edit().putFloat(key, value).commit();
+        sp.edit().putFloat(key, value).apply();
     }
 
     public void put(String key, long value) {
-        sp.edit().putLong(key, value).commit();
+        sp.edit().putLong(key, value).apply();
     }
 
     public void putInt(String key, int value) {
-        sp.edit().putInt(key, value).commit();
+        sp.edit().putInt(key, value).apply();
     }
 
     public String get(String key, String defValue) {

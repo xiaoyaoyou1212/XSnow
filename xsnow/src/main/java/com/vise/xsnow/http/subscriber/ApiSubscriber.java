@@ -14,10 +14,10 @@ import io.reactivex.Observer;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-01-03 14:07
  */
-public abstract class ApiSubscriber<T> implements Observer<T> {
-    public WeakReference<Context> contextWeakReference;
+abstract class ApiSubscriber<T> implements Observer<T> {
+    WeakReference<Context> contextWeakReference;
 
-    public ApiSubscriber(Context context) {
+    ApiSubscriber(Context context) {
         contextWeakReference = new WeakReference<>(context);
     }
 
@@ -30,5 +30,5 @@ public abstract class ApiSubscriber<T> implements Observer<T> {
         }
     }
 
-    public abstract void onError(ApiException e);
+    protected abstract void onError(ApiException e);
 }

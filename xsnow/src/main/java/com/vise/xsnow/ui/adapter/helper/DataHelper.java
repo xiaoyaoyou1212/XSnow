@@ -2,7 +2,7 @@ package com.vise.xsnow.ui.adapter.helper;
 
 import java.util.List;
 
-public interface DataHelper<T> {
+interface DataHelper<T> {
     boolean isEnabled(int position);
 
     /**

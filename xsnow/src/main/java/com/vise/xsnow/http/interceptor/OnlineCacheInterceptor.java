@@ -1,5 +1,6 @@
 package com.vise.xsnow.http.interceptor;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
@@ -27,8 +28,8 @@ public class OnlineCacheInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
-        okhttp3.Response originalResponse = chain.proceed(chain.request());
+    public Response intercept(@NonNull Chain chain) throws IOException {
+        Response originalResponse = chain.proceed(chain.request());
         String cacheControl = originalResponse.header("Cache-Control");
         if (TextUtils.isEmpty(cacheControl) || cacheControl.contains("no-store") || cacheControl.contains("no-cache") || cacheControl
                 .contains("must-revalidate") || cacheControl.contains("max-age") || cacheControl.contains("max-stale")) {

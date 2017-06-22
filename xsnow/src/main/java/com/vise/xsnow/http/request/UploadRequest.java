@@ -1,6 +1,7 @@
 package com.vise.xsnow.http.request;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.vise.xsnow.http.body.UploadProgressRequestBody;
 import com.vise.xsnow.http.callback.ACallback;
@@ -182,7 +183,7 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
             }
 
             @Override
-            public void writeTo(BufferedSink sink) throws IOException {
+            public void writeTo(@NonNull BufferedSink sink) throws IOException {
                 Source source = null;
                 try {
                     source = Okio.source(inputStream);

@@ -112,10 +112,11 @@ public class ViseHttp {
      * @return
      */
     public static BaseRequest BASE(BaseRequest request) {
-        if (request == null) {
-            throw new NullPointerException("this request is null!");
+        if (request != null) {
+            return request;
+        } else {
+            return new GetRequest();
         }
-        return request;
     }
 
     /**

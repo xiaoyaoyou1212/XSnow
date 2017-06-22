@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.interceptor;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +24,7 @@ public class HeadersInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
         if (headers != null && headers.size() > 0) {
             Set<String> keys = headers.keySet();

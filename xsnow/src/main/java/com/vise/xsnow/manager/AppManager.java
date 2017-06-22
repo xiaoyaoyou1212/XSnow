@@ -14,7 +14,7 @@ import java.util.Stack;
  * @date: 2016-12-19 14:57
  */
 public class AppManager {
-    public static Stack<Activity> activityStack;
+    private static Stack<Activity> activityStack;
     private static AppManager instance;
 
     private AppManager() {
@@ -33,14 +33,13 @@ public class AppManager {
 
     public void addActivity(Activity activity) {
         if (activityStack == null) {
-            activityStack = new Stack<Activity>();
+            activityStack = new Stack<>();
         }
         activityStack.add(activity);
     }
 
     public Activity currentActivity() {
-        Activity activity = activityStack.lastElement();
-        return activity;
+        return activityStack.lastElement();
     }
 
     public boolean isActivityExist(Class<?> cls) {

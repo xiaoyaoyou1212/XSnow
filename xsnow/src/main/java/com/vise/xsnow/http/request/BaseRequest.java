@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.vise.log.ViseLog;
 import com.vise.utils.assist.SSLUtil;
-import com.vise.xsnow.cache.DiskCache;
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.api.ApiService;
@@ -517,7 +516,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
             if (cacheTime > 0) {
                 ViseHttp.getApiCacheBuilder().cacheTime(cacheTime);
             } else {
-                ViseHttp.getApiCacheBuilder().cacheTime(DiskCache.CACHE_NEVER_EXPIRE);
+                ViseHttp.getApiCacheBuilder().cacheTime(ViseConfig.CACHE_NEVER_EXPIRE);
             }
         }
 

@@ -99,7 +99,7 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
      * @param item     对应数据
      * @return 默认为0, 返回Id
      */
-    public int checkLayoutId(int position, T item) {
+    private int checkLayoutId(int position, T item) {
         return 0;
     }
 

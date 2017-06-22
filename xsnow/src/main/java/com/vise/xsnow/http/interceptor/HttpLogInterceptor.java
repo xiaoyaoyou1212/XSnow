@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.interceptor;
 
+import android.support.annotation.NonNull;
+
 import com.vise.log.ViseLog;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class HttpLogInterceptor implements Interceptor {
         BODY        //所有数据全部打印
     }
 
-    public void log(String message) {
+    private void log(String message) {
         ViseLog.i(message);
     }
 
@@ -49,7 +51,7 @@ public class HttpLogInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
         if (level == Level.NONE) {
             return chain.proceed(request);
@@ -123,7 +125,7 @@ public class HttpLogInterceptor implements Interceptor {
                 }
                 log(" ");
                 if (logBody && HttpHeaders.hasVaryAll(clone)) {
-                    if (isPlaintext(responseBody.contentType())) {
+                    if (responseBody != null && isPlaintext(responseBody.contentType())) {
                         String body = responseBody.string();
                         log("\tbody:" + body);
                         responseBody = ResponseBody.create(responseBody.contentType(), body);
@@ -165,13 +167,18 @@ public class HttpLogInterceptor implements Interceptor {
         try {
             final Request copy = request.newBuilder().build();
             final Buffer buffer = new Buffer();
-            copy.body().writeTo(buffer);
-            Charset charset = UTF8;
-            MediaType contentType = copy.body().contentType();
-            if (contentType != null) {
-                charset = contentType.charset(UTF8);
+            RequestBody requestBody = copy.body();
+            if (requestBody != null) {
+                requestBody.writeTo(buffer);
+                Charset charset = UTF8;
+                MediaType contentType = requestBody.contentType();
+                if (contentType != null) {
+                    charset = contentType.charset(UTF8);
+                }
+                if (charset != null) {
+                    log("\tbody:" + buffer.readString(charset));
+                }
             }
-            log("\tbody:" + buffer.readString(charset));
         } catch (Exception e) {
             e.printStackTrace();
         }

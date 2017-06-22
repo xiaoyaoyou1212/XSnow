@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.vise.log.ViseLog;
 import com.vise.xsnow.cache.DiskCache;
+import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.mode.ApiHost;
 import com.vise.xsnow.http.mode.CacheMode;
 import com.vise.xsnow.http.mode.CacheResult;
@@ -136,7 +137,7 @@ public class ApiCache {
         private final Context context;
         private File diskDir;
         private long diskMaxSize;
-        private long cacheTime = DiskCache.CACHE_NEVER_EXPIRE;
+        private long cacheTime = ViseConfig.CACHE_NEVER_EXPIRE;
         private String cacheKey = ApiHost.getHost();
 
         public Builder(Context context) {

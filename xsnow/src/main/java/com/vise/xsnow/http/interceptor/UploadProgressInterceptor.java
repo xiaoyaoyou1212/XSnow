@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.interceptor;
 
+import android.support.annotation.NonNull;
+
 import com.vise.xsnow.http.body.UploadProgressRequestBody;
 import com.vise.xsnow.http.callback.UCallback;
 
@@ -26,7 +28,7 @@ public class UploadProgressInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request originalRequest = chain.request();
         if (originalRequest.body() == null) {
             return chain.proceed(originalRequest);

@@ -96,8 +96,9 @@ public abstract class DBManager<M, K> implements IDatabase<M, K> {
         return true;
     }
 
+    @SafeVarargs
     @Override
-    public boolean deleteByKeyInTx(@NotNull K... key) {
+    public final boolean deleteByKeyInTx(@NotNull K... key) {
         try {
             getAbstractDao().deleteByKeyInTx(key);
         } catch (SQLiteException e) {
@@ -129,8 +130,9 @@ public abstract class DBManager<M, K> implements IDatabase<M, K> {
         return true;
     }
 
+    @SafeVarargs
     @Override
-    public boolean updateInTx(@NotNull M... m) {
+    public final boolean updateInTx(@NotNull M... m) {
         try {
             getAbstractDao().updateInTx(m);
         } catch (SQLiteException e) {

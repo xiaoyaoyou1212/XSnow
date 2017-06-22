@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.interceptor;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -11,10 +13,10 @@ import okhttp3.Response;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 16/12/31 21:17.
  */
-public class NoCacheInterceptor implements Interceptor {
+class NoCacheInterceptor implements Interceptor {
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
         request = request.newBuilder().header("Cache-Control", "no-cache").build();
         Response originalResponse = chain.proceed(request);

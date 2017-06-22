@@ -18,7 +18,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Cache;
-import okhttp3.Call;
+import okhttp3.Call.Factory;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import retrofit2.CallAdapter;
@@ -32,7 +32,7 @@ import retrofit2.Converter;
 public class HttpGlobalConfig {
     private CallAdapter.Factory callAdapterFactory;//Call适配器工厂
     private Converter.Factory converterFactory;//转换工厂
-    private okhttp3.Call.Factory callFactory;//Call工厂
+    private Factory callFactory;//Call工厂
     private SSLSocketFactory sslSocketFactory;//SSL工厂
     private HostnameVerifier hostnameVerifier;//主机域名验证
     private ConnectionPool connectionPool;//连接池
@@ -90,7 +90,7 @@ public class HttpGlobalConfig {
      * @param factory
      * @return
      */
-    public HttpGlobalConfig callFactory(okhttp3.Call.Factory factory) {
+    public HttpGlobalConfig callFactory(Factory factory) {
         this.callFactory = checkNotNull(factory, "factory == null");
         return this;
     }
@@ -420,7 +420,7 @@ public class HttpGlobalConfig {
         return converterFactory;
     }
 
-    public Call.Factory getCallFactory() {
+    public Factory getCallFactory() {
         return callFactory;
     }
 

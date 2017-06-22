@@ -13,7 +13,7 @@ import okhttp3.ResponseBody;
  * @date: 2017-01-05 14:39
  */
 public class ApiFunc<T> implements Function<ResponseBody, T> {
-    protected Type type;
+    private Type type;
 
     public ApiFunc(Type type) {
         this.type = type;
@@ -22,7 +22,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
         Gson gson = new Gson();
-        String json = null;
+        String json;
         try {
             json = responseBody.string();
             if (type.equals(String.class)) {
@@ -35,6 +35,6 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
         } finally {
             responseBody.close();
         }
-        return (T) json;
+        return null;
     }
 }

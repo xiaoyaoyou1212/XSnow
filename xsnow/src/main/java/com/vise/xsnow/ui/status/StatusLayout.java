@@ -135,8 +135,8 @@ public class StatusLayout extends FrameLayout {
     }
 
     private boolean inflateLayout(int id) {
-        boolean isShow = true;
-        if (mLayoutSparseArray.get(id) != null) return isShow;
+        boolean isShow;
+        if (mLayoutSparseArray.get(id) != null) return true;
         if (id == StatusType.NETWORK_ERROR.getType() && mStatusLayoutManager.getNetworkErrorView() != null) {
             View view = mStatusLayoutManager.getNetworkErrorView().inflate();
             retryLoad(view, mStatusLayoutManager.getNetworkErrorRetryViewId());

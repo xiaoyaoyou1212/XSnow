@@ -39,8 +39,8 @@ import okhttp3.ResponseBody;
  */
 public class DownloadRequest extends BaseRequest<DownloadRequest> {
 
-    protected String dirName = ViseConfig.DEFAULT_DOWNLOAD_DIR;
-    protected String fileName = ViseConfig.DEFAULT_DOWNLOAD_FILE_NAME;
+    private String dirName = ViseConfig.DEFAULT_DOWNLOAD_DIR;
+    private String fileName = ViseConfig.DEFAULT_DOWNLOAD_FILE_NAME;
 
     public DownloadRequest() {
     }
@@ -140,7 +140,9 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
 
     private File getDiskCacheDir(Context context, String dirName) {
         String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
+        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable())
+                && context.getExternalCacheDir() != null) {
             cachePath = context.getExternalCacheDir().getPath();
         } else {
             cachePath = context.getCacheDir().getPath();

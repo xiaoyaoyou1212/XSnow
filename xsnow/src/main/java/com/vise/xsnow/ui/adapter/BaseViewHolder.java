@@ -10,11 +10,11 @@ public class BaseViewHolder {
     /**
      * <p>保存小控件的集合</p>
      */
-    private SparseArray<View> mViews = new SparseArray<View>();
+    private SparseArray<View> mViews = new SparseArray<>();
     /**
      * <p>保存布局view的集合</p>
      */
-    private SparseArray<View> mConvertViews = new SparseArray<View>();
+    private SparseArray<View> mConvertViews = new SparseArray<>();
     /**
      * <p>当前下标</p>
      */

@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-29 19:05
  */
-public class EventSubscriber extends EventHelper {
+class EventSubscriber extends EventHelper {
     private final Object target;
     private final Method method;
     private final EventThread thread;
@@ -39,7 +39,7 @@ public class EventSubscriber extends EventHelper {
         return this.method.getParameterTypes()[0];
     }
 
-    private final void initObservable(Class aClass) {
+    private void initObservable(Class aClass) {
         disposable = toFlowable(aClass).subscribeOn(Schedulers.io()).observeOn(EventThread.getScheduler
                 (thread)).subscribe(new Consumer<Object>() {
             @Override
@@ -86,11 +86,11 @@ public class EventSubscriber extends EventHelper {
         return method.equals(other.method) && target == other.target;
     }
 
-    public final void throwRuntimeException(String msg, InvocationTargetException e) {
+    private void throwRuntimeException(String msg, InvocationTargetException e) {
         throwRuntimeException(msg, e.getCause());
     }
 
-    public final void throwRuntimeException(String msg, Throwable e) {
+    private void throwRuntimeException(String msg, Throwable e) {
         Throwable cause = e.getCause();
         if (cause != null) {
             throw new RuntimeException(msg + ": " + cause.getMessage(), cause);

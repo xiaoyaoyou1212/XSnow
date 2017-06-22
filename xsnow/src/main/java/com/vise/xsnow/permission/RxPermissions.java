@@ -112,7 +112,7 @@ public class RxPermissions {
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
     public Observable<Boolean> request(final String... permissions) {
-        return Observable.just(null).compose(ensure(permissions));
+        return Observable.just(new Object()).compose(ensure(permissions));
     }
 
     /**

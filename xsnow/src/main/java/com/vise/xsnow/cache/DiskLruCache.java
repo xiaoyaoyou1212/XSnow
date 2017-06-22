@@ -16,6 +16,8 @@
 
 package com.vise.xsnow.cache;
 
+import android.support.annotation.NonNull;
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -91,14 +93,14 @@ import java.util.regex.Pattern;
  * responding appropriately.
  */
 public final class DiskLruCache implements Closeable {
-  static final String JOURNAL_FILE = "journal";
-  static final String JOURNAL_FILE_TEMP = "journal.tmp";
-  static final String JOURNAL_FILE_BACKUP = "journal.bkp";
-  static final String MAGIC = "libcore.io.DiskLruCache";
-  static final String VERSION_1 = "1";
-  static final long ANY_SEQUENCE_NUMBER = -1;
-  static final String STRING_KEY_PATTERN = "[a-z0-9_-]{1,120}";
-  static final Pattern LEGAL_KEY_PATTERN = Pattern.compile(STRING_KEY_PATTERN);
+  private static final String JOURNAL_FILE = "journal";
+  private static final String JOURNAL_FILE_TEMP = "journal.tmp";
+  private static final String JOURNAL_FILE_BACKUP = "journal.bkp";
+  private static final String MAGIC = "libcore.io.DiskLruCache";
+  private static final String VERSION_1 = "1";
+  private static final long ANY_SEQUENCE_NUMBER = -1;
+  private static final String STRING_KEY_PATTERN = "[a-z0-9_-]{1,120}";
+  private static final Pattern LEGAL_KEY_PATTERN = Pattern.compile(STRING_KEY_PATTERN);
   private static final String CLEAN = "CLEAN";
   private static final String DIRTY = "DIRTY";
   private static final String REMOVE = "REMOVE";
@@ -154,7 +156,7 @@ public final class DiskLruCache implements Closeable {
   private long size = 0;
   private Writer journalWriter;
   private final LinkedHashMap<String, Entry> lruEntries =
-      new LinkedHashMap<String, Entry>(0, 0.75f, true);
+      new LinkedHashMap<>(0, 0.75f, true);
   private int redundantOpCount;
 
   /**
@@ -165,7 +167,7 @@ public final class DiskLruCache implements Closeable {
   private long nextSequenceNumber = 0;
 
   /** This cache uses a single background thread to evict entries. */
-  final ThreadPoolExecutor executorService =
+  private final ThreadPoolExecutor executorService =
       new ThreadPoolExecutor(0, 1, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
   private final Callable<Void> cleanupCallable = new Callable<Void>() {
     public Void call() throws Exception {
@@ -446,7 +448,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     redundantOpCount++;
-    journalWriter.append(READ + ' ' + key + '\n');
+    journalWriter.append(READ + ' ').append(key).append('\n');
     if (journalRebuildRequired()) {
       executorService.submit(cleanupCallable);
     }
@@ -606,7 +608,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     redundantOpCount++;
-    journalWriter.append(REMOVE + ' ' + key + '\n');
+    journalWriter.append(REMOVE + ' ').append(key).append('\n');
     lruEntries.remove(key);
 
     if (journalRebuildRequired()) {
@@ -639,7 +641,7 @@ public final class DiskLruCache implements Closeable {
     if (journalWriter == null) {
       return; // Already closed.
     }
-    for (Entry entry : new ArrayList<Entry>(lruEntries.values())) {
+    for (Entry entry : new ArrayList<>(lruEntries.values())) {
       if (entry.currentEditor != null) {
         entry.currentEditor.abort();
       }
@@ -856,7 +858,8 @@ public final class DiskLruCache implements Closeable {
         super(out);
       }
 
-      @Override public void write(int oneByte) {
+      @Override
+      public void write(int oneByte) {
         try {
           out.write(oneByte);
         } catch (IOException e) {
@@ -864,7 +867,8 @@ public final class DiskLruCache implements Closeable {
         }
       }
 
-      @Override public void write(byte[] buffer, int offset, int length) {
+      @Override
+      public void write(@NonNull byte[] buffer, int offset, int length) {
         try {
           out.write(buffer, offset, length);
         } catch (IOException e) {
@@ -872,7 +876,8 @@ public final class DiskLruCache implements Closeable {
         }
       }
 
-      @Override public void close() {
+      @Override
+      public void close() {
         try {
           out.close();
         } catch (IOException e) {
@@ -880,7 +885,8 @@ public final class DiskLruCache implements Closeable {
         }
       }
 
-      @Override public void flush() {
+      @Override
+      public void flush() {
         try {
           out.flush();
         } catch (IOException e) {

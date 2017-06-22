@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.interceptor;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -20,7 +22,7 @@ public class TagInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
         builder.tag(tag);
         return chain.proceed(builder.build());

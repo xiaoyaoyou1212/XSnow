@@ -1,6 +1,7 @@
 package com.vise.xsnow.http.interceptor;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.vise.utils.assist.Network;
 import com.vise.xsnow.common.ViseConfig;
@@ -31,7 +32,7 @@ public class OfflineCacheInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
         if (!Network.isConnected(context)) {
             request = request.newBuilder()

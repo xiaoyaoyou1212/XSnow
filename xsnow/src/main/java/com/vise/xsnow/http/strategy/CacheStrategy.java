@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 16/12/31 14:28.
  */
-public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
+abstract class CacheStrategy<T> implements ICacheStrategy<T> {
     <T> Observable<CacheResult<T>> loadCache(final ApiCache apiCache, final String key, final Type type) {
         return apiCache.<T>get(key).filter(new Predicate<String>() {
             @Override
@@ -30,7 +30,7 @@ public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
             public CacheResult<T> apply(String s) throws Exception {
                 T t = GSONUtil.gson().fromJson(s, type);
                 ViseLog.i("loadCache result=" + t);
-                return new CacheResult<T>(true, t);
+                return new CacheResult<>(true, t);
             }
         });
     }
@@ -46,7 +46,7 @@ public abstract class CacheStrategy<T> implements ICacheStrategy<T> {
                         ViseLog.i("save status => " + status);
                     }
                 });
-                return new CacheResult<T>(false, t);
+                return new CacheResult<>(false, t);
             }
         });
     }

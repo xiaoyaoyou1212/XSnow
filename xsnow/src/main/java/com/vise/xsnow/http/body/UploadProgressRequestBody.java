@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.body;
 
+import android.support.annotation.NonNull;
+
 import com.vise.log.ViseLog;
 import com.vise.xsnow.http.callback.UCallback;
 
@@ -26,7 +28,6 @@ public class UploadProgressRequestBody extends RequestBody {
     private RequestBody requestBody;
     private UCallback callback;
     private long lastTime;
-    private long currentTime;
 
     public UploadProgressRequestBody(RequestBody requestBody, UCallback callback) {
         this.requestBody = requestBody;
@@ -52,7 +53,7 @@ public class UploadProgressRequestBody extends RequestBody {
     }
 
     @Override
-    public void writeTo(BufferedSink sink) throws IOException {
+    public void writeTo(@NonNull BufferedSink sink) throws IOException {
         CountingSink countingSink = new CountingSink(sink);
         BufferedSink bufferedSink = Okio.buffer(countingSink);
         requestBody.writeTo(bufferedSink);
@@ -70,7 +71,7 @@ public class UploadProgressRequestBody extends RequestBody {
         }
 
         @Override
-        public void write(Buffer source, long byteCount) throws IOException {
+        public void write(@NonNull Buffer source, long byteCount) throws IOException {
             super.write(source, byteCount);
             //增加当前写入的字节数
             currentLength += byteCount;
@@ -78,7 +79,7 @@ public class UploadProgressRequestBody extends RequestBody {
             if (totalLength == 0) {
                 totalLength = contentLength();
             }
-            currentTime = System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
             if (currentTime - lastTime >= 100 || lastTime == 0 || currentLength == totalLength) {
                 lastTime = currentTime;
                 Observable.just(currentLength).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {

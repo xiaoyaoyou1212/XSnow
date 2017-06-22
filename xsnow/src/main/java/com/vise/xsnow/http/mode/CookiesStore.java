@@ -52,7 +52,7 @@ public class CookiesStore {
         }
     }
 
-    protected String getCookieToken(Cookie cookie) {
+    private String getCookieToken(Cookie cookie) {
         return cookie.name() + "@" + cookie.domain();
     }
 
@@ -116,7 +116,7 @@ public class CookiesStore {
         return ret;
     }
 
-    protected String encodeCookie(OkHttpCookies cookie) {
+    private String encodeCookie(OkHttpCookies cookie) {
         if (cookie == null) return null;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
@@ -130,7 +130,7 @@ public class CookiesStore {
         return HexUtil.encodeHexStr(os.toByteArray());
     }
 
-    protected Cookie decodeCookie(String cookieString) {
+    private Cookie decodeCookie(String cookieString) {
         byte[] bytes = HexUtil.decodeHex(cookieString.toCharArray());
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         Cookie cookie = null;
