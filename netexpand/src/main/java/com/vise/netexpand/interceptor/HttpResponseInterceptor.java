@@ -1,5 +1,6 @@
 package com.vise.netexpand.interceptor;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
@@ -27,7 +28,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         return process(chain);
     }
 
@@ -35,6 +36,9 @@ public abstract class HttpResponseInterceptor implements Interceptor {
         Request request = chain.request();
         Response response = chain.proceed(request);
         ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return response;
+        }
         BufferedSource source = responseBody.source();
         source.request(Long.MAX_VALUE); // Buffer the entire body.
         Buffer buffer = source.buffer();
@@ -42,6 +46,9 @@ public abstract class HttpResponseInterceptor implements Interceptor {
         MediaType contentType = responseBody.contentType();
         if (contentType != null) {
             charset = contentType.charset(UTF8);
+        }
+        if (charset == null) {
+            return response;
         }
         String bodyString = buffer.clone().readString(charset);
         ViseLog.i("<-- HTTP Interceptor:" + bodyString + " host:" + request.url().toString());
@@ -81,10 +88,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
         if (mediaType.type() != null && mediaType.type().equals("text")) {
             return true;
         }
-        if (mediaType.subtype() != null && mediaType.subtype().equals("json")) {
-            return true;
-        }
-        return false;
+        return mediaType.subtype() != null && mediaType.subtype().equals("json");
     }
 
     /**

@@ -30,7 +30,7 @@ public class ApiResultFunc<T> implements Function<ResponseBody, ApiResult<T>> {
     @Override
     public ApiResult<T> apply(ResponseBody responseBody) throws Exception {
         Gson gson = new Gson();
-        ApiResult<T> apiResult = new ApiResult<T>();
+        ApiResult<T> apiResult = new ApiResult<>();
         apiResult.setCode(-1);
         try {
             String json = responseBody.string();

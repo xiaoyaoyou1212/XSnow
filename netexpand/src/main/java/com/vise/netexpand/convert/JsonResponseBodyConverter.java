@@ -1,5 +1,7 @@
 package com.vise.netexpand.convert;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -16,7 +18,7 @@ final class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     }
 
     @Override
-    public T convert(ResponseBody value) throws IOException {
+    public T convert(@NonNull ResponseBody value) throws IOException {
         return (T) value.string();
     }
 }

@@ -20,7 +20,6 @@ import java.util.List;
 public class ImageLoaderActivity extends BaseActivity {
 
     private GridView mImageGrid;
-    private ImageAdapter mImageAdapter;
     private List<String> mImageList = new ArrayList<>();
 
     @Override
@@ -60,7 +59,7 @@ public class ImageLoaderActivity extends BaseActivity {
         mImageList.add("http://img.juemei.com/album/2016-09-04/57cb5fac8c5c6.jpg");
         mImageList.add("http://img.juemei.com/album/2016-09-04/57cb5fad34f13.jpg");
         mImageList.add("http://img.juemei.com/album/2016-09-04/57cb5faf282a5.jpg");
-        mImageAdapter = new ImageAdapter(mContext, mImageList);
+        ImageAdapter mImageAdapter = new ImageAdapter(mContext, mImageList);
         mImageGrid.setAdapter(mImageAdapter);
     }
 

@@ -14,11 +14,7 @@ public class ResponseHelper {
         if (apiResult == null) {
             return false;
         }
-        if (apiResult.getCode() == ResponseCode.HTTP_SUCCESS || ignoreSomeIssue(apiResult.getCode())) {
-            return true;
-        } else {
-            return false;
-        }
+        return apiResult.getCode() == ResponseCode.HTTP_SUCCESS || ignoreSomeIssue(apiResult.getCode());
     }
 
     private static boolean ignoreSomeIssue(int code) {

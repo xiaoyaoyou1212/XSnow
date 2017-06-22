@@ -19,7 +19,6 @@ import com.vise.xsnow.ui.status.StatusLayoutManager;
  */
 public class StatusSwitchActivity extends BaseActivity {
 
-    private LinearLayout mLayoutMain;
     private Button mShow_content_view;
     private Button mShow_loading_view;
     private Button mShow_empty_view;
@@ -36,7 +35,7 @@ public class StatusSwitchActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mLayoutMain = F(R.id.layout_main);
+        LinearLayout mLayoutMain = F(R.id.layout_main);
         mShow_content_view = F(R.id.show_content_view);
         mShow_loading_view = F(R.id.show_loading_view);
         mShow_empty_view = F(R.id.show_empty_view);

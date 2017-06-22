@@ -38,7 +38,10 @@ public class GsonConverterFactory extends Converter.Factory {
         if (type != null && type.equals(String.class)) {
             return new JsonResponseBodyConverter<>();
         }
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type != null ? type : null));
+        TypeAdapter<?> adapter = null;
+        if (type != null) {
+            adapter = gson.getAdapter(TypeToken.get(type));
+        }
         return new GsonResponseBodyConverter<>(gson, adapter);
     }
 

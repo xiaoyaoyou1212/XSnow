@@ -37,8 +37,6 @@ public class UploadDownActivity extends BaseActivity {
     private ProgressBar mUpload_progress;
     private TextView mUpload_progress_desc;
 
-    private String saveName = "weixin.apk";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +134,7 @@ public class UploadDownActivity extends BaseActivity {
 
     private void download() {
         mDownload_btn.setClickable(false);
+        String saveName = "weixin.apk";
         ViseHttp.DOWNLOAD()
                 .baseUrl("http://dldir1.qq.com/")
                 .suffixUrl("weixin/android/weixin6330android920.apk")
@@ -164,7 +163,9 @@ public class UploadDownActivity extends BaseActivity {
 
     private File getUploadFile(Context context, String fileName) {
         String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
+        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable())
+                && context.getExternalCacheDir() != null) {
             cachePath = context.getExternalCacheDir().getPath();
         } else {
             cachePath = context.getCacheDir().getPath();
