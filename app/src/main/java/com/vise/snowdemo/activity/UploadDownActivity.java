@@ -118,7 +118,7 @@ public class UploadDownActivity extends BaseActivity {
                 .addFile("androidPicFile", getUploadFile(mContext, "test.jpg"))
                 .baseUrl("https://200.200.200.50/")
                 .suffixUrl("v1/web/cms/skinStrategy/addOrUpdateSkinStrategy")
-                .request(mContext, new ACallback<Object>() {
+                .request(new ACallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 ViseLog.i("upload success:" + data);
@@ -139,7 +139,7 @@ public class UploadDownActivity extends BaseActivity {
                 .baseUrl("http://dldir1.qq.com/")
                 .suffixUrl("weixin/android/weixin6330android920.apk")
                 .setFileName(saveName)
-                .request(mContext, new ACallback<DownProgress>() {
+                .request(new ACallback<DownProgress>() {
                     @Override
                     public void onSuccess(DownProgress downProgress) {
                         if (downProgress == null) {

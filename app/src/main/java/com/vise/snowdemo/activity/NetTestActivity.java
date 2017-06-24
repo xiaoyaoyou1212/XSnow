@@ -11,7 +11,7 @@ import com.vise.netexpand.request.ApiGetRequest;
 import com.vise.netexpand.request.ApiPostRequest;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.mode.AuthorModel;
-import com.vise.xsnow.common.GSONUtil;
+import com.vise.xsnow.common.GsonUtil;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.mode.CacheMode;
@@ -157,7 +157,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_1() {
         mShow_response_data.setText("");
-        ViseHttp.GET().suffixUrl("getAuthor").request(mContext, new ACallback<AuthorModel>() {
+        ViseHttp.GET().suffixUrl("getAuthor").request(new ACallback<AuthorModel>() {
             @Override
             public void onSuccess(AuthorModel authorModel) {
                 ViseLog.i("request onSuccess!");
@@ -180,7 +180,7 @@ public class NetTestActivity extends BaseActivity {
                 .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_CACHE)
-                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
+                .request(new ACallback<CacheResult<AuthorModel>>() {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
@@ -207,7 +207,7 @@ public class NetTestActivity extends BaseActivity {
                 .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_REMOTE)
-                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
+                .request(new ACallback<CacheResult<AuthorModel>>() {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
@@ -234,7 +234,7 @@ public class NetTestActivity extends BaseActivity {
                 .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_CACHE)
-                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
+                .request(new ACallback<CacheResult<AuthorModel>>() {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
@@ -261,7 +261,7 @@ public class NetTestActivity extends BaseActivity {
                 .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_REMOTE)
-                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
+                .request(new ACallback<CacheResult<AuthorModel>>() {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
@@ -288,7 +288,7 @@ public class NetTestActivity extends BaseActivity {
                 .suffixUrl("getAuthor")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.CACHE_AND_REMOTE)
-                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
+                .request(new ACallback<CacheResult<AuthorModel>>() {
                     @Override
                     public void onSuccess(CacheResult<AuthorModel> cacheResult) {
                         ViseLog.i("request onSuccess!");
@@ -311,7 +311,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_7() {
         mShow_response_data.setText("");
-        ViseHttp.GET().suffixUrl("getString").request(mContext, new ACallback<String>() {
+        ViseHttp.GET().suffixUrl("getString").request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
                 ViseLog.i("request onSuccess!");
@@ -330,7 +330,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_8() {
         mShow_response_data.setText("");
-        ViseHttp.GET().suffixUrl("getListAuthor").request(mContext, new ACallback<List<AuthorModel>>() {
+        ViseHttp.GET().suffixUrl("getListAuthor").request(new ACallback<List<AuthorModel>>() {
             @Override
             public void onSuccess(List<AuthorModel> authorModel) {
                 ViseLog.i("request onSuccess!");
@@ -349,7 +349,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_9() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(mContext, new ACallback<AuthorModel>() {
+        ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(new ACallback<AuthorModel>() {
             @Override
             public void onSuccess(AuthorModel authorModel) {
                 ViseLog.i("request onSuccess!");
@@ -368,7 +368,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_10() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultString").request(mContext, new ACallback<String>() {
+        ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultString").request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
                 ViseLog.i("request onSuccess!");
@@ -387,7 +387,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_11() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultListAuthor").request(mContext, new ACallback<List<AuthorModel>>() {
+        ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultListAuthor").request(new ACallback<List<AuthorModel>>() {
             @Override
             public void onSuccess(List<AuthorModel> authorModel) {
                 ViseLog.i("request onSuccess!");
@@ -406,7 +406,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_post_1() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiPostRequest()).suffixUrl("postAuthor").request(mContext, new ACallback<String>() {
+        ViseHttp.BASE(new ApiPostRequest()).suffixUrl("postAuthor").request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
                 ViseLog.i("request onSuccess!");
@@ -434,7 +434,7 @@ public class NetTestActivity extends BaseActivity {
                 .addForm("author_websit", "http://www.huwei.tech/")
                 .addForm("author_introduction", getString(R.string.author_introduction)))
                 .suffixUrl("postFormAuthor")
-                .request(mContext, new ACallback<String>() {
+                .request(new ACallback<String>() {
                     @Override
                     public void onSuccess(String data) {
                         ViseLog.i("request onSuccess!");
@@ -463,9 +463,9 @@ public class NetTestActivity extends BaseActivity {
         mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
         mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
         ViseHttp.BASE(new ApiPostRequest()
-                .setJson(GSONUtil.gson().toJson(mAuthorModel)))
+                .setJson(GsonUtil.gson().toJson(mAuthorModel)))
                 .suffixUrl("postJsonAuthor")
-                .request(mContext, new ACallback<String>() {
+                .request(new ACallback<String>() {
                     @Override
                     public void onSuccess(String data) {
                         ViseLog.i("request onSuccess!");
@@ -496,9 +496,9 @@ public class NetTestActivity extends BaseActivity {
         ViseHttp.BASE(new ApiPostRequest()
                 .addUrlParam("appId", "10001")
                 .addUrlParam("appType", "Android")
-                .setJson(GSONUtil.gson().toJson(mAuthorModel)))
+                .setJson(GsonUtil.gson().toJson(mAuthorModel)))
                 .suffixUrl("postUrlAuthor")
-                .request(mContext, new ACallback<String>() {
+                .request(new ACallback<String>() {
                     @Override
                     public void onSuccess(String data) {
                         ViseLog.i("request onSuccess!");
