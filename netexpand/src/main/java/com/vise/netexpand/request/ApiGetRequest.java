@@ -1,16 +1,16 @@
 package com.vise.netexpand.request;
 
-import android.content.Context;
-
 import com.vise.netexpand.func.ApiResultFunc;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
+import com.vise.xsnow.http.core.ApiManager;
 import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
 
 import java.lang.reflect.Type;
 
 import io.reactivex.Observable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * @Description: 返回APIResult的GET请求类
@@ -29,10 +29,14 @@ public class ApiGetRequest extends ApiBaseRequest {
     }
 
     @Override
-    protected <T> void execute(Context context, ACallback<T> callback) {
-        if (isLocalCache) {
-            this.cacheExecute(getSubType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+    protected <T> void execute(ACallback<T> callback) {
+        DisposableObserver disposableObserver = new ApiCallbackSubscriber(callback);
+        if (super.tag != null) {
+            ApiManager.get().add(super.tag, disposableObserver);
         }
-        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+        if (isLocalCache) {
+            this.cacheExecute(getSubType(callback)).subscribe(disposableObserver);
+        }
+        this.execute(getType(callback)).subscribe(disposableObserver);
     }
 }

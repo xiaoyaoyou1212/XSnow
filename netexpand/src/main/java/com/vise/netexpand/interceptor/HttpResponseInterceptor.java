@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.vise.log.ViseLog;
 import com.vise.netexpand.mode.ApiResult;
 import com.vise.netexpand.mode.ResponseCode;
-import com.vise.xsnow.common.GSONUtil;
+import com.vise.xsnow.common.GsonUtil;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -58,7 +58,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
         }
 
         if (!TextUtils.isEmpty(bodyString)) {
-            ApiResult apiResult = GSONUtil.gson().fromJson(bodyString, ApiResult.class);
+            ApiResult apiResult = GsonUtil.gson().fromJson(bodyString, ApiResult.class);
             if (apiResult != null) {
                 switch (apiResult.getCode()) {
                     case ResponseCode.ACCESS_TOKEN_EXPIRED: //AccessToken错误或已过期

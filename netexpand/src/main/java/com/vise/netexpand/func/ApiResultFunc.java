@@ -2,9 +2,9 @@ package com.vise.netexpand.func;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.vise.netexpand.mode.ApiResult;
 import com.vise.netexpand.mode.ResponseCode;
+import com.vise.xsnow.common.GsonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +29,6 @@ public class ApiResultFunc<T> implements Function<ResponseBody, ApiResult<T>> {
 
     @Override
     public ApiResult<T> apply(ResponseBody responseBody) throws Exception {
-        Gson gson = new Gson();
         ApiResult<T> apiResult = new ApiResult<>();
         apiResult.setCode(-1);
         try {
@@ -38,7 +37,7 @@ public class ApiResultFunc<T> implements Function<ResponseBody, ApiResult<T>> {
             if (result != null) {
                 apiResult = result;
                 if (apiResult.getData() != null) {
-                    T data = gson.fromJson(apiResult.getData().toString(), type);
+                    T data = GsonUtil.gson().fromJson(apiResult.getData().toString(), type);
                     apiResult.setData(data);
                     apiResult.setCode(ResponseCode.HTTP_SUCCESS);
                 } else {
