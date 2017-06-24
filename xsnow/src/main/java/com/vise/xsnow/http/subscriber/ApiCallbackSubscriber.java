@@ -1,11 +1,7 @@
 package com.vise.xsnow.http.subscriber;
 
-import android.content.Context;
-
 import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.exception.ApiException;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * @Description: 包含回调的订阅者，如果订阅这个，上层在不使用订阅者的情况下可获得回调
@@ -15,11 +11,9 @@ import io.reactivex.disposables.Disposable;
 public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     ACallback<T> callBack;
-    Disposable disposable;
-    T t;
+    T data;
 
-    public ApiCallbackSubscriber(Context context, ACallback<T> callBack) {
-        super(context);
+    public ApiCallbackSubscriber(ACallback<T> callBack) {
         if (callBack == null) {
             throw new NullPointerException("this callback is null!");
         }
@@ -28,9 +22,6 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     @Override
     public void onError(ApiException e) {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
         if (e == null) {
             callBack.onFail(-1, "This ApiException is Null.");
             return;
@@ -39,20 +30,16 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
     }
 
     @Override
-    public void onSubscribe(Disposable d) {
-        disposable = d;
-    }
-
-    @Override
     public void onNext(T t) {
-        this.t = t;
+        this.data = t;
         callBack.onSuccess(t);
     }
 
     @Override
     public void onComplete() {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
+    }
+
+    public T getData() {
+        return data;
     }
 }

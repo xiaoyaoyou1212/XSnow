@@ -13,7 +13,7 @@ import okhttp3.Response;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 16/12/31 21:17.
  */
-class NoCacheInterceptor implements Interceptor {
+public class NoCacheInterceptor implements Interceptor {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {

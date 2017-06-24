@@ -1,11 +1,11 @@
 package com.vise.xsnow.http.request;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.vise.xsnow.http.body.UploadProgressRequestBody;
 import com.vise.xsnow.http.callback.ACallback;
 import com.vise.xsnow.http.callback.UCallback;
+import com.vise.xsnow.http.core.ApiManager;
 import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.mode.MediaTypes;
 import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.observers.DisposableObserver;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -69,8 +70,12 @@ public class UploadRequest extends BaseRequest<UploadRequest> {
     }
 
     @Override
-    protected <T> void execute(Context context, ACallback<T> callback) {
-        this.execute(getType(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+    protected <T> void execute(ACallback<T> callback) {
+        DisposableObserver disposableObserver = new ApiCallbackSubscriber(callback);
+        if (super.tag != null) {
+            ApiManager.get().add(super.tag, disposableObserver);
+        }
+        this.execute(getType(callback)).subscribe(disposableObserver);
     }
 
     public UploadRequest addUrlParam(String paramKey, String paramValue) {

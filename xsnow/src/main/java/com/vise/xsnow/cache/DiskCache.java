@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.vise.log.ViseLog;
 import com.vise.utils.cipher.MD5;
 import com.vise.utils.system.AppUtil;
-import com.vise.xsnow.common.GSONUtil;
+import com.vise.xsnow.common.GsonUtil;
 import com.vise.xsnow.common.ViseConfig;
 
 import java.io.File;
@@ -69,7 +69,7 @@ public class DiskCache implements ICache {
 
     @Override
     public void put(String key, Object value) {
-        put(key, value != null ? GSONUtil.gson().toJson(value) : null);
+        put(key, value != null ? GsonUtil.gson().toJson(value) : null);
     }
 
     public String get(String key) {

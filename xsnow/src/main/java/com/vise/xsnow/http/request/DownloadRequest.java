@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
+import com.vise.xsnow.http.core.ApiManager;
 import com.vise.xsnow.http.func.ApiRetryFunc;
 import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.mode.DownProgress;
@@ -29,6 +30,7 @@ import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -94,8 +96,12 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
     }
 
     @Override
-    protected <T> void execute(Context context, ACallback<T> callback) {
-        this.execute(getType(callback)).subscribe(new DownCallbackSubscriber(context, callback));
+    protected <T> void execute(ACallback<T> callback) {
+        DisposableObserver disposableObserver = new DownCallbackSubscriber(callback);
+        if (super.tag != null) {
+            ApiManager.get().add(super.tag, disposableObserver);
+        }
+        this.execute(getType(callback)).subscribe(disposableObserver);
     }
 
     private void saveFile(FlowableEmitter<? super DownProgress> sub, File saveFile, ResponseBody resp) {

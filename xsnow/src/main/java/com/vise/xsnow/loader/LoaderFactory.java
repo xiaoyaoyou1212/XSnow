@@ -6,16 +6,27 @@ package com.vise.xsnow.loader;
  * @date: 2016-12-19 15:16
  */
 public class LoaderFactory {
-    private static ILoader loader;
+    private static ILoader innerLoader;
+    private static ILoader externalLoader;
+
+    public static void setLoader(ILoader loader) {
+        if (externalLoader == null && loader != null) {
+            externalLoader = loader;
+        }
+    }
 
     public static ILoader getLoader() {
-        if (loader == null) {
+        if (innerLoader == null) {
             synchronized (LoaderFactory.class) {
-                if (loader == null) {
-                    loader = new GlideLoader();
+                if (innerLoader == null) {
+                    if (externalLoader != null) {
+                        innerLoader = externalLoader;
+                    } else {
+                        innerLoader = new GlideLoader();
+                    }
                 }
             }
         }
-        return loader;
+        return innerLoader;
     }
 }

@@ -1,7 +1,7 @@
 package com.vise.xsnow.http.strategy;
 
 import com.vise.log.ViseLog;
-import com.vise.xsnow.common.GSONUtil;
+import com.vise.xsnow.common.GsonUtil;
 import com.vise.xsnow.http.core.ApiCache;
 import com.vise.xsnow.http.mode.CacheResult;
 
@@ -28,7 +28,7 @@ abstract class CacheStrategy<T> implements ICacheStrategy<T> {
         }).map(new Function<String, CacheResult<T>>() {
             @Override
             public CacheResult<T> apply(String s) throws Exception {
-                T t = GSONUtil.gson().fromJson(s, type);
+                T t = GsonUtil.gson().fromJson(s, type);
                 ViseLog.i("loadCache result=" + t);
                 return new CacheResult<>(true, t);
             }

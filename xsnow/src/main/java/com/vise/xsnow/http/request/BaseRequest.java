@@ -1,7 +1,5 @@
 package com.vise.xsnow.http.request;
 
-import android.content.Context;
-
 import com.vise.log.ViseLog;
 import com.vise.utils.assist.SSLUtil;
 import com.vise.xsnow.common.ViseConfig;
@@ -14,7 +12,6 @@ import com.vise.xsnow.http.core.ApiCookie;
 import com.vise.xsnow.http.func.ApiFunc;
 import com.vise.xsnow.http.func.ApiRetryFunc;
 import com.vise.xsnow.http.interceptor.HeadersInterceptor;
-import com.vise.xsnow.http.interceptor.TagInterceptor;
 import com.vise.xsnow.http.interceptor.UploadProgressInterceptor;
 import com.vise.xsnow.http.mode.ApiHost;
 import com.vise.xsnow.http.mode.CacheMode;
@@ -410,17 +407,17 @@ public abstract class BaseRequest<R extends BaseRequest> {
         return cacheExecute(type);
     }
 
-    public <T> void request(Context context, ACallback<T> callback) {
+    public <T> void request(ACallback<T> callback) {
         generateGlobalConfig();
         generateLocalConfig();
-        execute(context, callback);
+        execute(callback);
     }
 
     protected abstract <T> Observable<T> execute(Type type);
 
     protected abstract <T> Observable<CacheResult<T>> cacheExecute(Type type);
 
-    protected abstract <T> void execute(Context context, ACallback<T> callback);
+    protected abstract <T> void execute(ACallback<T> callback);
 
     protected <T> ObservableTransformer<ResponseBody, T> norTransformer(final Type type) {
         return new ObservableTransformer<ResponseBody, T>() {
@@ -464,10 +461,6 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
         if (headers.headersMap.size() > 0) {
             newBuilder.addInterceptor(new HeadersInterceptor(headers.headersMap));
-        }
-
-        if (tag != null) {
-            newBuilder.addInterceptor(new TagInterceptor(tag));
         }
 
         if (uploadCallback != null) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.vise.xsnow.http.callback.UCallback;
 import com.vise.xsnow.http.config.HttpGlobalConfig;
 import com.vise.xsnow.http.core.ApiCache;
+import com.vise.xsnow.http.core.ApiManager;
 import com.vise.xsnow.http.request.BaseRequest;
 import com.vise.xsnow.http.request.DeleteRequest;
 import com.vise.xsnow.http.request.DownloadRequest;
@@ -17,7 +18,6 @@ import com.vise.xsnow.http.request.PutRequest;
 import com.vise.xsnow.http.request.UploadRequest;
 
 import io.reactivex.disposables.Disposable;
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -201,31 +201,26 @@ public class ViseHttp {
     }
 
     /**
+     * 添加请求订阅者
+     * @param tag
+     * @param disposable
+     */
+    public void addDisposable(Object tag, Disposable disposable) {
+        ApiManager.get().add(tag, disposable);
+    }
+
+    /**
      * 根据Tag取消请求
      */
     public void cancelTag(Object tag) {
-        for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
-            if (tag.equals(call.request().tag())) {
-                call.cancel();
-            }
-        }
-        for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
-            if (tag.equals(call.request().tag())) {
-                call.cancel();
-            }
-        }
+        ApiManager.get().cancel(tag);
     }
 
     /**
      * 取消所有请求请求
      */
     public void cancelAll() {
-        for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
-            call.cancel();
-        }
-        for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
-            call.cancel();
-        }
+        ApiManager.get().cancelAll();
     }
 
     /**

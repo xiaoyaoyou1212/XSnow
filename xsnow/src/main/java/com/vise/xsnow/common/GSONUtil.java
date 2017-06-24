@@ -7,7 +7,7 @@ import com.google.gson.Gson;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/7 19:20.
  */
-public class GSONUtil {
+public class GsonUtil {
     private static Gson gson;
 
     public static Gson gson() {

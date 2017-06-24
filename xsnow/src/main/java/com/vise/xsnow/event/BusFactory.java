@@ -6,16 +6,27 @@ package com.vise.xsnow.event;
  * @date: 2016-12-19 15:06
  */
 public class BusFactory {
-    private static IBus bus;
+    private static IBus innerBus;
+    private static IBus externalBus;
+
+    public static void setBus(IBus bus) {
+        if (externalBus == null && bus != null) {
+            externalBus = bus;
+        }
+    }
 
     public static IBus getBus() {
-        if (bus == null) {
+        if (innerBus == null) {
             synchronized (BusFactory.class) {
-                if (bus == null) {
-                    bus = new RxBusImpl();
+                if (innerBus == null) {
+                    if (externalBus != null) {
+                        innerBus = externalBus;
+                    } else {
+                        innerBus = new RxBusImpl();
+                    }
                 }
             }
         }
-        return bus;
+        return innerBus;
     }
 }
