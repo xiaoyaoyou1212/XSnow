@@ -1,45 +1,25 @@
 # XSnow
 
-[![Author](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-%E8%83%A1%E4%BC%9F-blue.svg)](http://www.huwei.tech/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfcabf1d9793485d84f090e542255710)](https://www.codacy.com/app/xiaoyaoyou1212/XSnow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xiaoyaoyou1212/XSnow&amp;utm_campaign=Badge_Grade) [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/LICENSE) [![JCenter](https://img.shields.io/badge/JCenter-2.0.1-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.1/) [![API](https://img.shields.io/badge/API-12%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=12)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfcabf1d9793485d84f090e542255710)](https://www.codacy.com/app/xiaoyaoyou1212/XSnow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xiaoyaoyou1212/XSnow&amp;utm_campaign=Badge_Grade) [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/LICENSE) [![API](https://img.shields.io/badge/API-12%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=12)
 
-基于RxJava+Retrofit精心打造的Android基础框架，包含网络、上传、下载、缓存、事件总线、权限管理、数据库、图片加载、UI模块，基本都是项目中必用功能，每个模块充分解耦，可随意替换。
+基于RxJava2+Retrofit2精心打造的Android基础框架，包含网络、上传、下载、缓存、事件总线、权限管理、数据库、图片加载、UI模块，基本都是项目中必用功能，每个模块充分解耦，可自由拓展。
+
 XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意。该框架通用纯净，只依赖公共核心库。
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.1'`
-
-### QQ交流群
-![QQ群](http://img.blog.csdn.net/20170327191310083)
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.2'`
 
 ### 版本说明
-- V2.0.1
-    - 修复权限申请异常。（2017-06-08）
+[![Latest Version](https://img.shields.io/badge/Latest Version-2.0.2-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
 
-- V2.0.0
-	- 项目大范围重构，将一些不通用功能抽离，让每一个模块功能更纯净通用，基础框架也由RxJava迁移到RxJava2。（2017-06-08）
+### 代码托管
+[![JCenter](https://img.shields.io/badge/JCenter-2.0.2-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.2/)
 
-- V1.1.1
-	- 优化BaseActivity、BaseFragment以及BaseApplication，简化findViewById操作以及点击事件处理。（2017-04-04）
-
-- V1.1.0
-	- 增加状态视图切换功能，如网络异常、无数据等情况下的显示，让视图显示更方便管理。（2017-03-08）
-
-- V1.0.1
-	- 优化部分模块间的耦合性。（2017-01-19）
-
-- V1.0.0
-	- 项目初始提交。（2017-01-16）
-
-版本号说明：版本号第一位为大版本更新时使用，第二位为小功能更新时使用，第三位则是用来bug修复管理。
-
-### *注意事项*
-
-- 项目中的每个功能都附有使用示例，但示例可能不是很全，主要是提供一个使用的思路，有些现象需要通过查看日志才能看到，如数据库的增删改查操作、事件总线的通知功能等。
-
-- 网络访问的API调试采用的是moco服务进行处理的，项目中有提供开启该服务的命令，需要在使用时调用命令开启该服务，还有需要将应用初始化的baseurl设置为本地电脑的IP地址。
-
-- 上传文件功能由于使用的是公司内部服务器调试，所以在demo中只提供了一个使用示例，无法看到效果。
+## 效果展示
+![GET请求](http://img.blog.csdn.net/20170608192317956)![POST请求](http://img.blog.csdn.net/20170608192332222)
+![上传下载](http://img.blog.csdn.net/20170608192344573)![图片加载](http://img.blog.csdn.net/20170608192400487)
+![视图切换](http://img.blog.csdn.net/20170608192416644)![事件总线、缓存、数据库等操作](http://img.blog.csdn.net/20170608192429371)
 
 ## 网络
 
@@ -69,27 +49,78 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 支持失败重试机制，可配置失败重试次数以及重试时间间隔。
 
+- 支持根据Tag中途取消请求，也可以取消所有请求。
+
 - ......
 
 ### 使用示例：
 
 第一步需要在application中进行全局初始化以及添加全局相关配置，具体使用如下：
-
 ```
 ViseHttp.init(this);
-        ViseHttp.CONFIG()
-                .baseUrl("http://10.8.4.39/")
-                .setCookie(true)
-                .converterFactory(GsonConverterFactory.create())
-                .interceptor(new HttpLogInterceptor()
-                        .setLevel(HttpLogInterceptor.Level.BODY));
+ViseHttp.CONFIG()
+        //配置请求主机地址
+        .baseUrl("http://192.168.1.100/")
+        //配置全局请求头
+        .globalHeaders(new HashMap<String, String>())
+        //配置全局请求参数
+        .globalParams(new HashMap<String, String>())
+        //配置读取超时时间，单位秒
+        .readTimeout(30)
+        //配置写入超时时间，单位秒
+        .writeTimeout(30)
+        //配置连接超时时间，单位秒
+        .connectTimeout(30)
+        //配置请求失败重试次数
+        .retryCount(3)
+        //配置请求失败重试间隔时间，单位毫秒
+        .retryDelayMillis(1000)
+        //配置是否使用cookie
+        .setCookie(true)
+        //配置自定义cookie
+        .apiCookie(new ApiCookie(this))
+        //配置是否使用OkHttp的默认缓存
+        .setHttpCache(true)
+        //配置OkHttp缓存路径
+        .setHttpCacheDirectory(new File(ViseHttp.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR))
+        //配置自定义OkHttp缓存
+        .httpCache(new Cache(new File(ViseHttp.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR), ViseConfig.CACHE_MAX_SIZE))
+        //配置自定义离线缓存
+        .cacheOffline(new Cache(new File(ViseHttp.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR), ViseConfig.CACHE_MAX_SIZE))
+        //配置自定义在线缓存
+        .cacheOnline(new Cache(new File(ViseHttp.getContext().getCacheDir(), ViseConfig.CACHE_HTTP_DIR), ViseConfig.CACHE_MAX_SIZE))
+        //配置开启Gzip请求方式，需要服务器支持
+        .postGzipInterceptor()
+        //配置应用级拦截器
+        .interceptor(new HttpLogInterceptor()
+                .setLevel(HttpLogInterceptor.Level.BODY))
+        //配置网络拦截器
+        .networkInterceptor(new NoCacheInterceptor())
+        //配置转换工厂
+        .converterFactory(GsonConverterFactory.create())
+        //配置适配器工厂
+        .callAdapterFactory(RxJava2CallAdapterFactory.create())
+        //配置请求工厂
+        .callFactory(new Call.Factory() {
+            @Override
+            public Call newCall(Request request) {
+                return null;
+            }
+        })
+        //配置连接池
+        .connectionPool(new ConnectionPool())
+        //配置主机证书验证
+        .hostnameVerifier(new SSLUtil.UnSafeHostnameVerifier("http://192.168.1.100/"))
+        //配置SSL证书验证
+        .SSLSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
+        //配置主机代理
+        .proxy(new Proxy(Proxy.Type.HTTP, new SocketAddress() {}));
 ```
-
 后面就是具体调用请求的过程，请求的类型有多种情形，下面就以最常用的几种类型举例说明，具体效果可以查看demo，以下为使用示例：
 
 - GET 不带缓存
 ```
-ViseHttp.GET().suffixUrl("getAuthor").request(mContext, new ACallback<AuthorModel>() {
+ViseHttp.GET().suffixUrl("getAuthor").request(new ACallback<AuthorModel>() {
     @Override
     public void onSuccess(AuthorModel authorModel) {
     }
@@ -99,27 +130,29 @@ ViseHttp.GET().suffixUrl("getAuthor").request(mContext, new ACallback<AuthorMode
     }
 });
 ```
+提供了多种参数的添加方式，具体可查看BaseRequest中提供的API。
 
 - GET 带缓存
 ```
 ViseHttp.GET()
-                .suffixUrl("getAuthor")
-                .setLocalCache(true)
-                .cacheMode(CacheMode.FIRST_CACHE) //配置缓存策略
-                .request(mContext, new ACallback<CacheResult<AuthorModel>>() {
-                    @Override
-                    public void onSuccess(CacheResult<AuthorModel> cacheResult) {
-                    }
+        .suffixUrl("getAuthor")
+        .setLocalCache(true)//设置是否使用缓存，如果使用缓存必须设置为true
+        .cacheMode(CacheMode.FIRST_CACHE) //配置缓存策略
+        .request(new ACallback<CacheResult<AuthorModel>>() {
+            @Override
+            public void onSuccess(CacheResult<AuthorModel> cacheResult) {
+            }
 
-                    @Override
-                    public void onFail(int errCode, String errMsg) {
-                    }
-                });
+            @Override
+            public void onFail(int errCode, String errMsg) {
+            }
+        });
 ```
+由于带缓存方式有点不一样，需要告知上层是否是缓存数据，所以需要外部包裹一层CacheResult结构，使用时必须要按照这种方式设置model，还有需要注意的是必须要设置缓存开关为true，如果为false是没法解析CacheResult结构的，这点一定切记。
 
 - GET 返回String
 ```
-ViseHttp.GET().suffixUrl("getString").request(mContext, new ACallback<String>() {
+ViseHttp.GET().suffixUrl("getString").request(new ACallback<String>() {
     @Override
     public void onSuccess(String data) {
     }
@@ -132,7 +165,7 @@ ViseHttp.GET().suffixUrl("getString").request(mContext, new ACallback<String>() 
 
 - GET 返回List
 ```
-ViseHttp.GET().suffixUrl("getListAuthor").request(mContext, new ACallback<List<AuthorModel>>() {
+ViseHttp.GET().suffixUrl("getListAuthor").request(new ACallback<List<AuthorModel>>() {
     @Override
     public void onSuccess(List<AuthorModel> authorModel) {
     }
@@ -145,7 +178,7 @@ ViseHttp.GET().suffixUrl("getListAuthor").request(mContext, new ACallback<List<A
 
 - GET 返回ApiResult
 ```
-ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(mContext, new ACallback<AuthorModel>() {
+ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(new ACallback<AuthorModel>() {
     @Override
     public void onSuccess(AuthorModel authorModel) {
     }
@@ -155,28 +188,30 @@ ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(mCont
     }
 });
 ```
+由于ApiResult这个结构没法通用，用的是拓展库方式提供一种解决方案，可替换成各自服务器定义的字段，具体参考netexpand库，这里使用需要通过BASE将自定义的请求方式设置进去，内部会自动去掉外部层级ApiResult，直接返回你所需的数据部分。
 
 - POST 上传表单
 ```
 ViseHttp.BASE(new ApiPostRequest()
-                .addForm("author_name", getString(R.string.author_name))
-                .addForm("author_nickname", getString(R.string.author_nickname))
-                .addForm("author_account", "xiaoyaoyou1212")
-                .addForm("author_github", "https://github.com/xiaoyaoyou1212")
-                .addForm("author_csdn", "http://blog.csdn.net/xiaoyaoyou1212")
-                .addForm("author_websit", "http://www.huwei.tech/")
-                .addForm("author_introduction", getString(R.string.author_introduction)))
-                .suffixUrl("postFormAuthor")
-                .request(mContext, new ACallback<String>() {
-                    @Override
-                    public void onSuccess(String data) {
-                    }
+        .addForm("author_name", getString(R.string.author_name))
+        .addForm("author_nickname", getString(R.string.author_nickname))
+        .addForm("author_account", "xiaoyaoyou1212")
+        .addForm("author_github", "https://github.com/xiaoyaoyou1212")
+        .addForm("author_csdn", "http://blog.csdn.net/xiaoyaoyou1212")
+        .addForm("author_websit", "http://www.huwei.tech/")
+        .addForm("author_introduction", getString(R.string.author_introduction)))
+        .suffixUrl("postFormAuthor")
+        .request(new ACallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+            }
 
-                    @Override
-                    public void onFail(int errCode, String errMsg) {
-                    }
-                });
+            @Override
+            public void onFail(int errCode, String errMsg) {
+            }
+        });
 ```
+上传表单时需要通过addForm将键值对一个个添加进去，支持上传中文字符。
 
 - POST 上传json
 ```
@@ -192,7 +227,7 @@ mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
 ViseHttp.BASE(new ApiPostRequest()
         .setJson(GSONUtil.gson().toJson(mAuthorModel)))
         .suffixUrl("postJsonAuthor")
-        .request(mContext, new ACallback<String>() {
+        .request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
             }
@@ -202,6 +237,7 @@ ViseHttp.BASE(new ApiPostRequest()
             }
         });
 ```
+上传JSON格式数据时需要先将数据转换成JSON格式，再通过setJson添加进去。
 
 - POST 后缀带请求参数
 ```
@@ -219,7 +255,7 @@ ViseHttp.BASE(new ApiPostRequest()
         .addUrlParam("appType", "Android")
         .setJson(GSONUtil.gson().toJson(mAuthorModel)))
         .suffixUrl("postUrlAuthor")
-        .request(mContext, new ACallback<String>() {
+        .request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
             }
@@ -229,6 +265,7 @@ ViseHttp.BASE(new ApiPostRequest()
             }
         });
 ```
+有些POST请求可能URL后面也带有参数，这样的话需要通过addUrlParam进行设置，与添加到请求body的参数设置方式addParam是不一样的，这点需要注意。
 
 ## 上传下载
 
@@ -262,7 +299,7 @@ ViseHttp.UPLOAD(new UCallback() {
     }}).addFile("androidIcon", getUploadFile(mContext, "test.jpg"))
         .baseUrl("https://200.200.200.50/")
         .suffixUrl("addImageFile")
-        .request(mContext, new ACallback<Object>() {
+        .request(new ACallback<Object>() {
     @Override
     public void onSuccess(Object data) {
     }
@@ -272,27 +309,30 @@ ViseHttp.UPLOAD(new UCallback() {
     }
 });
 ```
+由于API请求成功与上传回调没法统一处理，故将请求成功与上传进度回调分离，上传进度通过UCallback告知调用者，上传进度支持拦截器返回，也支持添加文件上传时设置回调。
 
 - 下载示例：
 ```
 ViseHttp.DOWNLOAD()
-                .baseUrl("http://dldir1.qq.com/")
-                .suffixUrl("weixin/android/weixin6330android920.apk")
-                .setFileName(saveName)
-                .request(mContext, new ACallback<DownProgress>() {
-                    @Override
-                    public void onSuccess(DownProgress downProgress) {
-                    }
+        .baseUrl("http://dldir1.qq.com/")
+        .suffixUrl("weixin/android/weixin6330android920.apk")
+        .setFileName(saveName)
+        .request(new ACallback<DownProgress>() {
+            @Override
+            public void onSuccess(DownProgress downProgress) {
+            }
 
-                    @Override
-                    public void onFail(int errCode, String errMsg) {
-                    }
-                });
+            @Override
+            public void onFail(int errCode, String errMsg) {
+            }
+        });
 ```
+通过读取返回的DownProgress获取下载进度，下载文件默认保存在该应用的/cache/download目录下。
 
 ## 缓存
 
 ### 简介：
+
 包含内存、磁盘二级缓存以及SharedPreferences缓存，可自由拓展。磁盘缓存支持KEY加密存储，可定制缓存时长。SharedPreferences支持内容安全存储，采用Base64加密解密。
 
 ### 使用示例：
@@ -312,6 +352,7 @@ ViseHttp.DOWNLOAD()
 ## 事件总线
 
 ### 简介：
+
 采用Rx响应式编程思想建立的RxBus模块，采用注解方式标识事件消耗地，通过遍历查找事件处理方法。支持可插拔，可替换成EventBus库，只需上层采用的同样是注解方式，那么上层是不需要动任何代码的。
 
 ### 使用示例：
@@ -331,6 +372,7 @@ public void showAuthor(IEvent event) {
     }
 }
 ```
+如果需要定制使用其他Bus如EventBus，那么只需将实现IBus接口的对象在应用初始化时通过`BusFactory.setBus(new EventBus())`传进去即可。
 
 ## 数据库
 
@@ -372,6 +414,7 @@ greendao{
 ```
 LoaderFactory.getLoader().loadNet(imageView, url, new ILoader.Options(R.mipmap.github_head_portrait, R.mipmap.github_head_portrait));
 ```
+如果需要定制使用其他图片加载框架如Fresco，那么只需将实现ILoader接口的对象在应用初始化时通过`LoaderFactory.setLoader(new FrescoLoader())`传进去即可。
 
 ## 权限管理
 
@@ -456,22 +499,23 @@ mLayoutMain.addView(mStatusLayoutManager.getStatusLayout());关联根视图
 mStatusLayoutManager.showLoadingView();//显示加载视图
 ```
 
+### 注意事项
 
-## 效果展示
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/main_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/function_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/http_get_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/http_post_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/download_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/image_loader_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/status_switch_view.png)
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/other_view.png)
+- 该框架引用了日志系统和公共工具库，这两个库都很轻量级，具体使用详情可分别参考[https://github.com/xiaoyaoyou1212/ViseLog](https://github.com/xiaoyaoyou1212/ViseLog)和[https://github.com/xiaoyaoyou1212/ViseUtils](https://github.com/xiaoyaoyou1212/ViseUtils)。
 
-*注：该框架引用了日志系统和公共工具库，这两个库都很轻量级，具体使用详情可分别参考
-[https://github.com/xiaoyaoyou1212/ViseLog](https://github.com/xiaoyaoyou1212/ViseLog)和
-[https://github.com/xiaoyaoyou1212/ViseUtils](https://github.com/xiaoyaoyou1212/ViseUtils)。*
+- 项目中的每个功能都附有使用示例，但示例可能不是很全，主要是提供一个使用的思路，有些现象需要通过查看日志才能看到，如数据库的增删改查操作、事件总线的通知功能等。
 
-### 关于作者
-#### 作者：胡伟
-#### 网站：[http://www.huwei.tech](http://www.huwei.tech)
-#### 博客：[http://blog.csdn.net/xiaoyaoyou1212](http://blog.csdn.net/xiaoyaoyou1212)
+- ==网络访问的API调试采用的是moco服务进行处理的，项目中有提供开启该服务的命令，需要在使用时调用命令开启该服务，还有需要将应用初始化的baseurl设置为本地电脑的IP地址。(重点注意)==
+
+- 上传文件功能由于使用的是公司内部服务器调试，所以在demo中只提供了一个使用示例，无法看到效果。
+
+### 关于我
+[![Website](https://img.shields.io/badge/Website-huwei-blue.svg)](http://www.huwei.tech/)
+[![GitHub](https://img.shields.io/badge/GitHub-xiaoyaoyou1212-blue.svg)](https://github.com/xiaoyaoyou1212)
+[![CSDN](https://img.shields.io/badge/CSDN-xiaoyaoyou1212-blue.svg)](http://blog.csdn.net/xiaoyaoyou1212)
+
+### 最后
+如果觉得该项目有帮助，请点下Star，您的支持是我开源的动力。如果有好的想法和建议，也欢迎Fork项目参与进来。使用中如果有任何问题和建议都可以进群交流，QQ群二维码如下：
+![QQ群](http://img.blog.csdn.net/20170327191310083)
+*欢迎进群交流！*
+
