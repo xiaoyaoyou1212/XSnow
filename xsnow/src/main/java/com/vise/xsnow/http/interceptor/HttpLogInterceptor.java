@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.vise.log.ViseLog;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
@@ -176,7 +177,7 @@ public class HttpLogInterceptor implements Interceptor {
                     charset = contentType.charset(UTF8);
                 }
                 if (charset != null) {
-                    log("\tbody:" + buffer.readString(charset));
+                    log("\tbody:" + URLDecoder.decode(buffer.readString(charset), UTF8.name()));
                 }
             }
         } catch (Exception e) {
