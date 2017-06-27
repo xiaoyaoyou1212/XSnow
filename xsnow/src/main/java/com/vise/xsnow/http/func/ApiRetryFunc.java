@@ -3,6 +3,8 @@ package com.vise.xsnow.http.func;
 import com.vise.log.ViseLog;
 import com.vise.xsnow.http.exception.ApiException;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -31,7 +33,8 @@ public class ApiRetryFunc implements Function<Observable<? extends Throwable>, O
                 .flatMap(new Function<Throwable, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(Throwable throwable) throws Exception {
-                        if (++retryCount <= maxRetries) {
+                        if (++retryCount <= maxRetries && (throwable instanceof SocketTimeoutException
+                                || throwable instanceof ConnectException)) {
                             ViseLog.d("get response data error, it will try after " + retryDelayMillis
                                     + " millisecond, retry count " + retryCount);
                             return Observable.timer(retryDelayMillis, TimeUnit.MILLISECONDS);
