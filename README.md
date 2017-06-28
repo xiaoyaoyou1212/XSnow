@@ -17,7 +17,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 [![JCenter](https://img.shields.io/badge/JCenter-2.0.2-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.2/)
 
 ## 效果展示
-![](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/screencapture.gif)
+![操作演示动画](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/screenshot.gif)
 
 ## 网络
 
