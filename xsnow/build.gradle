@@ -29,7 +29,7 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'org.greenrobot:greendao:3.2.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    provided 'com.github.bumptech.glide:glide:3.7.0'
 }
 
 apply from: '../bintray.gradle'

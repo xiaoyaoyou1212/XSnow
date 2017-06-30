@@ -66,28 +66,28 @@ public class ViseHttp {
 
     public static Context getContext() {
         if (context == null) {
-            throw new IllegalStateException("Please call ViseNet.init(this) in Application to initialize!");
+            throw new IllegalStateException("Please call ViseHttp.init(this) in Application to initialize!");
         }
         return context;
     }
 
     public static OkHttpClient.Builder getOkHttpBuilder() {
         if (okHttpBuilder == null) {
-            throw new IllegalStateException("Please call ViseNet.init(this) in Application to initialize!");
+            throw new IllegalStateException("Please call ViseHttp.init(this) in Application to initialize!");
         }
         return okHttpBuilder;
     }
 
     public static Retrofit.Builder getRetrofitBuilder() {
         if (retrofitBuilder == null) {
-            throw new IllegalStateException("Please call ViseNet.init(this) in Application to initialize!");
+            throw new IllegalStateException("Please call ViseHttp.init(this) in Application to initialize!");
         }
         return retrofitBuilder;
     }
 
     public static ApiCache.Builder getApiCacheBuilder() {
         if (apiCacheBuilder == null) {
-            throw new IllegalStateException("Please call ViseNet.init(this) in Application to initialize!");
+            throw new IllegalStateException("Please call ViseHttp.init(this) in Application to initialize!");
         }
         return apiCacheBuilder;
     }

@@ -17,7 +17,11 @@ import java.io.File;
 public class GlideLoader implements ILoader {
     @Override
     public void init(Context context) {
-
+        try {
+            Class.forName("com.bumptech.glide.Glide");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Must be dependencies Glide!");
+        }
     }
 
     @Override
