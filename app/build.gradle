@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'com.antfortune.freeline'
 
 android {
     compileSdkVersion 23
@@ -34,4 +35,11 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     testCompile 'junit:junit:4.12'
     compile project(path: ':netexpand')
+
+    /**
+     * 配置依赖的图片框架
+     * 注意：作为示例，该库修改图片框架为Fresco，如果不想修改图片默认框架Glide，那么需要在这里指定依赖的Glide版本
+     */
+    compile 'com.facebook.fresco:fresco:1.3.0'
+//    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

@@ -1,8 +1,8 @@
 package com.vise.snowdemo.adapter;
 
 import android.content.Context;
-import android.widget.ImageView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.vise.snowdemo.R;
 import com.vise.xsnow.loader.ILoader;
 import com.vise.xsnow.loader.LoaderFactory;
@@ -23,7 +23,9 @@ public class ImageAdapter extends HelperAdapter<String> {
 
     @Override
     public void HelpConvert(HelperViewHolder viewHolder, int position, String s) {
-        ImageView icon = viewHolder.getView(R.id.item_image_loader_icon);
+        SimpleDraweeView icon = viewHolder.getView(R.id.item_image_loader_icon);
+//        LoaderFactory.getLoader().loadAssets(icon, "github_head_portrait.jpg", null);
+//        LoaderFactory.getLoader().loadResource(icon, R.mipmap.github_head_portrait, null);
         LoaderFactory.getLoader().loadNet(icon, s, new ILoader.Options(R.mipmap.github_head_portrait, R.mipmap.github_head_portrait));
     }
 }

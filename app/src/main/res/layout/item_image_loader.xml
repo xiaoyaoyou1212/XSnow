@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_image_loader_icon"
         android:layout_width="match_parent"
         android:layout_height="200dp"

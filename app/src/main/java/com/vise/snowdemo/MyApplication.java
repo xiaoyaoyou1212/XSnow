@@ -4,25 +4,15 @@ import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 import com.vise.netexpand.convert.GsonConverterFactory;
 import com.vise.snowdemo.db.DbHelper;
+import com.vise.snowdemo.loader.FrescoLoader;
 import com.vise.utils.assist.SSLUtil;
 import com.vise.xsnow.BaseApplication;
-import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.ViseHttp;
-import com.vise.xsnow.http.core.ApiCookie;
 import com.vise.xsnow.http.interceptor.HttpLogInterceptor;
-import com.vise.xsnow.http.interceptor.NoCacheInterceptor;
 import com.vise.xsnow.loader.LoaderFactory;
 
-import java.io.File;
-import java.net.Proxy;
-import java.net.SocketAddress;
 import java.util.HashMap;
 
-import okhttp3.Cache;
-import okhttp3.Call;
-import okhttp3.ConnectionPool;
-import okhttp3.Request;
-import okhttp3.internal.cache.CacheInterceptor;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
@@ -37,6 +27,7 @@ public class MyApplication extends BaseApplication {
         initLog();
         initNet();
         DbHelper.getInstance().init(this);
+        LoaderFactory.setLoader(new FrescoLoader());//外部定制图片加载库Fresco
         LoaderFactory.getLoader().init(this);
     }
 
@@ -51,7 +42,7 @@ public class MyApplication extends BaseApplication {
         ViseHttp.init(this);
         ViseHttp.CONFIG()
                 //配置请求主机地址
-                .baseUrl("http://192.168.1.100/")
+                .baseUrl("http://10.8.4.39/")
                 //配置全局请求头
                 .globalHeaders(new HashMap<String, String>())
                 //配置全局请求参数
