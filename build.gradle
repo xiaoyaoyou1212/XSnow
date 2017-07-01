@@ -12,6 +12,7 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+//        classpath 'com.antfortune.freeline:gradle:0.8.7'
     }
 }
 
