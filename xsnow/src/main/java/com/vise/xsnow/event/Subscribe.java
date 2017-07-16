@@ -1,6 +1,6 @@
 package com.vise.xsnow.event;
 
-import com.vise.xsnow.event.inner.EventThread;
+import com.vise.xsnow.event.inner.ThreadMode;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface EventSubscribe {
-    EventThread thread() default EventThread.MAIN_THREAD;
+public @interface Subscribe {
+    ThreadMode threadMode() default ThreadMode.MAIN_THREAD;
 }

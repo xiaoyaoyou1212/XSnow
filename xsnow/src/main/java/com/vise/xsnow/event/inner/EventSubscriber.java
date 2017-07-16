@@ -12,13 +12,13 @@ import io.reactivex.schedulers.Schedulers;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-29 19:05
  */
-class EventSubscriber extends EventHelper {
+class EventSubscriber extends EventBase {
     private final Object target;
     private final Method method;
-    private final EventThread thread;
+    private final ThreadMode thread;
     private Disposable disposable;
 
-    public EventSubscriber(Object target, Method method, EventThread thread) {
+    public EventSubscriber(Object target, Method method, ThreadMode thread) {
         if (target == null) {
             throw new NullPointerException("SubscriberEvent target cannot be null.");
         }
@@ -32,7 +32,7 @@ class EventSubscriber extends EventHelper {
         this.method = method;
         this.thread = thread;
         this.method.setAccessible(true);
-        initObservable(this.method.getParameterTypes()[0]);
+        subscribeEvent(this.method.getParameterTypes()[0]);
     }
 
     public final Class getParameter() {
@@ -43,8 +43,8 @@ class EventSubscriber extends EventHelper {
      * 订阅事件
      * @param aClass
      */
-    private void initObservable(Class aClass) {
-        disposable = toFlowable(aClass).subscribeOn(Schedulers.io()).observeOn(EventThread.getScheduler
+    private void subscribeEvent(Class aClass) {
+        disposable = toFlowable(aClass).subscribeOn(Schedulers.io()).observeOn(ThreadMode.getScheduler
                 (thread)).subscribe(new Consumer<Object>() {
             @Override
             public void accept(Object event) throws Exception {

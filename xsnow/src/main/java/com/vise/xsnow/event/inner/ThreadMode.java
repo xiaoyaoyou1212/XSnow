@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author: <a href="http://xiaoyaoyou1212.360doc.com">DAWI</a>
  * @date: 2016-12-29 19:02
  */
-public enum EventThread {
+public enum ThreadMode {
     MAIN_THREAD,
     NEW_THREAD,
     IO,
@@ -17,7 +17,7 @@ public enum EventThread {
     COMPUTATION,
     TRAMPOLINE;
 
-    public static Scheduler getScheduler(EventThread thread) {
+    public static Scheduler getScheduler(ThreadMode thread) {
         Scheduler scheduler;
         switch (thread) {
             case MAIN_THREAD:

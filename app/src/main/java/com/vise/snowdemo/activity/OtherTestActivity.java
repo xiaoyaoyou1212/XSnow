@@ -13,8 +13,8 @@ import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.cache.MemoryCache;
 import com.vise.xsnow.cache.SpCache;
 import com.vise.xsnow.event.BusManager;
-import com.vise.xsnow.event.EventSubscribe;
 import com.vise.xsnow.event.IEvent;
+import com.vise.xsnow.event.Subscribe;
 import com.vise.xsnow.ui.BaseActivity;
 
 /**
@@ -137,7 +137,7 @@ public class OtherTestActivity extends BaseActivity {
         return true;
     }
 
-    @EventSubscribe
+    @Subscribe()
     public void showAuthor(IEvent event) {
         if (event != null && event instanceof AuthorEvent) {
             ViseLog.i("Receive Event Message:" + ((AuthorEvent) event).getAuthorModel());

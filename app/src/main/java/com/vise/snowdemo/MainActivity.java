@@ -24,8 +24,8 @@ import com.vise.snowdemo.activity.UploadDownActivity;
 import com.vise.snowdemo.mode.AuthorEvent;
 import com.vise.utils.view.ActivityUtil;
 import com.vise.utils.view.DialogUtil;
-import com.vise.xsnow.event.EventSubscribe;
 import com.vise.xsnow.event.IEvent;
+import com.vise.xsnow.event.Subscribe;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
 import com.vise.xsnow.ui.BaseActivity;
@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    @EventSubscribe
+    @Subscribe
     public void showAuthor(IEvent event) {
         if (event != null && event instanceof AuthorEvent) {
             ViseLog.i("Receive Event Message:" + ((AuthorEvent) event).getAuthorModel());

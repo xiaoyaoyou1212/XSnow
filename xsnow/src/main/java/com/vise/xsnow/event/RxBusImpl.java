@@ -1,8 +1,8 @@
 package com.vise.xsnow.event;
 
+import com.vise.xsnow.event.inner.EventBase;
 import com.vise.xsnow.event.inner.EventComposite;
 import com.vise.xsnow.event.inner.EventFind;
-import com.vise.xsnow.event.inner.EventHelper;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -14,7 +14,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 15:07
  */
-public class RxBusImpl extends EventHelper implements IBus {
+public class RxBusImpl extends EventBase implements IBus {
 
     private ConcurrentMap<Object, EventComposite> mEventCompositeMap = new ConcurrentHashMap<>();
 

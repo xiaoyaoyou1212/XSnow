@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-29 19:19
  */
-public class EventComposite extends EventHelper {
+public class EventComposite extends EventBase {
     private CompositeDisposable compositeDisposable;
     private Object object;
     private Set<EventSubscriber> subscriberEvents;

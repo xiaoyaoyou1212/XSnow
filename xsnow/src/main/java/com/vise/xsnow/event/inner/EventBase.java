@@ -11,11 +11,11 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 /**
- * @Description: 事件帮助类
+ * @Description: 事件处理基类
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-29 19:08
  */
-public class EventHelper {
+public class EventBase {
     protected final static Map<Class<?>, Object> STICKY_EVENT_MAP;
     protected final static Subject<Object> SUBJECT;
 
@@ -24,7 +24,7 @@ public class EventHelper {
         STICKY_EVENT_MAP = new HashMap<>();
     }
 
-    protected EventHelper() {
+    protected EventBase() {
     }
 
     static <T> Flowable<T> toFlowable(Class<T> eventType) {

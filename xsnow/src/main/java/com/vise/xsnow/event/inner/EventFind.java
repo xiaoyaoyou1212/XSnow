@@ -1,6 +1,6 @@
 package com.vise.xsnow.event.inner;
 
-import com.vise.xsnow.event.EventSubscribe;
+import com.vise.xsnow.event.Subscribe;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -26,7 +26,7 @@ public class EventFind {
             if (method.isBridge()) {
                 continue;
             }
-            if (method.isAnnotationPresent(EventSubscribe.class)) {
+            if (method.isAnnotationPresent(Subscribe.class)) {
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 if (parameterTypes.length != 1) {
                     throw new IllegalArgumentException("Method " + method + " has @Subscribe annotation but requires " + parameterTypes
@@ -39,8 +39,8 @@ public class EventFind {
                             "but is not 'public'.");
                 }
 
-                EventSubscribe annotation = method.getAnnotation(EventSubscribe.class);
-                EventThread thread = annotation.thread();
+                Subscribe annotation = method.getAnnotation(Subscribe.class);
+                ThreadMode thread = annotation.threadMode();
 
                 EventSubscriber subscriberEvent = new EventSubscriber(listenerClass, method, thread);
                 if (!subscriberMethods.contains(subscriberEvent)) {
