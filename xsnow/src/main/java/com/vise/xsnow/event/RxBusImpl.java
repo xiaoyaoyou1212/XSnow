@@ -18,6 +18,10 @@ public class RxBusImpl extends EventHelper implements IBus {
 
     private ConcurrentMap<Object, EventComposite> mEventCompositeMap = new ConcurrentHashMap<>();
 
+    /**
+     * 注册事件监听
+     * @param object
+     */
     @Override
     public void register(Object object) {
         if (object == null) {
@@ -27,11 +31,15 @@ public class RxBusImpl extends EventHelper implements IBus {
         EventComposite subscriberMethods = EventFind.findAnnotatedSubscriberMethods(object, compositeDisposable);
         mEventCompositeMap.put(object, subscriberMethods);
 
-        if (!STICKY_EVENT_MAP.isEmpty()) {
+        if (!STICKY_EVENT_MAP.isEmpty()) {//如果有粘性事件，则发送粘性事件
             subscriberMethods.subscriberSticky(STICKY_EVENT_MAP);
         }
     }
 
+    /**
+     * 取消事件监听
+     * @param object
+     */
     @Override
     public void unregister(Object object) {
         if (object == null) {
@@ -44,11 +52,19 @@ public class RxBusImpl extends EventHelper implements IBus {
         mEventCompositeMap.remove(object);
     }
 
+    /**
+     * 发送普通事件
+     * @param event
+     */
     @Override
     public void post(IEvent event) {
         SUBJECT.onNext(event);
     }
 
+    /**
+     * 发送粘性事件
+     * @param event
+     */
     @Override
     public void postSticky(IEvent event) {
         STICKY_EVENT_MAP.put(event.getClass(), event);

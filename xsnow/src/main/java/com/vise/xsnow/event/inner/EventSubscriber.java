@@ -39,6 +39,10 @@ class EventSubscriber extends EventHelper {
         return this.method.getParameterTypes()[0];
     }
 
+    /**
+     * 订阅事件
+     * @param aClass
+     */
     private void initObservable(Class aClass) {
         disposable = toFlowable(aClass).subscribeOn(Schedulers.io()).observeOn(EventThread.getScheduler
                 (thread)).subscribe(new Consumer<Object>() {
@@ -58,6 +62,11 @@ class EventSubscriber extends EventHelper {
         return disposable;
     }
 
+    /**
+     * 分发事件
+     * @param event
+     * @throws InvocationTargetException
+     */
     public final void handleEvent(Object event) throws InvocationTargetException {
         try {
             method.invoke(target, event);

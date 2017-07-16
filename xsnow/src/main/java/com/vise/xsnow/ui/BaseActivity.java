@@ -8,8 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.vise.xsnow.event.BusFactory;
-import com.vise.xsnow.manager.AppManager;
+import com.vise.xsnow.event.BusManager;
 
 /**
  * @Description: Activity基类
@@ -20,17 +19,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected Context mContext;
     private SparseArray<View> mViews;
-    private boolean mIsRegisterEvent = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         mViews = new SparseArray<>();
-        if (mIsRegisterEvent) {
-            BusFactory.getBus().register(this);
+        if (isRegisterEvent()) {
+            BusManager.getBus().register(this);
         }
-        AppManager.getInstance().addActivity(this);
+        ActivityManager.getInstance().addActivity(this);
     }
 
     @Override
@@ -52,10 +50,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mIsRegisterEvent) {
-            BusFactory.getBus().unregister(this);
+        if (isRegisterEvent()) {
+            BusManager.getBus().unregister(this);
         }
-        AppManager.getInstance().removeActivity(this);
+        ActivityManager.getInstance().removeActivity(this);
     }
 
     @Override
@@ -76,13 +74,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         view.setOnClickListener(this);
     }
 
-    public boolean isRegisterEvent() {
-        return mIsRegisterEvent;
-    }
-
-    public BaseActivity setRegisterEvent(boolean mIsRegisterEvent) {
-        this.mIsRegisterEvent = mIsRegisterEvent;
-        return this;
+    protected boolean isRegisterEvent() {
+        return false;
     }
 
     /**

@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRegisterEvent(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -117,6 +116,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    protected boolean isRegisterEvent() {
         return true;
     }
 

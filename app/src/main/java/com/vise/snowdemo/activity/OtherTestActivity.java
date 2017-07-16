@@ -12,7 +12,7 @@ import com.vise.snowdemo.mode.AuthorModel;
 import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.cache.MemoryCache;
 import com.vise.xsnow.cache.SpCache;
-import com.vise.xsnow.event.BusFactory;
+import com.vise.xsnow.event.BusManager;
 import com.vise.xsnow.event.EventSubscribe;
 import com.vise.xsnow.event.IEvent;
 import com.vise.xsnow.ui.BaseActivity;
@@ -39,7 +39,6 @@ public class OtherTestActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRegisterEvent(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_test);
     }
@@ -128,9 +127,14 @@ public class OtherTestActivity extends BaseActivity {
                 }
                 break;
             case R.id.send_event:
-                BusFactory.getBus().post(new AuthorEvent().setAuthorModel(mAuthorModel));
+                BusManager.getBus().post(new AuthorEvent().setAuthorModel(mAuthorModel));
                 break;
         }
+    }
+
+    @Override
+    protected boolean isRegisterEvent() {
+        return true;
     }
 
     @EventSubscribe

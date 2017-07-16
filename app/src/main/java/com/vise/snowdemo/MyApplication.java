@@ -1,15 +1,16 @@
 package com.vise.snowdemo;
 
+import android.app.Application;
+
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 import com.vise.netexpand.convert.GsonConverterFactory;
 import com.vise.snowdemo.db.DbHelper;
 import com.vise.snowdemo.loader.FrescoLoader;
 import com.vise.utils.assist.SSLUtil;
-import com.vise.xsnow.BaseApplication;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.interceptor.HttpLogInterceptor;
-import com.vise.xsnow.loader.LoaderFactory;
+import com.vise.xsnow.loader.LoaderManager;
 
 import java.util.HashMap;
 
@@ -20,15 +21,15 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/1/18 23:19.
  */
-public class MyApplication extends BaseApplication {
-
+public class MyApplication extends Application {
     @Override
-    protected void initConfigs() {
+    public void onCreate() {
+        super.onCreate();
         initLog();
         initNet();
         DbHelper.getInstance().init(this);
-        LoaderFactory.setLoader(new FrescoLoader());//外部定制图片加载库Fresco
-        LoaderFactory.getLoader().init(this);
+        LoaderManager.setLoader(new FrescoLoader());//外部定制图片加载库Fresco
+        LoaderManager.getLoader().init(this);
     }
 
     private void initLog() {

@@ -1,10 +1,9 @@
-package com.vise.xsnow.manager;
+package com.vise.xsnow.ui;
 
 import android.app.Activity;
 import android.content.Context;
 
 import com.vise.log.ViseLog;
-import com.vise.xsnow.ui.BaseActivity;
 
 import java.util.Stack;
 
@@ -13,18 +12,18 @@ import java.util.Stack;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 14:57
  */
-public class AppManager {
+public class ActivityManager {
     private static Stack<Activity> activityStack;
-    private static AppManager instance;
+    private static ActivityManager instance;
 
-    private AppManager() {
+    private ActivityManager() {
     }
 
-    public static AppManager getInstance() {
+    public static ActivityManager getInstance() {
         if (instance == null) {
-            synchronized (AppManager.class) {
+            synchronized (ActivityManager.class) {
                 if (instance == null) {
-                    instance = new AppManager();
+                    instance = new ActivityManager();
                 }
             }
         }

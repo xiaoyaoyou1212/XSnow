@@ -5,7 +5,7 @@ import android.content.Context;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.vise.snowdemo.R;
 import com.vise.xsnow.loader.ILoader;
-import com.vise.xsnow.loader.LoaderFactory;
+import com.vise.xsnow.loader.LoaderManager;
 import com.vise.xsnow.ui.adapter.helper.HelperAdapter;
 import com.vise.xsnow.ui.adapter.helper.HelperViewHolder;
 
@@ -26,6 +26,6 @@ public class ImageAdapter extends HelperAdapter<String> {
         SimpleDraweeView icon = viewHolder.getView(R.id.item_image_loader_icon);
 //        LoaderFactory.getLoader().loadAssets(icon, "github_head_portrait.jpg", null);
 //        LoaderFactory.getLoader().loadResource(icon, R.mipmap.github_head_portrait, null);
-        LoaderFactory.getLoader().loadNet(icon, s, new ILoader.Options(R.mipmap.github_head_portrait, R.mipmap.github_head_portrait));
+        LoaderManager.getLoader().loadNet(icon, s, new ILoader.Options(R.mipmap.github_head_portrait, R.mipmap.github_head_portrait));
     }
 }

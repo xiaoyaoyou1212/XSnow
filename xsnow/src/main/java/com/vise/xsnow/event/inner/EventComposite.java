@@ -48,6 +48,10 @@ public class EventComposite extends EventHelper {
         this.subscriberEvents = subscriberEvents;
     }
 
+    /**
+     * 发送粘性事件
+     * @param objectMap
+     */
     public final void subscriberSticky(Map<Class<?>, Object> objectMap) {
         List<Class> classes = new ArrayList<>();
         for (Map.Entry<Class<?>, Object> classObjectEntry : objectMap.entrySet()) {

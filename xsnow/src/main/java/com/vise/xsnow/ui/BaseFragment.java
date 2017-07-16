@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.vise.xsnow.event.BusFactory;
+import com.vise.xsnow.event.BusManager;
 
 /**
  * @Description: Fragment基类
@@ -34,7 +34,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         this.mViews = new SparseArray<>();
         this.mInflater = LayoutInflater.from(mContext);
         if (mIsRegisterEvent) {
-            BusFactory.getBus().register(this);
+            BusManager.getBus().register(this);
         }
     }
 
@@ -61,7 +61,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onDestroy() {
         super.onDestroy();
         if (mIsRegisterEvent) {
-            BusFactory.getBus().unregister(this);
+            BusManager.getBus().unregister(this);
         }
     }
 

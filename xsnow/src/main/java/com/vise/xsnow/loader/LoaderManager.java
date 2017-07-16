@@ -1,11 +1,11 @@
 package com.vise.xsnow.loader;
 
 /**
- * @Description: 加载工厂，可定制图片加载框架
+ * @Description: 图片加载管理，可定制图片加载框架
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 15:16
  */
-public class LoaderFactory {
+public class LoaderManager {
     private static ILoader innerLoader;
     private static ILoader externalLoader;
 
@@ -17,7 +17,7 @@ public class LoaderFactory {
 
     public static ILoader getLoader() {
         if (innerLoader == null) {
-            synchronized (LoaderFactory.class) {
+            synchronized (LoaderManager.class) {
                 if (innerLoader == null) {
                     if (externalLoader != null) {
                         innerLoader = externalLoader;

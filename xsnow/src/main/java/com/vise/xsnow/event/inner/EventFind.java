@@ -44,8 +44,8 @@ public class EventFind {
 
                 EventSubscriber subscriberEvent = new EventSubscriber(listenerClass, method, thread);
                 if (!subscriberMethods.contains(subscriberEvent)) {
-                    subscriberMethods.add(subscriberEvent);
-                    compositeDisposable.add(subscriberEvent.getDisposable());
+                    subscriberMethods.add(subscriberEvent);//添加事件订阅者
+                    compositeDisposable.add(subscriberEvent.getDisposable());//管理订阅，方便取消订阅
                 }
             }
         }

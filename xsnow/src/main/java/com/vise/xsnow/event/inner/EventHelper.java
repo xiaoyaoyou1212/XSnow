@@ -31,6 +31,10 @@ public class EventHelper {
         return SUBJECT.ofType(eventType).toFlowable(BackpressureStrategy.BUFFER);
     }
 
+    /**
+     * 删除指定粘性事件
+     * @param event
+     */
     static synchronized void dellSticky(Object event) {
         if (!STICKY_EVENT_MAP.isEmpty()) {
             List<Class> classes = new ArrayList<>();
