@@ -6,8 +6,11 @@ package com.vise.xsnow.permission;
  * @date: 2017-04-19 20:14
  */
 public class Permission {
+    //权限名称
     public final String name;
+    //是否授予权限
     public final boolean granted;
+    //是否显示请求权限理由
     public final boolean shouldShowRequestPermissionRationale;
 
     public Permission(String name, boolean granted) {
