@@ -8,13 +8,13 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.2'`
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.3'`
 
 ### 版本说明
-[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.0.2-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
+[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.0.3-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
 
 ### 代码托管
-[![JCenter](https://img.shields.io/badge/JCenter-2.0.2-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.2/)
+[![JCenter](https://img.shields.io/badge/JCenter-2.0.3-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.3/)
 
 ## 效果展示
 ![操作演示动画](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/screenshot.gif)
