@@ -8,13 +8,13 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.0.3'`
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.1.0'`
 
 ### 版本说明
-[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.0.3-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
+[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.1.0-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
 
 ### 代码托管
-[![JCenter](https://img.shields.io/badge/JCenter-2.0.3-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.0.3/)
+[![JCenter](https://img.shields.io/badge/JCenter-2.1.0-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.0/)
 
 ## 效果展示
 ![操作演示动画](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/screenshot.gif)
@@ -118,7 +118,7 @@ ViseHttp.CONFIG()
 
 - GET 不带缓存
 ```
-ViseHttp.GET().suffixUrl("getAuthor").request(new ACallback<AuthorModel>() {
+ViseHttp.GET("getAuthor").request(new ACallback<AuthorModel>() {
     @Override
     public void onSuccess(AuthorModel authorModel) {
     }
@@ -132,8 +132,7 @@ ViseHttp.GET().suffixUrl("getAuthor").request(new ACallback<AuthorModel>() {
 
 - GET 带缓存
 ```
-ViseHttp.GET()
-        .suffixUrl("getAuthor")
+ViseHttp.GET("getAuthor")
         .setLocalCache(true)//设置是否使用缓存，如果使用缓存必须设置为true
         .cacheMode(CacheMode.FIRST_CACHE) //配置缓存策略
         .request(new ACallback<CacheResult<AuthorModel>>() {
@@ -150,7 +149,7 @@ ViseHttp.GET()
 
 - GET 返回String
 ```
-ViseHttp.GET().suffixUrl("getString").request(new ACallback<String>() {
+ViseHttp.GET("getString").request(new ACallback<String>() {
     @Override
     public void onSuccess(String data) {
     }
@@ -163,7 +162,7 @@ ViseHttp.GET().suffixUrl("getString").request(new ACallback<String>() {
 
 - GET 返回List
 ```
-ViseHttp.GET().suffixUrl("getListAuthor").request(new ACallback<List<AuthorModel>>() {
+ViseHttp.GET("getListAuthor").request(new ACallback<List<AuthorModel>>() {
     @Override
     public void onSuccess(List<AuthorModel> authorModel) {
     }
@@ -176,7 +175,7 @@ ViseHttp.GET().suffixUrl("getListAuthor").request(new ACallback<List<AuthorModel
 
 - GET 返回ApiResult
 ```
-ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(new ACallback<AuthorModel>() {
+ViseHttp.BASE(new ApiGetRequest("getApiResultAuthor")).request(new ACallback<AuthorModel>() {
     @Override
     public void onSuccess(AuthorModel authorModel) {
     }
@@ -190,7 +189,7 @@ ViseHttp.BASE(new ApiGetRequest()).suffixUrl("getApiResultAuthor").request(new A
 
 - POST 上传表单
 ```
-ViseHttp.BASE(new ApiPostRequest()
+ViseHttp.BASE(new ApiPostRequest("postFormAuthor")
         .addForm("author_name", getString(R.string.author_name))
         .addForm("author_nickname", getString(R.string.author_nickname))
         .addForm("author_account", "xiaoyaoyou1212")
@@ -198,7 +197,6 @@ ViseHttp.BASE(new ApiPostRequest()
         .addForm("author_csdn", "http://blog.csdn.net/xiaoyaoyou1212")
         .addForm("author_websit", "http://www.huwei.tech/")
         .addForm("author_introduction", getString(R.string.author_introduction)))
-        .suffixUrl("postFormAuthor")
         .request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
@@ -222,9 +220,8 @@ mAuthorModel.setAuthor_github("https://github.com/xiaoyaoyou1212");
 mAuthorModel.setAuthor_csdn("http://blog.csdn.net/xiaoyaoyou1212");
 mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
 mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
-ViseHttp.BASE(new ApiPostRequest()
+ViseHttp.BASE(new ApiPostRequest("postJsonAuthor")
         .setJson(GSONUtil.gson().toJson(mAuthorModel)))
-        .suffixUrl("postJsonAuthor")
         .request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
@@ -248,11 +245,10 @@ mAuthorModel.setAuthor_github("https://github.com/xiaoyaoyou1212");
 mAuthorModel.setAuthor_csdn("http://blog.csdn.net/xiaoyaoyou1212");
 mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
 mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
-ViseHttp.BASE(new ApiPostRequest()
+ViseHttp.BASE(new ApiPostRequest("postUrlAuthor")
         .addUrlParam("appId", "10001")
         .addUrlParam("appType", "Android")
         .setJson(GSONUtil.gson().toJson(mAuthorModel)))
-        .suffixUrl("postUrlAuthor")
         .request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
@@ -287,7 +283,7 @@ ViseHttp.BASE(new ApiPostRequest()
 
 - 上传示例：
 ```
-ViseHttp.UPLOAD(new UCallback() {
+ViseHttp.UPLOAD("addImageFile", new UCallback() {
     @Override
     public void onProgress(long currentLength, long totalLength, float percent) {
     }
@@ -296,7 +292,6 @@ ViseHttp.UPLOAD(new UCallback() {
     public void onFail(int errCode, String errMsg) {
     }}).addFile("androidIcon", getUploadFile(mContext, "test.jpg"))
         .baseUrl("https://200.200.200.50/")
-        .suffixUrl("addImageFile")
         .request(new ACallback<Object>() {
     @Override
     public void onSuccess(Object data) {
@@ -311,9 +306,8 @@ ViseHttp.UPLOAD(new UCallback() {
 
 - 下载示例：
 ```
-ViseHttp.DOWNLOAD()
+ViseHttp.DOWNLOAD("weixin/android/weixin6330android920.apk")
         .baseUrl("http://dldir1.qq.com/")
-        .suffixUrl("weixin/android/weixin6330android920.apk")
         .setFileName(saveName)
         .request(new ACallback<DownProgress>() {
             @Override
