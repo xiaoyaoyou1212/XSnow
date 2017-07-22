@@ -34,15 +34,17 @@ import okio.Source;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/14 20:28.
  */
-public class UploadRequest extends BaseRequest<UploadRequest> {
+public class UploadRequest extends BaseHttpRequest<UploadRequest> {
 
     protected List<MultipartBody.Part> multipartBodyParts = new ArrayList<>();
     protected StringBuilder stringBuilder = new StringBuilder();
 
-    public UploadRequest() {
+    public UploadRequest(String suffixUrl) {
+        super(suffixUrl);
     }
 
-    public UploadRequest(UCallback callback) {
+    public UploadRequest(String suffixUrl, UCallback callback) {
+        super(suffixUrl);
         this.uploadCallback = callback;
     }
 

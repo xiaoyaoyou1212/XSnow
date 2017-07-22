@@ -18,6 +18,10 @@ import io.reactivex.observers.DisposableObserver;
  * @date: 17/5/13 14:31.
  */
 public class ApiGetRequest extends ApiBaseRequest {
+    public ApiGetRequest(String suffixUrl) {
+        super(suffixUrl);
+    }
+
     @Override
     protected <T> Observable<T> execute(Type type) {
         return apiService.get(suffixUrl, params).map(new ApiResultFunc<T>(type)).compose(this.<T>apiTransformer());
@@ -25,7 +29,7 @@ public class ApiGetRequest extends ApiBaseRequest {
 
     @Override
     protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return this.<T>execute(type).compose(ViseHttp.getInstance().getApiCache().<T>transformer(cacheMode, type));
+        return this.<T>execute(type).compose(ViseHttp.getApiCache().<T>transformer(cacheMode, type));
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.vise.xsnow.http.callback.UCallback;
 import com.vise.xsnow.http.config.HttpGlobalConfig;
 import com.vise.xsnow.http.core.ApiCache;
 import com.vise.xsnow.http.core.ApiManager;
-import com.vise.xsnow.http.request.BaseRequest;
+import com.vise.xsnow.http.request.BaseHttpRequest;
 import com.vise.xsnow.http.request.DeleteRequest;
 import com.vise.xsnow.http.request.DownloadRequest;
 import com.vise.xsnow.http.request.GetRequest;
@@ -15,6 +15,7 @@ import com.vise.xsnow.http.request.OptionsRequest;
 import com.vise.xsnow.http.request.PatchRequest;
 import com.vise.xsnow.http.request.PostRequest;
 import com.vise.xsnow.http.request.PutRequest;
+import com.vise.xsnow.http.request.RetrofitRequest;
 import com.vise.xsnow.http.request.UploadRequest;
 
 import io.reactivex.disposables.Disposable;
@@ -27,32 +28,17 @@ import retrofit2.Retrofit;
  * @date: 2017-04-28 15:07
  */
 public class ViseHttp {
-    private static ViseHttp instance;
     private static Context context;
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit.Builder retrofitBuilder;
     private static ApiCache.Builder apiCacheBuilder;
-    private OkHttpClient okHttpClient;
-    private ApiCache apiCache;
+    private static OkHttpClient okHttpClient;
+    private static ApiCache apiCache;
 
     private static final HttpGlobalConfig NET_GLOBAL_CONFIG = HttpGlobalConfig.getInstance();
 
     public static HttpGlobalConfig CONFIG() {
         return NET_GLOBAL_CONFIG;
-    }
-
-    private ViseHttp() {
-    }
-
-    public static ViseHttp getInstance() {
-        if (instance == null) {
-            synchronized (ViseHttp.class) {
-                if (instance == null) {
-                    instance = new ViseHttp();
-                }
-            }
-        }
-        return instance;
     }
 
     public static void init(Context appContext) {
@@ -92,14 +78,14 @@ public class ViseHttp {
         return apiCacheBuilder;
     }
 
-    public OkHttpClient getOkHttpClient() {
+    public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             okHttpClient = getOkHttpBuilder().build();
         }
         return okHttpClient;
     }
 
-    public ApiCache getApiCache() {
+    public static ApiCache getApiCache() {
         if (apiCache == null || apiCache.isClosed()) {
             apiCache = getApiCacheBuilder().build();
         }
@@ -111,93 +97,110 @@ public class ViseHttp {
      * @param request
      * @return
      */
-    public static BaseRequest BASE(BaseRequest request) {
+    public static BaseHttpRequest BASE(BaseHttpRequest request) {
         if (request != null) {
             return request;
         } else {
-            return new GetRequest();
+            return new GetRequest("");
         }
     }
 
     /**
-     * GET请求
+     * 可传入自定义Retrofit接口服务的请求类型
      * @return
      */
-    public static GetRequest GET() {
-        return new GetRequest();
+    public static <T> RetrofitRequest RETROFIT() {
+        return new RetrofitRequest();
+    }
+
+    /**
+     * GET请求
+     * @param suffixUrl
+     * @return
+     */
+    public static GetRequest GET(String suffixUrl) {
+        return new GetRequest(suffixUrl);
     }
 
     /**
      * POST请求
+     * @param suffixUrl
      * @return
      */
-    public static PostRequest POST() {
-        return new PostRequest();
+    public static PostRequest POST(String suffixUrl) {
+        return new PostRequest(suffixUrl);
     }
 
     /**
      * HEAD请求
+     * @param suffixUrl
      * @return
      */
-    public static HeadRequest HEAD() {
-        return new HeadRequest();
+    public static HeadRequest HEAD(String suffixUrl) {
+        return new HeadRequest(suffixUrl);
     }
 
     /**
      * PUT请求
+     * @param suffixUrl
      * @return
      */
-    public static PutRequest PUT() {
-        return new PutRequest();
+    public static PutRequest PUT(String suffixUrl) {
+        return new PutRequest(suffixUrl);
     }
 
     /**
      * PATCH请求
+     * @param suffixUrl
      * @return
      */
-    public static PatchRequest PATCH() {
-        return new PatchRequest();
+    public static PatchRequest PATCH(String suffixUrl) {
+        return new PatchRequest(suffixUrl);
     }
 
     /**
      * OPTIONS请求
+     * @param suffixUrl
      * @return
      */
-    public static OptionsRequest OPTIONS() {
-        return new OptionsRequest();
+    public static OptionsRequest OPTIONS(String suffixUrl) {
+        return new OptionsRequest(suffixUrl);
     }
 
     /**
      * DELETE请求
+     * @param suffixUrl
      * @return
      */
-    public static DeleteRequest DELETE() {
-        return new DeleteRequest();
+    public static DeleteRequest DELETE(String suffixUrl) {
+        return new DeleteRequest(suffixUrl);
     }
 
     /**
      * 上传
+     * @param suffixUrl
      * @return
      */
-    public static UploadRequest UPLOAD() {
-        return new UploadRequest();
+    public static UploadRequest UPLOAD(String suffixUrl) {
+        return new UploadRequest(suffixUrl);
     }
 
     /**
-     * 上传（包含上传进度）
-     * @param callback 上传进度回调
+     * 上传（包含上传进度回调）
+     * @param suffixUrl
      * @return
      */
-    public static UploadRequest UPLOAD(UCallback callback) {
-        return new UploadRequest(callback);
+    public static UploadRequest UPLOAD(String suffixUrl, UCallback uCallback) {
+        return new UploadRequest(suffixUrl, uCallback);
     }
 
     /**
      * 下载（回调DownProgress）
+     * @param suffixUrl
      * @return
      */
-    public static DownloadRequest DOWNLOAD() {
-        return new DownloadRequest();
+    public static DownloadRequest DOWNLOAD(String suffixUrl) {
+        return new DownloadRequest(suffixUrl);
     }
 
     /**
@@ -205,21 +208,21 @@ public class ViseHttp {
      * @param tag
      * @param disposable
      */
-    public void addDisposable(Object tag, Disposable disposable) {
+    public static void addDisposable(Object tag, Disposable disposable) {
         ApiManager.get().add(tag, disposable);
     }
 
     /**
      * 根据Tag取消请求
      */
-    public void cancelTag(Object tag) {
+    public static void cancelTag(Object tag) {
         ApiManager.get().cancel(tag);
     }
 
     /**
      * 取消所有请求请求
      */
-    public void cancelAll() {
+    public static void cancelAll() {
         ApiManager.get().cancelAll();
     }
 
@@ -227,7 +230,7 @@ public class ViseHttp {
      * 清除对应Key的缓存
      * @param key
      */
-    public void removeCache(String key) {
+    public static void removeCache(String key) {
         getApiCache().remove(key);
     }
 
@@ -235,7 +238,7 @@ public class ViseHttp {
      * 清楚所有缓存并关闭缓存
      * @return
      */
-    public Disposable clearCache() {
+    public static Disposable clearCache() {
         return getApiCache().clear();
     }
 

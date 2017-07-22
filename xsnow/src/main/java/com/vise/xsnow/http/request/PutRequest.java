@@ -16,7 +16,11 @@ import io.reactivex.observers.DisposableObserver;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-04-28 16:06
  */
-public class PutRequest extends BaseRequest<PutRequest> {
+public class PutRequest extends BaseHttpRequest<PutRequest> {
+    public PutRequest(String suffixUrl) {
+        super(suffixUrl);
+    }
+
     @Override
     protected <T> Observable<T> execute(Type type) {
         return apiService.put(suffixUrl, params).compose(this.<T>norTransformer(type));
@@ -24,7 +28,7 @@ public class PutRequest extends BaseRequest<PutRequest> {
 
     @Override
     protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return this.<T>execute(type).compose(ViseHttp.getInstance().getApiCache().<T>transformer(cacheMode, type));
+        return this.<T>execute(type).compose(ViseHttp.getApiCache().<T>transformer(cacheMode, type));
     }
 
     @Override

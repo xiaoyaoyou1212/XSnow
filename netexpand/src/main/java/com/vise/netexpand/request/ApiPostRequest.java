@@ -33,6 +33,10 @@ public class ApiPostRequest extends ApiBaseRequest {
     protected MediaType mediaType;
     protected String content;
 
+    public ApiPostRequest(String suffixUrl) {
+        super(suffixUrl);
+    }
+
     @Override
     protected <T> Observable<T> execute(Type type) {
         if (stringBuilder.length() > 0) {
@@ -71,7 +75,7 @@ public class ApiPostRequest extends ApiBaseRequest {
 
     @Override
     protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return this.<T>execute(type).compose(ViseHttp.getInstance().getApiCache().<T>transformer(cacheMode, type));
+        return this.<T>execute(type).compose(ViseHttp.getApiCache().<T>transformer(cacheMode, type));
     }
 
     @Override

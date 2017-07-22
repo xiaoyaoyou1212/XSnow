@@ -39,12 +39,13 @@ import okhttp3.ResponseBody;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/14 21:50.
  */
-public class DownloadRequest extends BaseRequest<DownloadRequest> {
+public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
 
     private String dirName = ViseConfig.DEFAULT_DOWNLOAD_DIR;
     private String fileName = ViseConfig.DEFAULT_DOWNLOAD_FILE_NAME;
 
-    public DownloadRequest() {
+    public DownloadRequest(String suffixUrl) {
+        super(suffixUrl);
     }
 
     public DownloadRequest setDirName(String dirName) {

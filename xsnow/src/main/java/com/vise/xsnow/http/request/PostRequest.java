@@ -25,13 +25,17 @@ import okhttp3.RequestBody;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2017-04-28 16:06
  */
-public class PostRequest extends BaseRequest<PostRequest> {
+public class PostRequest extends BaseHttpRequest<PostRequest> {
 
     protected Map<String, Object> forms = new LinkedHashMap<>();
     protected StringBuilder stringBuilder = new StringBuilder();
     protected RequestBody requestBody;
     protected MediaType mediaType;
     protected String content;
+
+    public PostRequest(String suffixUrl) {
+        super(suffixUrl);
+    }
 
     @Override
     protected <T> Observable<T> execute(Type type) {
@@ -63,7 +67,7 @@ public class PostRequest extends BaseRequest<PostRequest> {
 
     @Override
     protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return this.<T>execute(type).compose(ViseHttp.getInstance().getApiCache().<T>transformer(cacheMode, type));
+        return this.<T>execute(type).compose(ViseHttp.getApiCache().<T>transformer(cacheMode, type));
     }
 
     @Override

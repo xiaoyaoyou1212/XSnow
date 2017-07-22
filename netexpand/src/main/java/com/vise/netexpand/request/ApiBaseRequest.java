@@ -3,6 +3,7 @@ package com.vise.netexpand.request;
 import com.vise.netexpand.func.ApiDataFunc;
 import com.vise.netexpand.mode.ApiResult;
 import com.vise.xsnow.http.func.ApiRetryFunc;
+import com.vise.xsnow.http.request.BaseHttpRequest;
 import com.vise.xsnow.http.request.BaseRequest;
 
 import io.reactivex.Observable;
@@ -16,7 +17,11 @@ import io.reactivex.schedulers.Schedulers;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/28 15:46.
  */
-public abstract class ApiBaseRequest extends BaseRequest<ApiBaseRequest> {
+public abstract class ApiBaseRequest extends BaseHttpRequest<ApiBaseRequest> {
+    public ApiBaseRequest(String suffixUrl) {
+        super(suffixUrl);
+    }
+
     protected <T> ObservableTransformer<ApiResult<T>, T> apiTransformer() {
         return new ObservableTransformer<ApiResult<T>, T>() {
             @Override

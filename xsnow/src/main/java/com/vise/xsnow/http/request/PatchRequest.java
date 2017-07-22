@@ -16,7 +16,11 @@ import io.reactivex.observers.DisposableObserver;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/14 20:29.
  */
-public class PatchRequest extends BaseRequest<PatchRequest> {
+public class PatchRequest extends BaseHttpRequest<PatchRequest> {
+    public PatchRequest(String suffixUrl) {
+        super(suffixUrl);
+    }
+
     @Override
     protected <T> Observable<T> execute(Type type) {
         return apiService.patch(suffixUrl, params).compose(this.<T>norTransformer(type));
@@ -24,7 +28,7 @@ public class PatchRequest extends BaseRequest<PatchRequest> {
 
     @Override
     protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return this.<T>execute(type).compose(ViseHttp.getInstance().getApiCache().<T>transformer(cacheMode, type));
+        return this.<T>execute(type).compose(ViseHttp.getApiCache().<T>transformer(cacheMode, type));
     }
 
     @Override
