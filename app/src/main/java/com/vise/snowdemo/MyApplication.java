@@ -43,7 +43,7 @@ public class MyApplication extends Application {
         ViseHttp.init(this);
         ViseHttp.CONFIG()
                 //配置请求主机地址
-                .baseUrl("http://10.8.4.39/")
+                .baseUrl("http://192.168.1.100/")
                 //配置全局请求头
                 .globalHeaders(new HashMap<String, String>())
                 //配置全局请求参数

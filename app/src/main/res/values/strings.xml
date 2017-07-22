@@ -25,6 +25,9 @@
     <string name="request_post_3">POST 提交Json</string>
     <string name="request_post_4">POST URL带参数</string>
 
+    <string name="request_retrofit_1">自定义Retrofit请求</string>
+    <string name="request_retrofit_2">自定义Retrofit请求 带缓存</string>
+
     <string name="file_upload">文件上传</string>
     <string name="file_down">文件下载</string>
 

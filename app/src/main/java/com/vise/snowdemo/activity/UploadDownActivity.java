@@ -96,7 +96,7 @@ public class UploadDownActivity extends BaseActivity {
 
     private void upload() {
         mUpload_btn.setClickable(false);
-        ViseHttp.UPLOAD(new UCallback() {
+        ViseHttp.UPLOAD("v1/web/cms/skinStrategy/addOrUpdateSkinStrategy", new UCallback() {
             @Override
             public void onProgress(long currentLength, long totalLength, float percent) {
                 if (percent == 100) {
@@ -117,7 +117,6 @@ public class UploadDownActivity extends BaseActivity {
                 .addParam("status", "1")
                 .addFile("androidPicFile", getUploadFile(mContext, "test.jpg"))
                 .baseUrl("https://200.200.200.50/")
-                .suffixUrl("v1/web/cms/skinStrategy/addOrUpdateSkinStrategy")
                 .request(new ACallback<Object>() {
             @Override
             public void onSuccess(Object data) {
@@ -135,9 +134,8 @@ public class UploadDownActivity extends BaseActivity {
     private void download() {
         mDownload_btn.setClickable(false);
         String saveName = "weixin.apk";
-        ViseHttp.DOWNLOAD()
+        ViseHttp.DOWNLOAD("weixin/android/weixin6330android920.apk")
                 .baseUrl("http://dldir1.qq.com/")
-                .suffixUrl("weixin/android/weixin6330android920.apk")
                 .setFileName(saveName)
                 .request(new ACallback<DownProgress>() {
                     @Override
