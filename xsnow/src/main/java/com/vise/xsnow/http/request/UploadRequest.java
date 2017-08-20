@@ -92,6 +92,16 @@ public class UploadRequest extends BaseHttpRequest<UploadRequest> {
         return this;
     }
 
+    public UploadRequest addFiles(Map<String, File> fileMap) {
+        if (fileMap == null) {
+            return this;
+        }
+        for (Map.Entry<String, File> entry : fileMap.entrySet()) {
+            addFile(entry.getKey(), entry.getValue());
+        }
+        return this;
+    }
+
     public UploadRequest addFile(String key, File file) {
         return addFile(key, file, null);
     }

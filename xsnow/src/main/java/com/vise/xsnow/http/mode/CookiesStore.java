@@ -60,7 +60,8 @@ public class CookiesStore {
         String name = getCookieToken(cookie);
 
         //将cookies缓存到内存中 如果缓存过期 就重置此cookie
-        if (!cookie.persistent()) {
+        boolean hasExpired = cookie.persistent() && ((cookie.expiresAt() - System.currentTimeMillis()) / 1000 < 0);
+        if (hasExpired) {
             if (!cookies.containsKey(url.host())) {
                 cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
             }
@@ -73,7 +74,9 @@ public class CookiesStore {
 
         //将cookies持久化到本地
         SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
-        prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
+        if (cookies.get(url.host()) != null) {
+            prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
+        }
         prefsWriter.putString(name, encodeCookie(new OkHttpCookies(cookie)));
         prefsWriter.apply();
     }
