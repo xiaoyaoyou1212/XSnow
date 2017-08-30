@@ -2,10 +2,11 @@ package com.vise.xsnow.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
 import android.view.View;
 
 import com.vise.xsnow.event.BusManager;
@@ -18,13 +19,11 @@ import com.vise.xsnow.event.BusManager;
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected Context mContext;
-    private SparseArray<View> mViews;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        mViews = new SparseArray<>();
         if (isRegisterEvent()) {
             BusManager.getBus().register(this);
         }
@@ -61,16 +60,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         processClick(view);
     }
 
-    protected <E extends View> E F(int viewId) {
-        E view = (E) mViews.get(viewId);
-        if (view == null) {
-            view = (E) findViewById(viewId);
-            mViews.put(viewId, view);
-        }
-        return view;
+    protected <E extends View> E F(@IdRes int viewId) {
+        return (E) super.findViewById(viewId);
     }
 
-    protected <E extends View> void C(E view) {
+    protected <E extends View> E F(@NonNull View view, @IdRes int viewId) {
+        return (E) view.findViewById(viewId);
+    }
+
+    protected <E extends View> void C(@NonNull E view) {
         view.setOnClickListener(this);
     }
 

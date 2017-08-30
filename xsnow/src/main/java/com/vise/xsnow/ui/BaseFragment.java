@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected Resources mResources;
     protected LayoutInflater mInflater;
     protected View mConvertView;
-    private SparseArray<View> mViews;
     private boolean mIsRegisterEvent = false;
 
     @Override
@@ -31,7 +31,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         super.onAttach(activity);
         this.mContext = activity;
         this.mResources = mContext.getResources();
-        this.mViews = new SparseArray<>();
         this.mInflater = LayoutInflater.from(mContext);
         if (mIsRegisterEvent) {
             BusManager.getBus().register(this);
@@ -70,19 +69,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         processClick(view);
     }
 
-    protected <E extends View> E F(int viewId) {
-        if (mConvertView != null) {
-            E view = (E) mViews.get(viewId);
-            if (view == null) {
-                view = (E) mConvertView.findViewById(viewId);
-                mViews.put(viewId, view);
-            }
-            return view;
+    protected <E extends View> E F(@IdRes int viewId) {
+        if (mConvertView == null) {
+            return null;
         }
-        return null;
+        return (E) mConvertView.findViewById(viewId);
     }
 
-    protected <E extends View> void C(E view) {
+    protected <E extends View> E F(@NonNull View view, @IdRes int viewId) {
+        return (E) view.findViewById(viewId);
+    }
+
+    protected <E extends View> void C(@NonNull E view) {
         view.setOnClickListener(this);
     }
 

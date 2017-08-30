@@ -41,13 +41,32 @@ import okhttp3.ResponseBody;
  */
 public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
 
+    private String rootName;
     private String dirName = ViseConfig.DEFAULT_DOWNLOAD_DIR;
     private String fileName = ViseConfig.DEFAULT_DOWNLOAD_FILE_NAME;
 
     public DownloadRequest(String suffixUrl) {
         super(suffixUrl);
+        rootName = getDiskCachePath(ViseHttp.getContext());
     }
 
+    /**
+     * 设置根目录，默认App缓存目录，有外置卡则默认外置卡缓存目录
+     * @param rootName
+     * @return
+     */
+    public DownloadRequest setRootName(String rootName) {
+        if (!TextUtils.isEmpty(rootName)) {
+            this.rootName = rootName;
+        }
+        return this;
+    }
+
+    /**
+     * 设置文件夹路径
+     * @param dirName
+     * @return
+     */
     public DownloadRequest setDirName(String dirName) {
         if (!TextUtils.isEmpty(dirName)) {
             this.dirName = dirName;
@@ -55,6 +74,11 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
         return this;
     }
 
+    /**
+     * 设置文件名称
+     * @param fileName
+     * @return
+     */
     public DownloadRequest setFileName(String fileName) {
         if (!TextUtils.isEmpty(fileName)) {
             this.fileName = fileName;
@@ -75,9 +99,9 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
                         return Flowable.create(new FlowableOnSubscribe<DownProgress>() {
                             @Override
                             public void subscribe(FlowableEmitter<DownProgress> subscriber) throws Exception {
-                                File dir = getDiskCacheDir(ViseHttp.getContext(), dirName);
+                                File dir = getDiskCacheDir(rootName, dirName);
                                 if (!dir.exists()) {
-                                    dir.mkdir();
+                                    dir.mkdirs();
                                 }
                                 File file = new File(dir.getPath() + File.separator + fileName);
                                 saveFile(subscriber, file, responseBody);
@@ -145,7 +169,11 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
         }
     }
 
-    private File getDiskCacheDir(Context context, String dirName) {
+    private File getDiskCacheDir(String rootName, String dirName) {
+        return new File(rootName + File.separator + dirName);
+    }
+
+    private String getDiskCachePath(Context context) {
         String cachePath;
         if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable())
@@ -154,6 +182,6 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
         } else {
             cachePath = context.getCacheDir().getPath();
         }
-        return new File(cachePath + File.separator + dirName);
+        return cachePath;
     }
 }
