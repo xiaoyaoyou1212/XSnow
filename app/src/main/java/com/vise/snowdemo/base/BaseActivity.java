@@ -1,4 +1,4 @@
-package com.vise.xsnow.ui;
+package com.vise.snowdemo.base;
 
 import android.content.Context;
 import android.os.Bundle;

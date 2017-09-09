@@ -19,7 +19,7 @@ import com.vise.xsnow.http.callback.UCallback;
 import com.vise.xsnow.http.mode.DownProgress;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
-import com.vise.xsnow.ui.BaseActivity;
+import com.vise.snowdemo.base.BaseActivity;
 
 import java.io.File;
 

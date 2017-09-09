@@ -15,7 +15,7 @@ import com.vise.xsnow.cache.SpCache;
 import com.vise.xsnow.event.BusManager;
 import com.vise.xsnow.event.IEvent;
 import com.vise.xsnow.event.Subscribe;
-import com.vise.xsnow.ui.BaseActivity;
+import com.vise.snowdemo.base.BaseActivity;
 
 /**
  * @Description: 数据库、缓存及事件发送展示，具体展示结果参考日志

@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.vise.snowdemo.R;
-import com.vise.xsnow.ui.BaseActivity;
+import com.vise.snowdemo.base.BaseActivity;
 import com.vise.xsnow.ui.status.OnRetryListener;
 import com.vise.xsnow.ui.status.OnStatusViewListener;
 import com.vise.xsnow.ui.status.StatusLayoutManager;

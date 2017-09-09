@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
 import com.vise.log.ViseLog;
 import com.vise.netexpand.request.ApiGetRequest;
 import com.vise.netexpand.request.ApiPostRequest;
@@ -16,16 +15,13 @@ import com.vise.snowdemo.mode.AuthorModel;
 import com.vise.xsnow.common.GsonUtil;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
-import com.vise.xsnow.http.core.ApiCache;
 import com.vise.xsnow.http.core.ApiTransformer;
 import com.vise.xsnow.http.mode.CacheMode;
 import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
-import com.vise.xsnow.ui.BaseActivity;
+import com.vise.snowdemo.base.BaseActivity;
 
 import java.util.List;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * @Description: 网络获取相关展示

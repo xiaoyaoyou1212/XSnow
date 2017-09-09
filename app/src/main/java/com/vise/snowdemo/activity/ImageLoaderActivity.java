@@ -7,7 +7,7 @@ import android.widget.GridView;
 
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.adapter.ImageAdapter;
-import com.vise.xsnow.ui.BaseActivity;
+import com.vise.snowdemo.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
