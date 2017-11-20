@@ -40,7 +40,8 @@ public class ApiGetRequest extends ApiBaseRequest {
         }
         if (isLocalCache) {
             this.cacheExecute(getSubType(callback)).subscribe(disposableObserver);
+        } else {
+            this.execute(getType(callback)).subscribe(disposableObserver);
         }
-        this.execute(getType(callback)).subscribe(disposableObserver);
     }
 }

@@ -4,7 +4,6 @@ import com.vise.netexpand.func.ApiDataFunc;
 import com.vise.netexpand.mode.ApiResult;
 import com.vise.xsnow.http.func.ApiRetryFunc;
 import com.vise.xsnow.http.request.BaseHttpRequest;
-import com.vise.xsnow.http.request.BaseRequest;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

@@ -86,8 +86,9 @@ public class ApiPostRequest extends ApiBaseRequest {
         }
         if (isLocalCache) {
             this.cacheExecute(getSubType(callback)).subscribe(disposableObserver);
+        } else {
+            this.execute(getType(callback)).subscribe(disposableObserver);
         }
-        this.execute(getType(callback)).subscribe(disposableObserver);
     }
 
     public ApiPostRequest addUrlParam(String paramKey, String paramValue) {
