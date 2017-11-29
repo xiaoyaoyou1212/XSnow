@@ -1,4 +1,6 @@
 ## 版本说明
+- V2.1.4（2017-11-29）
+    - 修复取消所有网络请求出现的java.util.ConcurrentModificationException异常。
 
 - V2.1.3（2017-09-09）
     - 去掉基础Activity、Fragment，每个项目基本都会自定义，实际意义不大，故放到demo中提供一种参考。
