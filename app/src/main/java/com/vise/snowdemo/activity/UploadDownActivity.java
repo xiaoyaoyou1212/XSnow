@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.vise.log.ViseLog;
 import com.vise.snowdemo.R;
+import com.vise.snowdemo.base.BaseActivity;
 import com.vise.utils.view.DialogUtil;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
@@ -19,7 +20,6 @@ import com.vise.xsnow.http.callback.UCallback;
 import com.vise.xsnow.http.mode.DownProgress;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
-import com.vise.snowdemo.base.BaseActivity;
 
 import java.io.File;
 
@@ -110,7 +110,8 @@ public class UploadDownActivity extends BaseActivity {
             public void onFail(int errCode, String errMsg) {
                 mUpload_btn.setClickable(true);
                 ViseLog.i("upload errorCode:" + errCode + ",errorMsg:" + errMsg);
-            }}).addParam("strategyId", "41")
+            }
+        }).addParam("strategyId", "41")
                 .addParam("title", "初秋美白养成计划")
                 .addParam("tagIds", "95,96,208")
                 .addParam("content", "夏天晒黑了？初秋正是美白的好时机，快快行动起来。")
@@ -118,24 +119,26 @@ public class UploadDownActivity extends BaseActivity {
                 .addFile("androidPicFile", getUploadFile(mContext, "test.jpg"))
                 .baseUrl("https://200.200.200.50/")
                 .request(new ACallback<Object>() {
-            @Override
-            public void onSuccess(Object data) {
-                ViseLog.i("upload success:" + data);
-            }
+                    @Override
+                    public void onSuccess(Object data) {
+                        ViseLog.i("upload success:" + data);
+                    }
 
-            @Override
-            public void onFail(int errCode, String errMsg) {
-                mUpload_btn.setClickable(true);
-                ViseLog.i("upload errorCode:" + errCode + ",errorMsg:" + errMsg);
-            }
-        });
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        mUpload_btn.setClickable(true);
+                        ViseLog.i("upload errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+                });
     }
 
     private void download() {
         mDownload_btn.setClickable(false);
         String saveName = "weixin.apk";
-        ViseHttp.DOWNLOAD("weixin/android/weixin6330android920.apk")
-                .baseUrl("http://dldir1.qq.com/")
+        //http://dldir1.qq.com/weixin/android/weixin6330android920.apk
+        //http://imtt.dd.qq.com/16891/1A8EA15110A5DA113EBD2F955615C7EC.apk?fsname=com.moji.mjweather_7.0103.02_7010302.apk&csr=1bbd
+        ViseHttp.DOWNLOAD("16891/1A8EA15110A5DA113EBD2F955615C7EC.apk?fsname=com.moji.mjweather_7.0103.02_7010302.apk&csr=1bbd")
+                .baseUrl("http://imtt.dd.qq.com/")
                 .setFileName(saveName)
                 .request(new ACallback<DownProgress>() {
                     @Override

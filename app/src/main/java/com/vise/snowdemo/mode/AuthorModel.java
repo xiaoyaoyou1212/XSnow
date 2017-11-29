@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @date: 2017/6/5 20:29
  */
 @Entity
-public class AuthorModel implements Serializable{
+public class AuthorModel implements Serializable {
     @Id(autoincrement = true)
     private Long id;
     private int author_id;
@@ -26,8 +26,8 @@ public class AuthorModel implements Serializable{
 
     @Generated(hash = 1688768647)
     public AuthorModel(Long id, int author_id, String author_name,
-            String author_nickname, String author_account, String author_github,
-            String author_csdn, String author_websit, String author_introduction) {
+                       String author_nickname, String author_account, String author_github,
+                       String author_csdn, String author_websit, String author_introduction) {
         this.id = id;
         this.author_id = author_id;
         this.author_name = author_name;

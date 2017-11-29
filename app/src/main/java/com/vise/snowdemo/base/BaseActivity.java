@@ -93,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     /**
      * 点击事件处理
+     *
      * @param view
      */
     protected abstract void processClick(View view);

@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/28 15:46.
  */
-public abstract class ApiBaseRequest extends BaseHttpRequest<ApiBaseRequest> {
+public abstract class ApiBaseRequest<R extends ApiBaseRequest> extends BaseHttpRequest<R> {
     public ApiBaseRequest(String suffixUrl) {
         super(suffixUrl);
     }

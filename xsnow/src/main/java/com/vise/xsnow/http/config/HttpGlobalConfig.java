@@ -48,6 +48,7 @@ public class HttpGlobalConfig {
     private int retryCount;//请求失败重试次数
 
     private static HttpGlobalConfig instance;
+
     private HttpGlobalConfig() {
     }
 
@@ -167,6 +168,7 @@ public class HttpGlobalConfig {
 
     /**
      * 设置HTTP缓存路径
+     *
      * @param httpCacheDirectory
      * @return
      */
@@ -177,6 +179,7 @@ public class HttpGlobalConfig {
 
     /**
      * 设置HTTP缓存
+     *
      * @param httpCache
      * @return
      */
@@ -221,6 +224,7 @@ public class HttpGlobalConfig {
 
     /**
      * 设置请求失败重试间隔时间
+     *
      * @param retryDelayMillis
      * @return
      */
@@ -231,6 +235,7 @@ public class HttpGlobalConfig {
 
     /**
      * 设置请求失败重试次数
+     *
      * @param retryCount
      * @return
      */

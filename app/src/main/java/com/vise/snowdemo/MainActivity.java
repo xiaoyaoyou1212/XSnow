@@ -21,6 +21,7 @@ import com.vise.snowdemo.activity.NetTestActivity;
 import com.vise.snowdemo.activity.OtherTestActivity;
 import com.vise.snowdemo.activity.StatusSwitchActivity;
 import com.vise.snowdemo.activity.UploadDownActivity;
+import com.vise.snowdemo.base.BaseActivity;
 import com.vise.snowdemo.mode.AuthorEvent;
 import com.vise.utils.view.ActivityUtil;
 import com.vise.utils.view.DialogUtil;
@@ -28,7 +29,6 @@ import com.vise.xsnow.event.IEvent;
 import com.vise.xsnow.event.Subscribe;
 import com.vise.xsnow.permission.OnPermissionCallback;
 import com.vise.xsnow.permission.PermissionManager;
-import com.vise.snowdemo.base.BaseActivity;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 

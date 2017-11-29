@@ -1,7 +1,7 @@
 package com.vise.xsnow.http.core;
 
-import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.disposables.Disposable;
 
@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable;
 public class ApiManager {
     private static ApiManager sInstance;
 
-    private HashMap<Object, Disposable> arrayMaps;
+    private ConcurrentHashMap<Object, Disposable> arrayMaps;
 
     public static ApiManager get() {
         if (sInstance == null) {
@@ -27,7 +27,7 @@ public class ApiManager {
     }
 
     private ApiManager() {
-        arrayMaps = new HashMap<>();
+        arrayMaps = new ConcurrentHashMap<>();
     }
 
     public void add(Object tag, Disposable disposable) {

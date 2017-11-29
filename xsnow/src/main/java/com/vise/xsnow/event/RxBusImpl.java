@@ -20,6 +20,7 @@ public class RxBusImpl extends EventBase implements IBus {
 
     /**
      * 注册事件监听
+     *
      * @param object
      */
     @Override
@@ -38,6 +39,7 @@ public class RxBusImpl extends EventBase implements IBus {
 
     /**
      * 取消事件监听
+     *
      * @param object
      */
     @Override
@@ -54,6 +56,7 @@ public class RxBusImpl extends EventBase implements IBus {
 
     /**
      * 发送普通事件
+     *
      * @param event
      */
     @Override
@@ -63,6 +66,7 @@ public class RxBusImpl extends EventBase implements IBus {
 
     /**
      * 发送粘性事件
+     *
      * @param event
      */
     @Override

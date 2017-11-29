@@ -50,6 +50,7 @@ public class EventComposite extends EventBase {
 
     /**
      * 发送粘性事件
+     *
      * @param objectMap
      */
     public final void subscriberSticky(Map<Class<?>, Object> objectMap) {

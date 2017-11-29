@@ -26,7 +26,7 @@ import okhttp3.RequestBody;
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 17/5/28 15:48.
  */
-public class ApiPostRequest extends ApiBaseRequest {
+public class ApiPostRequest extends ApiBaseRequest<ApiPostRequest> {
     protected Map<String, Object> forms = new LinkedHashMap<>();
     protected StringBuilder stringBuilder = new StringBuilder();
     protected RequestBody requestBody;

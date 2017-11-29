@@ -52,6 +52,7 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
 
     /**
      * 设置根目录，默认App缓存目录，有外置卡则默认外置卡缓存目录
+     *
      * @param rootName
      * @return
      */
@@ -64,6 +65,7 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
 
     /**
      * 设置文件夹路径
+     *
      * @param dirName
      * @return
      */
@@ -76,6 +78,7 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
 
     /**
      * 设置文件名称
+     *
      * @param fileName
      * @return
      */

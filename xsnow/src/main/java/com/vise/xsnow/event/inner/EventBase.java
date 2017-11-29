@@ -33,6 +33,7 @@ public class EventBase {
 
     /**
      * 删除指定粘性事件
+     *
      * @param event
      */
     static synchronized void dellSticky(Object event) {

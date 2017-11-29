@@ -11,6 +11,7 @@ import com.vise.netexpand.request.ApiGetRequest;
 import com.vise.netexpand.request.ApiPostRequest;
 import com.vise.snowdemo.R;
 import com.vise.snowdemo.api.AuthorService;
+import com.vise.snowdemo.base.BaseActivity;
 import com.vise.snowdemo.mode.AuthorModel;
 import com.vise.xsnow.common.GsonUtil;
 import com.vise.xsnow.http.ViseHttp;
@@ -19,7 +20,6 @@ import com.vise.xsnow.http.core.ApiTransformer;
 import com.vise.xsnow.http.mode.CacheMode;
 import com.vise.xsnow.http.mode.CacheResult;
 import com.vise.xsnow.http.subscriber.ApiCallbackSubscriber;
-import com.vise.snowdemo.base.BaseActivity;
 
 import java.util.List;
 
@@ -174,26 +174,29 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_1() {
         mShow_response_data.setText("");
-        ViseHttp.GET("getAuthor").request(new ACallback<AuthorModel>() {
-            @Override
-            public void onSuccess(AuthorModel authorModel) {
-                ViseLog.i("request onSuccess!");
-                if (authorModel == null) {
-                    return;
-                }
-                mShow_response_data.setText(authorModel.toString());
-            }
+        ViseHttp.GET("getAuthor")
+                .tag("request_get_1")
+                .request(new ACallback<AuthorModel>() {
+                    @Override
+                    public void onSuccess(AuthorModel authorModel) {
+                        ViseLog.i("request onSuccess!");
+                        if (authorModel == null) {
+                            return;
+                        }
+                        mShow_response_data.setText(authorModel.toString());
+                    }
 
-            @Override
-            public void onFail(int errCode, String errMsg) {
-                ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
-            }
-        });
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+                });
     }
 
     private void request_get_2() {
         mShow_response_data.setText("");
         ViseHttp.GET("getAuthor")
+                .tag("request_get_2")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_CACHE)
                 .request(new ACallback<CacheResult<AuthorModel>>() {
@@ -220,6 +223,7 @@ public class NetTestActivity extends BaseActivity {
     private void request_get_3() {
         mShow_response_data.setText("");
         ViseHttp.GET("getAuthor")
+                .tag("request_get_3")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.FIRST_REMOTE)
                 .request(new ACallback<CacheResult<AuthorModel>>() {
@@ -246,6 +250,7 @@ public class NetTestActivity extends BaseActivity {
     private void request_get_4() {
         mShow_response_data.setText("");
         ViseHttp.GET("getAuthor")
+                .tag("request_get_4")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_CACHE)
                 .request(new ACallback<CacheResult<AuthorModel>>() {
@@ -272,6 +277,7 @@ public class NetTestActivity extends BaseActivity {
     private void request_get_5() {
         mShow_response_data.setText("");
         ViseHttp.GET("getAuthor")
+                .tag("request_get_5")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.ONLY_REMOTE)
                 .request(new ACallback<CacheResult<AuthorModel>>() {
@@ -298,6 +304,7 @@ public class NetTestActivity extends BaseActivity {
     private void request_get_6() {
         mShow_response_data.setText("");
         ViseHttp.GET("getAuthor")
+                .tag("request_get_6")
                 .setLocalCache(true)
                 .cacheMode(CacheMode.CACHE_AND_REMOTE)
                 .request(new ACallback<CacheResult<AuthorModel>>() {
@@ -323,45 +330,49 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_7() {
         mShow_response_data.setText("");
-        ViseHttp.GET("getString").request(new ACallback<String>() {
-            @Override
-            public void onSuccess(String data) {
-                ViseLog.i("request onSuccess!");
-                if (data == null) {
-                    return;
-                }
-                mShow_response_data.setText(data);
-            }
+        ViseHttp.GET("getString")
+                .tag("request_get_7")
+                .request(new ACallback<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        ViseLog.i("request onSuccess!");
+                        if (data == null) {
+                            return;
+                        }
+                        mShow_response_data.setText(data);
+                    }
 
-            @Override
-            public void onFail(int errCode, String errMsg) {
-                ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
-            }
-        });
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+                });
     }
 
     private void request_get_8() {
         mShow_response_data.setText("");
-        ViseHttp.GET("getListAuthor").request(new ACallback<List<AuthorModel>>() {
-            @Override
-            public void onSuccess(List<AuthorModel> authorModel) {
-                ViseLog.i("request onSuccess!");
-                if (authorModel == null) {
-                    return;
-                }
-                mShow_response_data.setText(authorModel.toString());
-            }
+        ViseHttp.GET("getListAuthor")
+                .tag("request_get_8")
+                .request(new ACallback<List<AuthorModel>>() {
+                    @Override
+                    public void onSuccess(List<AuthorModel> authorModel) {
+                        ViseLog.i("request onSuccess!");
+                        if (authorModel == null) {
+                            return;
+                        }
+                        mShow_response_data.setText(authorModel.toString());
+                    }
 
-            @Override
-            public void onFail(int errCode, String errMsg) {
-                ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
-            }
-        });
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+                });
     }
 
     private void request_get_9() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiGetRequest("getApiResultAuthor")).request(new ACallback<AuthorModel>() {
+        ViseHttp.BASE(new ApiGetRequest("getApiResultAuthor").tag("request_get_9")).request(new ACallback<AuthorModel>() {
             @Override
             public void onSuccess(AuthorModel authorModel) {
                 ViseLog.i("request onSuccess!");
@@ -380,7 +391,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_10() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiGetRequest("getApiResultString")).request(new ACallback<String>() {
+        ViseHttp.BASE(new ApiGetRequest("getApiResultString").tag("request_get_10")).request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
                 ViseLog.i("request onSuccess!");
@@ -399,7 +410,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_get_11() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiGetRequest("getApiResultListAuthor")).request(new ACallback<List<AuthorModel>>() {
+        ViseHttp.BASE(new ApiGetRequest("getApiResultListAuthor").tag("request_get_11")).request(new ACallback<List<AuthorModel>>() {
             @Override
             public void onSuccess(List<AuthorModel> authorModel) {
                 ViseLog.i("request onSuccess!");
@@ -418,7 +429,7 @@ public class NetTestActivity extends BaseActivity {
 
     private void request_post_1() {
         mShow_response_data.setText("");
-        ViseHttp.BASE(new ApiPostRequest("postAuthor")).request(new ACallback<String>() {
+        ViseHttp.BASE(new ApiPostRequest("postAuthor").tag("request_post_1")).request(new ACallback<String>() {
             @Override
             public void onSuccess(String data) {
                 ViseLog.i("request onSuccess!");
@@ -438,6 +449,7 @@ public class NetTestActivity extends BaseActivity {
     private void request_post_2() {
         mShow_response_data.setText("");
         ViseHttp.BASE(new ApiPostRequest("postFormAuthor")
+                .tag("request_post_2")
                 .addForm("author_name", getString(R.string.author_name))
                 .addForm("author_nickname", getString(R.string.author_nickname))
                 .addForm("author_account", "xiaoyaoyou1212")
@@ -474,6 +486,7 @@ public class NetTestActivity extends BaseActivity {
         mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
         mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
         ViseHttp.BASE(new ApiPostRequest("postJsonAuthor")
+                .tag("request_post_3")
                 .setJson(GsonUtil.gson().toJson(mAuthorModel)))
                 .request(new ACallback<String>() {
                     @Override
@@ -504,6 +517,7 @@ public class NetTestActivity extends BaseActivity {
         mAuthorModel.setAuthor_websit("http://www.huwei.tech/");
         mAuthorModel.setAuthor_introduction(getString(R.string.author_introduction));
         ViseHttp.BASE(new ApiPostRequest("postUrlAuthor")
+                .tag("request_post_4")
                 .addUrlParam("appId", "10001")
                 .addUrlParam("appType", "Android")
                 .setJson(GsonUtil.gson().toJson(mAuthorModel)))
@@ -571,5 +585,11 @@ public class NetTestActivity extends BaseActivity {
                         ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
                     }
                 }));
+    }
+
+    @Override
+    protected void onDestroy() {
+        ViseHttp.cancelAll();
+        super.onDestroy();
     }
 }

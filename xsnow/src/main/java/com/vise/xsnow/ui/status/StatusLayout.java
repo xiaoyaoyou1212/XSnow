@@ -52,9 +52,12 @@ public class StatusLayout extends FrameLayout {
             addLayoutResId(mStatusLayoutManager.getLoadingLayoutResId(), StatusType.LOADING.getType());
         }
 
-        if (mStatusLayoutManager.getEmptyView() != null) addView(mStatusLayoutManager.getEmptyView());
-        if (mStatusLayoutManager.getOtherErrorView() != null) addView(mStatusLayoutManager.getOtherErrorView());
-        if (mStatusLayoutManager.getNetworkErrorView() != null) addView(mStatusLayoutManager.getNetworkErrorView());
+        if (mStatusLayoutManager.getEmptyView() != null)
+            addView(mStatusLayoutManager.getEmptyView());
+        if (mStatusLayoutManager.getOtherErrorView() != null)
+            addView(mStatusLayoutManager.getOtherErrorView());
+        if (mStatusLayoutManager.getNetworkErrorView() != null)
+            addView(mStatusLayoutManager.getNetworkErrorView());
     }
 
     private void addLayoutResId(@LayoutRes int layoutResId, int id) {
@@ -67,14 +70,16 @@ public class StatusLayout extends FrameLayout {
      * 显示加载视图
      */
     public void showLoadingView() {
-        if (mLayoutSparseArray.get(StatusType.LOADING.getType()) != null) showHideViewById(StatusType.LOADING.getType());
+        if (mLayoutSparseArray.get(StatusType.LOADING.getType()) != null)
+            showHideViewById(StatusType.LOADING.getType());
     }
 
     /**
      * 显示内容视图
      */
     public void showContentView() {
-        if (mLayoutSparseArray.get(StatusType.CONTENT.getType()) != null) showHideViewById(StatusType.CONTENT.getType());
+        if (mLayoutSparseArray.get(StatusType.CONTENT.getType()) != null)
+            showHideViewById(StatusType.CONTENT.getType());
     }
 
     /**
@@ -88,14 +93,16 @@ public class StatusLayout extends FrameLayout {
      * 显示网络异常
      */
     public void showNetworkErrorView() {
-        if (inflateLayout(StatusType.NETWORK_ERROR.getType())) showHideViewById(StatusType.NETWORK_ERROR.getType());
+        if (inflateLayout(StatusType.NETWORK_ERROR.getType()))
+            showHideViewById(StatusType.NETWORK_ERROR.getType());
     }
 
     /**
      * 显示其他异常
      */
     public void showOtherErrorView() {
-        if (inflateLayout(StatusType.OTHER_ERROR.getType())) showHideViewById(StatusType.OTHER_ERROR.getType());
+        if (inflateLayout(StatusType.OTHER_ERROR.getType()))
+            showHideViewById(StatusType.OTHER_ERROR.getType());
     }
 
     /**
@@ -142,12 +149,12 @@ public class StatusLayout extends FrameLayout {
             retryLoad(view, mStatusLayoutManager.getNetworkErrorRetryViewId());
             mLayoutSparseArray.put(id, view);
             isShow = true;
-        } else if(id == StatusType.EMPTY.getType() && mStatusLayoutManager.getEmptyView() != null) {
+        } else if (id == StatusType.EMPTY.getType() && mStatusLayoutManager.getEmptyView() != null) {
             View view = mStatusLayoutManager.getEmptyView().inflate();
             retryLoad(view, mStatusLayoutManager.getEmptyRetryViewId());
             mLayoutSparseArray.put(id, view);
             isShow = true;
-        } else if(id == StatusType.OTHER_ERROR.getType() && mStatusLayoutManager.getOtherErrorView() != null) {
+        } else if (id == StatusType.OTHER_ERROR.getType() && mStatusLayoutManager.getOtherErrorView() != null) {
             View view = mStatusLayoutManager.getOtherErrorView().inflate();
             retryLoad(view, mStatusLayoutManager.getOtherErrorRetryViewId());
             mLayoutSparseArray.put(id, view);

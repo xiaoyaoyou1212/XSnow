@@ -96,7 +96,7 @@ public class HttpLogInterceptor implements Interceptor {
                 log(" ");
                 if (logBody && hasRequestBody) {
                     if (isPlaintext(requestBody.contentType())) {
-                        log("\t"+requestBody.contentType());
+                        log("\t" + requestBody.contentType());
                         bodyToString(request);
                     } else {
                         log("\tbody: maybe [file part] , too large too print , ignored!");

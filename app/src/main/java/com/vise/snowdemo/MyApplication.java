@@ -96,9 +96,9 @@ public class MyApplication extends Application {
                 .hostnameVerifier(new SSLUtil.UnSafeHostnameVerifier("http://192.168.1.100/"))
                 //配置SSL证书验证
                 .SSLSocketFactory(SSLUtil.getSslSocketFactory(null, null, null))
-                //配置主机代理
+        //配置主机代理
 //                .proxy(new Proxy(Proxy.Type.HTTP, new SocketAddress() {}))
-                ;
+        ;
 
     }
 

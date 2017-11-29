@@ -42,7 +42,7 @@ public class FrescoLoader implements ILoader {
 
     @Override
     public void loadResource(ImageView target, int resId, Options options) {
-        Uri uri = Uri.parse("res://" + context.getPackageName() +  "/" + resId);
+        Uri uri = Uri.parse("res://" + context.getPackageName() + "/" + resId);
         load(target, uri, options);
     }
 

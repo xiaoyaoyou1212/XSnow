@@ -93,6 +93,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     /**
      * AccessToken错误或已过期
+     *
      * @param chain
      * @param request
      * @return
@@ -101,6 +102,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     /**
      * RefreshToken错误或已过期
+     *
      * @param chain
      * @param request
      * @return
@@ -109,6 +111,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     /**
      * 帐号在其它手机已登录
+     *
      * @param chain
      * @param request
      * @return
@@ -117,6 +120,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     /**
      * 签名错误
+     *
      * @param chain
      * @param request
      * @return
@@ -125,6 +129,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     /**
      * timestamp过期
+     *
      * @param chain
      * @param request
      * @return
@@ -133,6 +138,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     /**
      * 缺少授权信息
+     *
      * @param chain
      * @param request
      * @return

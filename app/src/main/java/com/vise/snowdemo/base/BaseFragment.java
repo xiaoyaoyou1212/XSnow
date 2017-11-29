@@ -117,6 +117,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     /**
      * 点击事件处理
+     *
      * @param view
      */
     protected abstract void processClick(View view);

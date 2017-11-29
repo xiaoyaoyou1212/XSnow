@@ -51,7 +51,7 @@ public class DbHelper {
 
     public DBManager<AuthorModel, Long> author() {
         if (author == null) {
-            author = new DBManager<AuthorModel, Long>(){
+            author = new DBManager<AuthorModel, Long>() {
                 @Override
                 public AbstractDao<AuthorModel, Long> getAbstractDao() {
                     return mDaoSession.getAuthorModelDao();

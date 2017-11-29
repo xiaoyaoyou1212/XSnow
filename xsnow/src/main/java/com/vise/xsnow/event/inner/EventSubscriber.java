@@ -41,6 +41,7 @@ class EventSubscriber extends EventBase {
 
     /**
      * 订阅事件
+     *
      * @param aClass
      */
     private void subscribeEvent(Class aClass) {
@@ -64,6 +65,7 @@ class EventSubscriber extends EventBase {
 
     /**
      * 分发事件
+     *
      * @param event
      * @throws InvocationTargetException
      */
