@@ -33,7 +33,6 @@ public class ViseHttp {
     private static Retrofit.Builder retrofitBuilder;
     private static ApiCache.Builder apiCacheBuilder;
     private static OkHttpClient okHttpClient;
-    private static ApiCache apiCache;
 
     private static final HttpGlobalConfig NET_GLOBAL_CONFIG = HttpGlobalConfig.getInstance();
 
@@ -86,10 +85,7 @@ public class ViseHttp {
     }
 
     public static ApiCache getApiCache() {
-        if (apiCache == null || apiCache.isClosed()) {
-            apiCache = getApiCacheBuilder().build();
-        }
-        return apiCache;
+        return getApiCacheBuilder().build();
     }
 
     /**
