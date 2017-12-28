@@ -29,6 +29,7 @@ import okio.Buffer;
 public class HttpLogInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private volatile Level level = Level.NONE;
+    private StringBuilder showMessage = new StringBuilder();
 
     public enum Level {
         NONE,       //不打印log
@@ -38,7 +39,16 @@ public class HttpLogInterceptor implements Interceptor {
     }
 
     private void log(String message) {
-        ViseLog.i(message);
+        // 请求或者响应开始
+        if (message.startsWith("--> POST") || message.startsWith("--> GET")) {
+            showMessage.setLength(0);
+        }
+        showMessage.append(message.concat("\n"));
+        // 响应结束，打印整条日志
+        if (message.startsWith("<-- END HTTP")) {
+            ViseLog.i(showMessage.toString());
+        }
+
     }
 
     public HttpLogInterceptor setLevel(Level level) {
@@ -125,8 +135,9 @@ public class HttpLogInterceptor implements Interceptor {
                     log("\t" + headers.name(i) + ": " + headers.value(i));
                 }
                 log(" ");
-                if (logBody && HttpHeaders.hasVaryAll(clone)) {
-                    if (responseBody != null && isPlaintext(responseBody.contentType())) {
+                if (logBody && HttpHeaders.hasBody(clone)) {
+                    if (responseBody != null && responseBody.contentType() != null
+                            && isPlaintext(responseBody.contentType())) {
                         String body = responseBody.string();
                         log("\tbody:" + body);
                         responseBody = ResponseBody.create(responseBody.contentType(), body);
