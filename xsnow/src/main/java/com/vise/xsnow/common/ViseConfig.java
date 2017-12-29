@@ -28,8 +28,8 @@ public class ViseConfig {
     public static final long DEFAULT_KEEP_ALIVE_DURATION = 8;//默认心跳间隔时长（秒）
     public static final long CACHE_MAX_SIZE = 10 * 1024 * 1024;//默认最大缓存大小（字节）
 
-    public static final int DEFAULT_RETRY_COUNT = 3;//默认重试次数
-    public static final int DEFAULT_RETRY_DELAY_MILLIS = 3000;//默认重试间隔时间（毫秒）
+    public static final int DEFAULT_RETRY_COUNT = 0;//默认重试次数
+    public static final int DEFAULT_RETRY_DELAY_MILLIS = 1000;//默认重试间隔时间（毫秒）
 
     public static final String DEFAULT_DOWNLOAD_DIR = "download";//默认下载目录
     public static final String DEFAULT_DOWNLOAD_FILE_NAME = "download_file.tmp";//默认下载文件名称

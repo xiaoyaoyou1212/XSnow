@@ -4,6 +4,7 @@ import com.vise.xsnow.http.core.ApiCache;
 import com.vise.xsnow.http.mode.CacheResult;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
@@ -25,7 +26,7 @@ public class FirstRemoteStrategy<T> extends CacheStrategy<T> {
             }
         });
         Observable<CacheResult<T>> cache = loadCache(apiCache, cacheKey, type);
-        return Observable.concat(remote, cache).filter(new Predicate<CacheResult<T>>() {
+        return Observable.concatDelayError(Arrays.asList(remote,cache)).filter(new Predicate<CacheResult<T>>() {
             @Override
             public boolean test(CacheResult<T> tCacheResult) throws Exception {
                 return tCacheResult != null && tCacheResult.getCacheData() != null;
