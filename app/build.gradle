@@ -3,12 +3,12 @@ apply plugin: 'org.greenrobot.greendao'
 //apply plugin: 'com.antfortune.freeline'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.vise.snowdemo"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:design:25.0.1'
     compile project(path: ':netexpand')
 
     /**
