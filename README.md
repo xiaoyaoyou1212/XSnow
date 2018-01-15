@@ -498,6 +498,68 @@ mLayoutMain.addView(mStatusLayoutManager.getStatusLayout());关联根视图
 mStatusLayoutManager.showLoadingView();//显示加载视图
 ```
 
+### 混淆配置
+由于 XSnow 库有依赖部分第三方库，所以需要对依赖的第三方库也做相应的混淆保护，具体的混淆配置如下：
+```
+#glide
+-dontwarn com.bumptech.glide.**
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+#gson
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *; }
+
+#rxjava
+-dontwarn io.reactivex.**
+-keep class io.reactivex.** { *; }
+
+#okhttp
+-dontwarn okio.**
+-keep class okio.** { *; }
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *; }
+
+#retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+#greendao
+-dontwarn org.greenrobot.greendao.**
+-keep class org.greenrobot.greendao.** { *; }
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+    public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+```
+
+针对 XSnow 库本身的混淆保护配置如下：
+```
+#XSnow
+-dontwarn com.vise.utils.**
+-keep class com.vise.xsnow.event.inner.ThreadMode { *; }
+-keep class com.vise.xsnow.http.api.ApiService { *; }
+-keep class com.vise.xsnow.http.mode.CacheMode
+-keep class com.vise.xsnow.http.mode.CacheResult { *; }
+-keep class com.vise.xsnow.http.mode.DownProgress { *; }
+-keep class com.vise.xsnow.http.strategy.**
+-keepclassmembers class * {
+    @com.vise.xsnow.event.Subscribe <methods>;
+}
+-keep class com.bumptech.glide.Glide
+```
+
+如果有拷贝使用到拓展库 netexpand，那么需要保护 ApiResult 这个类，具体配置如下：
+```
+#netexpand
+-keep class com.vise.netexpand.mode.ApiResult { *; }
+```
+
 ### 注意事项
 
 - 该框架引用了日志系统和公共工具库，这两个库都很轻量级，具体使用详情可分别参考[https://github.com/xiaoyaoyou1212/ViseLog](https://github.com/xiaoyaoyou1212/ViseLog)和[https://github.com/xiaoyaoyou1212/ViseUtils](https://github.com/xiaoyaoyou1212/ViseUtils)。
