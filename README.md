@@ -356,11 +356,11 @@ ViseHttp.DOWNLOAD("weixin/android/weixin6330android920.apk")
 
 ### 使用示例：
 
-- 发送事件：`BusFactory.getBus().post(new AuthorEvent().setAuthorModel(mAuthorModel));`
+- 发送事件：`BusManager.getBus().post(new AuthorEvent().setAuthorModel(mAuthorModel));`
 
-- 注册事件：`BusFactory.getBus().register(this);`
+- 注册事件：`BusManager.getBus().register(this);`
 
-- 取消注册：`BusFactory.getBus().unregister(this);`
+- 取消注册：`BusManager.getBus().unregister(this);`
 
 - 接收事件：
 ```
@@ -371,7 +371,7 @@ public void showAuthor(IEvent event) {
     }
 }
 ```
-如果需要定制使用其他Bus如EventBus，那么只需将实现IBus接口的对象在应用初始化时通过`BusFactory.setBus(new EventBus())`传进去即可。
+如果需要定制使用其他Bus如EventBus，那么只需将实现IBus接口的对象在应用初始化时通过`BusManager.setBus(new EventBus())`传进去即可。
 
 ## 数据库
 
