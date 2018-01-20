@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfcabf1d9793485d84f090e542255710)](https://www.codacy.com/app/xiaoyaoyou1212/XSnow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xiaoyaoyou1212/XSnow&amp;utm_campaign=Badge_Grade) [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/LICENSE) [![API](https://img.shields.io/badge/API-12%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=12)
 
-基于RxJava2+Retrofit2精心打造的Android基础框架，包含网络、上传、下载、缓存、事件总线、权限管理、数据库、图片加载、UI模块，基本都是项目中必用功能，每个模块充分解耦，可自由拓展。
+基于RxJava2+Retrofit2精心打造的Android基础框架，包含网络、上传、下载、缓存、事件总线、权限管理、数据库、图片加载，基本都是项目中必用功能，每个模块充分解耦，可自由拓展。
 
 XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意。该框架通用纯净，只依赖公共核心库。
 
@@ -443,59 +443,6 @@ PermissionManager.instance().with(this).request(new OnPermissionCallback() {
                 getString(R.string.permission_noAsk) + "\n" + permissionName);
     }
 }, Manifest.permission.CALL_PHONE);
-```
-
-## UI
-
-### 简介：
-
-包含基础组件、视图状态管理以及万能适配器。适配器可满足所有基于BaseAdapter的适配器组装，使用方便，易拓展；视图状态管理包含空视图、网络异常、其他异常的重试以及视图切换机制。
-
-### 使用示例：
-```
-//创建视图管理
-mStatusLayoutManager = StatusLayoutManager.newBuilder(mContext)
-        .contentView(R.layout.status_switch_content_layout)//配置内容视图
-        .loadingView(R.layout.loading_layout)//配置加载视图
-        .emptyView(R.layout.empty_layout)//配置空视图
-        .networkErrorView(R.layout.network_error_layout)//配置网络异常视图
-        .otherErrorView(R.layout.other_error_layout)//配置其他异常视图
-        .retryViewId(R.id.reload_view)//配置重试ViewID
-        .onStatusViewListener(new OnStatusViewListener() {//配置状态监听
-            @Override
-            public void onShowView(View view, int id) {//显示
-            }
-
-            @Override
-            public void onHideView(View view, int id) {//隐藏
-            }
-        })
-        .onRetryListener(new OnRetryListener() {//配置重试监听
-            @Override
-            public void onRetry() {
-            	//模拟重试，显示加载视图
-                mStatusLayoutManager.showLoadingView();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                            	//加载成功，显示内容视图
-                                mStatusLayoutManager.showContentView();
-                            }
-                        });
-                    }
-                }).start();
-            }
-        }).build();
-mLayoutMain.addView(mStatusLayoutManager.getStatusLayout());关联根视图
-mStatusLayoutManager.showLoadingView();//显示加载视图
 ```
 
 ### 混淆配置
