@@ -22,15 +22,26 @@ android {
 }
 
 dependencies {
+    /**
+     * 以下为必须依赖包：
+     * 第一个是注解框架
+     * 第二个是工具包，提供常用工具类方便开发，整个包很小；
+     * 后续几个为该库的基础依赖，该库是基于 RxJava 和 Retrofit 实现的
+     */
+    compile 'com.android.support:support-annotations:25.0.1'
     compile 'com.vise.xiaoyaoyou:viseutils:1.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'org.greenrobot:greendao:3.2.0'
-    provided 'com.android.support:support-annotations:25.0.1'
-    provided 'com.android.support:support-v4:25.0.1'
-    provided 'com.github.bumptech.glide:glide:3.7.0'
+
+    /**
+     *下面的依赖包都只是包含，如果调用层没有使用，不需要编译依赖，那么打包时将不会包含进去，并不会增加 APK 的大小
+    */
+    provided 'org.greenrobot:greendao:3.2.0' //数据库，如果需要使用，编译依赖即可
+    provided 'com.github.bumptech.glide:glide:3.7.0' //图片框架，如果需要使用，编译依赖即可
+    provided 'com.android.support:support-v4:25.0.1'//使用 Glide 框架时必须编译依赖
+
 }
 
-apply from: '../bintray.gradle'
+//apply from: '../bintray.gradle' //用来发布版本的

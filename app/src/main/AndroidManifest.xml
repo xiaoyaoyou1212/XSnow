@@ -25,7 +25,6 @@
         <activity android:name=".activity.UploadDownActivity"/>
         <activity android:name=".activity.ImageLoaderActivity"/>
         <activity android:name=".activity.OtherTestActivity"/>
-        <activity android:name=".activity.StatusSwitchActivity"/>
     </application>
 
 </manifest>

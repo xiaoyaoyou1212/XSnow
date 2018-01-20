@@ -15,10 +15,6 @@
             android:icon="@android:drawable/star_big_on"
             android:title="@string/menu_image_loader"/>
         <item
-            android:id="@+id/menu_status_view"
-            android:icon="@android:drawable/star_big_on"
-            android:title="@string/menu_status_view"/>
-        <item
             android:id="@+id/menu_other"
             android:icon="@android:drawable/star_big_on"
             android:title="@string/menu_other"/>

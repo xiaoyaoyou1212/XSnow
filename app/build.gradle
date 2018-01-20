@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-//apply plugin: 'com.antfortune.freeline'
 
 android {
     compileSdkVersion 25
@@ -32,6 +31,7 @@ android {
 
 dependencies {
     compile 'com.android.support:design:25.0.1'
+    compile 'org.greenrobot:greendao:3.2.0'
     compile project(path: ':netexpand')
 
     /**
