@@ -5,7 +5,9 @@ import android.text.TextUtils;
 
 import com.vise.log.ViseLog;
 import com.vise.netexpand.mode.ApiResult;
-import com.vise.netexpand.mode.ResponseCode;
+import com.vise.netexpand.temp.DefaultResponseState;
+import com.vise.netexpand.temp.IResponseState;
+import com.vise.netexpand.temp.Utils;
 import com.vise.xsnow.common.GsonUtil;
 
 import java.io.IOException;
@@ -26,6 +28,16 @@ import okio.BufferedSource;
  */
 public abstract class HttpResponseInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
+    private IResponseState responseState;
+
+    public HttpResponseInterceptor() {
+        this(new DefaultResponseState());
+    }
+
+    public HttpResponseInterceptor(IResponseState responseState) {
+        this.responseState = responseState;
+        Utils.checkIllegalArgument(responseState, "this responseState is null.");
+    }
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
@@ -60,21 +72,26 @@ public abstract class HttpResponseInterceptor implements Interceptor {
         if (!TextUtils.isEmpty(bodyString)) {
             ApiResult apiResult = GsonUtil.gson().fromJson(bodyString, ApiResult.class);
             if (apiResult != null) {
-                switch (apiResult.getCode()) {
-                    case ResponseCode.ACCESS_TOKEN_EXPIRED: //AccessToken错误或已过期
-                        return processAccessTokenExpired(chain, request);
-                    case ResponseCode.REFRESH_TOKEN_EXPIRED://RefreshToken错误或已过期
-                        return processRefreshTokenExpired(chain, request);
-                    case ResponseCode.OTHER_PHONE_LOGIN://帐号在其它手机已登录
-                        return processOtherPhoneLogin(chain, request);
-                    case ResponseCode.SIGN_ERROR://签名错误
-                        return processSignError(chain, request);
-                    case ResponseCode.TIMESTAMP_ERROR://timestamp过期
-                        return processTimestampError(chain, request);
-                    case ResponseCode.NO_ACCESS_TOKEN://缺少授权信息
-                        return processNoAccessToken(chain, request);
-                    default:
-                        break;
+                if (apiResult.getCode() == responseState.accessTokenExpired()) {//AccessToken错误或已过期
+                    return processAccessTokenExpired(chain, request);
+                } else if (apiResult.getCode() == responseState.refreshTokenExpired()) {//RefreshToken错误或已过期
+                    return processRefreshTokenExpired(chain, request);
+                } else if (apiResult.getCode() == responseState.otherPhoneLogin()) {//帐号在其它手机已登录
+                    return processOtherPhoneLogin(chain, request);
+                } else if (apiResult.getCode() == responseState.signError()) {//签名错误
+                    return processSignError(chain, request);
+                } else if (apiResult.getCode() == responseState.timestampError()) {//timestamp过期
+                    return processTimestampError(chain, request);
+                } else if (apiResult.getCode() == responseState.noAccessToken()) {//缺少授权信息
+                    return processNoAccessToken(chain, request);
+                } else {
+                    if (responseState.otherError() != null && responseState.otherError().size() > 0) {
+                        for (int errorCode : responseState.otherError()) {
+                            if (apiResult.getCode() == errorCode) {
+                                return processOtherError(errorCode, chain, request);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -144,5 +161,14 @@ public abstract class HttpResponseInterceptor implements Interceptor {
      * @return
      */
     abstract Response processNoAccessToken(Chain chain, Request request);
+
+    /**
+     * 其他异常处理
+     *
+     * @param chain
+     * @param request
+     * @return
+     */
+    abstract Response processOtherError(int errorCode, Chain chain, Request request);
 
 }
