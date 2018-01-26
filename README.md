@@ -59,6 +59,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 ### 使用简介
 
 1、引用依赖
+
 在 build 文件的 dependencies 添加如下依赖：
 ```
 compile 'com.vise.xiaoyaoyou:xsnow:x.x.x'
@@ -77,6 +78,7 @@ compile 'org.greenrobot:greendao:3.2.0'
 并根据 GreenDao 数据库的使用规则进行相关配置。
 
 2、初始化
+
 在 Application 中进行全局初始化以及添加全局相关配置，具体使用如下：
 
 ```
