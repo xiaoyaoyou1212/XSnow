@@ -14,17 +14,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.1.5'`
 
-### 代码托管
-
-[![JCenter](https://img.shields.io/badge/JCenter-2.1.5-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.5/)
-
-相关代码 Release 版本已上传到 JCenter，如需查看相关版本记录可点击上面链接进行查询。
-
-### 效果展示
-
-![操作演示动画](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/screenshot.gif)
-
-### 功能介绍
+### 功能简介
 
 - 支持GET、POST等请求方式，请求与响应数据自动进行转换处理，无需上层分别定义接口；
 
@@ -62,9 +52,13 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - ......
 
+### 效果展示
+
+![操作演示动画](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/screenshot.gif)
+
 ### 使用简介
 
-** 1、引用依赖 **
+1、引用依赖
 在 build 文件的 dependencies 添加如下依赖：
 ```
 compile 'com.vise.xiaoyaoyou:xsnow:x.x.x'
@@ -82,7 +76,7 @@ compile 'org.greenrobot:greendao:3.2.0'
 ```
 并根据 GreenDao 数据库的使用规则进行相关配置。
 
-** 2、初始化 **
+2、初始化
 在 Application 中进行全局初始化以及添加全局相关配置，具体使用如下：
 
 ```
@@ -94,9 +88,15 @@ ViseHttp.CONFIG()
         .converterFactory(GsonConverterFactory.create());
 ```
 
-** 其它详细配置以及具体请求调用介绍，请移步 ** [>>> 详细使用介绍](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)文档。
+#### 其它详细配置以及具体请求调用介绍，请移步 [>>> 详细使用介绍](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)文档。
 
-** 如果想深入了解项目中用到的相关技术，请移步 ** [>>> 相关技术说明](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E)文档。
+#### 如果想深入了解项目中用到的相关技术，请移步 [>>> 相关技术说明](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E)文档。
+
+### 代码托管
+
+[![JCenter](https://img.shields.io/badge/JCenter-2.1.5-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.5/)
+
+相关代码 Release 版本已上传到 JCenter，如需查看相关版本记录可点击上面链接进行查询。
 
 ### 版本说明
 
@@ -183,9 +183,9 @@ ViseHttp.CONFIG()
 
 ### 关于我
 
-**个人简介：**一位热爱分享的技术爱好者！
+#### 一位热爱分享的技术爱好者！
 
-**人生格言：**人生就是一场游戏，你遇到的障碍就是各种关卡，所以，让我们尽情地去攻略吧！
+人生就是一场游戏，你遇到的障碍就是各种关卡，所以，让我们尽情地去攻略吧！
 
 [![Website](https://img.shields.io/badge/Website-huwei-blue.svg)](http://www.huwei.tech/)[![GitHub](https://img.shields.io/badge/GitHub-xiaoyaoyou1212-blue.svg)](https://github.com/xiaoyaoyou1212)[![CSDN](https://img.shields.io/badge/CSDN-xiaoyaoyou1212-blue.svg)](http://blog.csdn.net/xiaoyaoyou1212)
 
