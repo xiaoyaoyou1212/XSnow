@@ -12,7 +12,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.1.5'`
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.1.6'`
 
 ### 功能简介
 
@@ -68,7 +68,7 @@ compile 'com.vise.xiaoyaoyou:xsnow:x.x.x'
 
 如果需要使用 Glide 加载图片功能，还需要添加如下依赖：
 ```
-compile 'org.greenrobot:greendao:3.2.0'
+compile 'com.github.bumptech.glide:glide:3.7.0'
 ```
 
 如果需要使用GreenDao数据库功能，还需要添加如下依赖：
@@ -79,37 +79,36 @@ compile 'org.greenrobot:greendao:3.2.0'
 
 2、初始化
 
-在 Application 中进行全局初始化以及添加全局相关配置，具体使用如下：
+在 Application 中进行全局初始化以及添加全局相关配置，简易初始化使用如下：
 
 ```
 ViseHttp.init(this);
 ViseHttp.CONFIG()
         //配置请求主机地址
-        .baseUrl("服务器地址")
-        //配置转换工厂
-        .converterFactory(GsonConverterFactory.create());
+        .baseUrl("服务器地址");
 ```
 
-#### 其它详细配置以及具体请求调用介绍，请移步 [>>> 详细使用介绍](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)文档。
+如果想快速接入项目中使用只需配置服务器地址就行，其他配置都将采用库中默认的配置。
+#### 如果想修改全局相关配置以及查看具体请求调用介绍，请移步 [>>> 详细使用介绍](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)文档。
 
 #### 如果想深入了解项目中用到的相关技术，请移步 [>>> 相关技术说明](https://github.com/xiaoyaoyou1212/XSnow/wiki/%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E)文档。
 
 ### 代码托管
 
-[![JCenter](https://img.shields.io/badge/JCenter-2.1.5-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.5/)
+[![JCenter](https://img.shields.io/badge/JCenter-2.1.6-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.6/)
 
 相关代码 Release 版本已上传到 JCenter，如需查看相关版本记录可点击上面链接进行查询。
 
 ### 版本说明
 
-[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.1.5-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
+[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.1.6-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
 
 如需查看相关版本记录点击上面进入相关链接查看即可，下面是最新修改记录：
 
-- V2.1.5（2017-12-29）
-    - 修复缓存key错乱问题；
-    - 修复日志打印body不显示问题；
-    - 修复缓存策略“优先网络策略”请求失败无法加载缓存问题。
+- V2.1.6（2018-02-01）
+    - 去掉UI模块（使用频率不高）；
+    - 修改数据库依赖方式为包含，如果需要使用GreenDao数据库还需进行依赖，具体可参考demo实现；
+    - 将GsonConverterFactory作为默认转换器。
 
 ### 混淆配置
 由于 XSnow 库有依赖部分第三方库，所以需要对依赖的第三方库也做相应的混淆保护，具体的混淆配置如下：
