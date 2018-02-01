@@ -26,6 +26,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * @Description: 请求基类
@@ -298,9 +299,10 @@ public abstract class BaseRequest<R extends BaseRequest> {
         }
         ViseHttp.getRetrofitBuilder().baseUrl(httpGlobalConfig.getBaseUrl());
 
-        if (httpGlobalConfig.getConverterFactory() != null) {
-            ViseHttp.getRetrofitBuilder().addConverterFactory(httpGlobalConfig.getConverterFactory());
+        if (httpGlobalConfig.getConverterFactory() == null) {
+            httpGlobalConfig.converterFactory(GsonConverterFactory.create());
         }
+        ViseHttp.getRetrofitBuilder().addConverterFactory(httpGlobalConfig.getConverterFactory());
 
         if (httpGlobalConfig.getCallAdapterFactory() == null) {
             httpGlobalConfig.callAdapterFactory(RxJava2CallAdapterFactory.create());
