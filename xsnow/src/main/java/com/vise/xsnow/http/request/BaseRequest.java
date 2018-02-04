@@ -353,6 +353,9 @@ public abstract class BaseRequest<R extends BaseRequest> {
         if (httpGlobalConfig.getHttpCache() != null) {
             ViseHttp.getOkHttpBuilder().cache(httpGlobalConfig.getHttpCache());
         }
+        ViseHttp.getOkHttpBuilder().connectTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        ViseHttp.getOkHttpBuilder().writeTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        ViseHttp.getOkHttpBuilder().readTimeout(ViseConfig.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
     }
 
     /**
