@@ -38,6 +38,7 @@ public class MyApplication extends Application {
         ViseHttp.CONFIG()
                 //配置请求主机地址
                 .baseUrl("http://192.168.1.105/")
+                .setCookie(true)
                 //配置日志拦截器
                 .interceptor(new HttpLogInterceptor()
                         .setLevel(HttpLogInterceptor.Level.BODY));

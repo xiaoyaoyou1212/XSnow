@@ -47,6 +47,7 @@ public class NetTestActivity extends BaseActivity {
     private Button mRequest_post_2;
     private Button mRequest_post_3;
     private Button mRequest_post_4;
+    private Button mRequest_post_5;
     private Button mRequest_retrofit_1;
     private Button mRequest_retrofit_2;
 
@@ -75,6 +76,7 @@ public class NetTestActivity extends BaseActivity {
         mRequest_post_2 = F(R.id.request_post_2);
         mRequest_post_3 = F(R.id.request_post_3);
         mRequest_post_4 = F(R.id.request_post_4);
+        mRequest_post_5 = F(R.id.request_post_5);
         mRequest_retrofit_1 = F(R.id.request_retrofit_1);
         mRequest_retrofit_2 = F(R.id.request_retrofit_2);
     }
@@ -97,6 +99,7 @@ public class NetTestActivity extends BaseActivity {
         C(mRequest_post_2);
         C(mRequest_post_3);
         C(mRequest_post_4);
+        C(mRequest_post_5);
         C(mRequest_retrofit_1);
         C(mRequest_retrofit_2);
     }
@@ -156,6 +159,9 @@ public class NetTestActivity extends BaseActivity {
                 break;
             case R.id.request_post_4:
                 request_post_4();
+                break;
+            case R.id.request_post_5:
+                request_post_5();
                 break;
             case R.id.request_retrofit_1:
                 request_retrofit_1();
@@ -534,6 +540,40 @@ public class NetTestActivity extends BaseActivity {
                     @Override
                     public void onFail(int errCode, String errMsg) {
                         ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+                });
+    }
+
+    private void request_post_5() {
+        mShow_response_data.setText("");
+        ViseHttp.POST("user/login")
+                .baseUrl("http://www.wanandroid.com/")
+                .addParam("username", "xiaoyaoyou")
+                .addParam("password", "xyyxyy")
+                .request(new ACallback<String>() {
+                    @Override
+                    public void onFail(int errCode, String errMsg) {
+                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    }
+
+                    @Override
+                    public void onSuccess(String data) {
+                        ViseLog.i("request onSuccess!" + data);
+                        mShow_response_data.setText(data);
+                        ViseHttp.GET("lg/collect/list/0/json")
+                                .baseUrl("http://www.wanandroid.com/")
+                                .request(new ACallback<String>() {
+                                    @Override
+                                    public void onFail(int errCode, String errMsg) {
+                                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                                    }
+
+                                    @Override
+                                    public void onSuccess(String data) {
+                                        ViseLog.i("request onSuccess!" + data);
+                                        mShow_response_data.setText(data);
+                                    }
+                                });
                     }
                 });
     }

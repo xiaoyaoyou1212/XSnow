@@ -23,6 +23,7 @@
     <string name="request_post_2">POST 提交表单</string>
     <string name="request_post_3">POST 提交Json</string>
     <string name="request_post_4">POST URL带参数</string>
+    <string name="request_post_5">POST 使用Cookie进行二次请求</string>
 
     <string name="request_retrofit_1">自定义Retrofit请求</string>
     <string name="request_retrofit_2">自定义Retrofit请求 带缓存</string>
