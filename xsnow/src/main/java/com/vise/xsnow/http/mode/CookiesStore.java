@@ -70,6 +70,7 @@ public class CookiesStore {
             if (cookies.containsKey(url.host())) {
                 cookies.get(url.host()).remove(name);
             }
+            cookies.get(url.host()).put(name, cookie);
         }
 
         //将cookies持久化到本地
