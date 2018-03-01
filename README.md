@@ -12,7 +12,7 @@ XSnow，X：未知一切，取其通用之意；Snow：雪，取其纯净之意�
 
 - 项目地址：[https://github.com/xiaoyaoyou1212/XSnow](https://github.com/xiaoyaoyou1212/XSnow)
 
-- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.1.7'`
+- 项目依赖：`compile 'com.vise.xiaoyaoyou:xsnow:2.1.8'`
 
 ### 功能简介
 
@@ -95,17 +95,17 @@ ViseHttp.CONFIG()
 
 ### 代码托管
 
-[![JCenter](https://img.shields.io/badge/JCenter-2.1.7-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.7/)
+[![JCenter](https://img.shields.io/badge/JCenter-2.1.8-orange.svg)](https://jcenter.bintray.com/com/vise/xiaoyaoyou/xsnow/2.1.8/)
 
 相关代码 Release 版本已上传到 JCenter，如需查看相关版本记录可点击上面链接进行查询。
 
 ### 版本说明
 
-[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.1.7-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
+[![LatestVersion](https://img.shields.io/badge/LatestVersion-2.1.8-orange.svg)](https://github.com/xiaoyaoyou1212/XSnow/blob/master/VERSION.md)
 
 如需查看相关版本记录点击上面进入相关链接查看即可，下面是最新修改记录：
 
-- V2.1.7（2018-03-01）
+- V2.1.8（2018-03-01）
     - 修复cookie无法存储问题。
 
 ### 混淆配置
