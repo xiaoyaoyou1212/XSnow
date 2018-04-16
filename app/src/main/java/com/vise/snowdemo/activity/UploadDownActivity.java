@@ -116,6 +116,10 @@ public class UploadDownActivity extends BaseActivity {
                 .addParam("tagIds", "95,96,208")
                 .addParam("content", "夏天晒黑了？初秋正是美白的好时机，快快行动起来。")
                 .addParam("status", "1")
+                .addBytes("", null, "", null)
+                .addImageFile("", null, null)
+                .addStream("", null, null)
+                .addFiles(null)
                 .addFile("androidPicFile", getUploadFile(mContext, "test.jpg"))
                 .baseUrl("https://200.200.200.50/")
                 .request(new ACallback<Object>() {
@@ -140,6 +144,8 @@ public class UploadDownActivity extends BaseActivity {
         ViseHttp.DOWNLOAD("16891/1A8EA15110A5DA113EBD2F955615C7EC.apk?fsname=com.moji.mjweather_7.0103.02_7010302.apk&csr=1bbd")
                 .baseUrl("http://imtt.dd.qq.com/")
                 .setFileName(saveName)
+                .setRootName("")
+                .setDirName("")
                 .request(new ACallback<DownProgress>() {
                     @Override
                     public void onSuccess(DownProgress downProgress) {

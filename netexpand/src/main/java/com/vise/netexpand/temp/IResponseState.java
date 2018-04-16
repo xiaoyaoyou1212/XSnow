@@ -3,7 +3,7 @@ package com.vise.netexpand.temp;
 import java.util.List;
 
 /**
- * @Description:
+ * @Description: 响应状态接口
  * @author: <a href="http://xiaoyaoyou1212.360doc.com">DAWI</a>
  * @date: 2018/1/20 16:27
  */
