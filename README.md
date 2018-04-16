@@ -198,12 +198,15 @@ ViseHttp.CONFIG()
 * * *
 
 如果感觉自己从项目中学到了很多，请不要吝惜你的钱包给点打赏鼓励吧，一分钱也是爱呀！
-![支付宝](http://img.blog.csdn.net/20180127000455414) ![微信支付](http://img.blog.csdn.net/20180127000514609)
+![微信支付](http://img.blog.csdn.net/20180127000514609)
 
 * * *
 
 如果有好的想法和建议，也欢迎Fork项目参与进来，使用中如果有任何问题和建议都可以进群交流，QQ群二维码如下：
 
-![QQ群](http://img.blog.csdn.net/20170327191310083)
+![QQ群](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/qq_chat_first.png)
+(此群已满)
+
+![QQ群](https://github.com/xiaoyaoyou1212/XSnow/blob/master/screenshot/qq_chat_second.png)
 
 * * *
