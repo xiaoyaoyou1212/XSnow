@@ -110,8 +110,8 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
                 return apiResultObservable
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
                         .map(new ApiFunc<T>(type))
+                        .observeOn(AndroidSchedulers.mainThread())
                         .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
             }
         };

@@ -28,8 +28,8 @@ public abstract class ApiBaseRequest<R extends ApiBaseRequest> extends BaseHttpR
                 return apiResultObservable
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
                         .map(new ApiDataFunc<T>())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
             }
         };
