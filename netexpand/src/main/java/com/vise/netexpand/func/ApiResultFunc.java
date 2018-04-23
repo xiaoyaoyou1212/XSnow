@@ -37,8 +37,12 @@ public class ApiResultFunc<T> implements Function<ResponseBody, ApiResult<T>> {
             if (result != null) {
                 apiResult = result;
                 if (apiResult.getData() != null) {
-                    T data = GsonUtil.gson().fromJson(apiResult.getData().toString(), type);
-                    apiResult.setData(data);
+                    if (type.equals(String.class)) {
+                        apiResult.setData((T) apiResult.getData());
+                    } else {
+                        T data = GsonUtil.gson().fromJson(apiResult.getData().toString(), type);
+                        apiResult.setData(data);
+                    }
                     apiResult.setCode(ResponseCode.HTTP_SUCCESS);
                 } else {
                     apiResult.setMsg("ApiResult's data is null");
