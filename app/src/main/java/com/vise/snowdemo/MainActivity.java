@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void initData() {
-        PermissionManager.instance().with(this).request(new OnPermissionCallback() {
+        PermissionManager.instance().request(this, new OnPermissionCallback() {
             @Override
             public void onRequestAllow(String permissionName) {
                 DialogUtil.showTips(mContext, getString(R.string.permission_control),

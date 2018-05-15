@@ -11,9 +11,7 @@ import io.reactivex.functions.Consumer;
  * @date: 2017-04-21 11:21
  */
 public class PermissionManager {
-
     private static PermissionManager permissionManager;
-    private Activity activity;
 
     private PermissionManager() {
 
@@ -30,14 +28,9 @@ public class PermissionManager {
         return permissionManager;
     }
 
-    public PermissionManager with(Activity activity) {
-        this.activity = activity;
-        return this;
-    }
-
-    public void request(final OnPermissionCallback permissionCallback, final String... permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.activity != null && permissionCallback != null) {
-            RxPermissions rxPermissions = new RxPermissions(this.activity);
+    public void request(Activity activity, final OnPermissionCallback permissionCallback, final String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity != null && permissionCallback != null) {
+            RxPermissions rxPermissions = new RxPermissions(activity);
             rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
                 @Override
                 public void accept(Permission permission) throws Exception {

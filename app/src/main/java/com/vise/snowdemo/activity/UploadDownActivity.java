@@ -61,7 +61,7 @@ public class UploadDownActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        PermissionManager.instance().with(this).request(new OnPermissionCallback() {
+        PermissionManager.instance().request(this, new OnPermissionCallback() {
             @Override
             public void onRequestAllow(String permissionName) {
                 DialogUtil.showTips(mContext, getString(R.string.permission_control),
