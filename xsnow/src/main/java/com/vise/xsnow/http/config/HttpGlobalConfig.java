@@ -470,14 +470,14 @@ public class HttpGlobalConfig {
     }
 
     public int getRetryDelayMillis() {
-        if (retryDelayMillis <= 0) {
+        if (retryDelayMillis < 0) {
             retryDelayMillis = ViseConfig.DEFAULT_RETRY_DELAY_MILLIS;
         }
         return retryDelayMillis;
     }
 
     public int getRetryCount() {
-        if (retryCount <= 0) {
+        if (retryCount < 0) {
             retryCount = ViseConfig.DEFAULT_RETRY_COUNT;
         }
         return retryCount;
